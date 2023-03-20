@@ -18,9 +18,9 @@ Make a scatterplot of `hwy` vs. `displ` using the `mpg` data frame. Next, map a
 
 that second part of the question is really unclear to me
 
-3.In the scatterplot of `hwy` vs. `displ`, what happens if you map a third variable to `linewidth`?
+3. In the scatterplot of `hwy` vs. `displ`, what happens if you map a third variable to `linewidth`?
 
-i don't know how to map a third variable??
+TODO: i don't know how to map a third variable??
 
 ## 2.2.5 Exercises
 
@@ -33,18 +33,16 @@ library(tidyverse)
 
 library(palmerpenguins)
 
-
 glimpse(penguins)
-
 ```
 
-2.What does the bill_depth_mm variable in the penguins data frame describe? Read the help for ?penguins to find out.
+2. What does the bill_depth_mm variable in the penguins data frame describe? Read the help for ?penguins to find out.
 
 ?penguins
 
 a number denoting bill depth (millimeters)
 
-3.Make a scatterplot of bill_depth_mm vs. bill_length_mm. Describe the relationship between these two variables.
+3. Make a scatterplot of bill_depth_mm vs. bill_length_mm. Describe the relationship between these two variables.
 
 ```{r}
 
