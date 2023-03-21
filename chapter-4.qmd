@@ -6,7 +6,7 @@ title: "Data transformation"
 
 ## Questions
 
-For question 3 I don't really know where to start with calculations
+
 
 
 ```{r}
@@ -26,9 +26,9 @@ library(tidyverse)
 
 ## 4.2.5 Exercises
 
-1.find all flights that
+1. Find all flights that
 
-a.had a arrival delay of two hours or more
+a. Had a arrival delay of two hours or more
 
 ```{r}
 
@@ -36,7 +36,7 @@ a.had a arrival delay of two hours or more
 filter(flights,arr_delay >= 2) %>% arrange(desc(arr_delay))
 ```
 
-b.flew to houston (IAH or HOU)
+b. Flew to houston (IAH or HOU)
 
 ```{r}
 
@@ -49,52 +49,52 @@ view(flights)
 flights %>% filter(dest %in% c("IAH","HOU"))
 ```
 
-c.Were operated by United, American, or Delta
+c. Were operated by United, American, or Delta
 
 ```{r}
 flights %>% filter(carrier %in% c("UA","DL","AA"))
 
 ```
 
-d.departed in summer(july,august,september)
+d. Departed in summer(july,august,september)
 
 ```{r}
 flights %>% filter(month %in% c(7,8,9))
 ```
 
-e.Arrived more than two hours late, but didn't leave late
+e. Arrived more than two hours late, but didn't leave late
 
 ```{r}
 flights %>% filter(dep_delay >= 0,arr_delay < -2)
 ```
 
-f.Were delayed by at least an hour, but made up over 30 minutes in flight
+f. Were delayed by at least an hour, but made up over 30 minutes in flight
 
 ```{r}
 flights %>% filter(dep_delay <= -1,arr_delay > 30)
 ```
 
-2.Sort `flights` to find the flights with longest departure delays. Find the flights that left earliest in the morning.
+2. Sort `flights` to find the flights with longest departure delays. Find the flights that left earliest in the morning.
 
 ```{r}
 flights %>% arrange(dep_delay) %>% arrange(time_hour) %>% glimpse()
 ```
 
-3.Sort `flights` to find the fastest flights (Hint: try sorting by a calculation).
+3. Sort `flights` to find the fastest flights (Hint: try sorting by a calculation).
 
 ```{r}
 flights %>% arrange(desc(arr_delay))
 ```
 
-4.Was there a flight on every day of 2013?
+4. Was there a flight on every day of 2013?
 
-yes
+Yes
 
 ```{r}
 flights %>% arrange(desc(day)) %>% arrange(desc(month))
 ```
 
-5.Which flights traveled the farthest distance? Which traveled the least distance?
+5. Which flights traveled the farthest distance? Which traveled the least distance?
 
 ```{r}
 flights %>% arrange(distance) 
@@ -104,7 +104,7 @@ flights %>% arrange(distance)
 flights %>% arrange(desc(distance))
 ```
 
-6.Does it matter what order you used [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) and [`arrange()`](https://dplyr.tidyverse.org/reference/arrange.html) if you're using both? Why/why not? Think about the results and how much work the functions would have to do.
+6. Does it matter what order you used [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) and [`arrange()`](https://dplyr.tidyverse.org/reference/arrange.html) if you're using both? Why/why not? Think about the results and how much work the functions would have to do.
 
 I don't think it matters the two functions would go over each other with no problems either way.
 
@@ -112,17 +112,17 @@ I don't think it matters the two functions would go over each other with no prob
 
 1.  Compare `air_time` with `arr_time - dep_time`. What do you expect to see? What do you see? What do you need to do to fix it?
 
-2.  no they don't match
+2.  No they don't match
 
     ```{r}
     flights %>% mutate(timearrdep = arr_time - dep_time)
     ```
 
-2.Compare `dep_time`, `sched_dep_time`, and `dep_delay`. How would you expect those three numbers to be related?
+2. Compare `dep_time`, `sched_dep_time`, and `dep_delay`. How would you expect those three numbers to be related?
 
-they show when a plane left when it was supposed to leave and if there was a delay
+They show when a plane left when it was supposed to leave and if there was a delay
 
-3.Brainstorm as many ways as possible to select `dep_time`, `dep_delay`, `arr_time`, and `arr_delay` from `flights`
+3. Brainstorm as many ways as possible to select `dep_time`, `dep_delay`, `arr_time`, and `arr_delay` from `flights`
 
 ```{r}
 flights %>% select(dep_time, dep_delay, arr_time, arr_delay)
@@ -132,15 +132,15 @@ flights %>% select(dep_time, dep_delay, arr_time, arr_delay)
 select(flights, dep_time:arr_delay, -sched_dep_time,-sched_arr_time)
 ```
 
-4.What happens if you include the name of a variable multiple times in a [`select()`](https://dplyr.tidyverse.org/reference/select.html) call?
+4. What happens if you include the name of a variable multiple times in a [`select()`](https://dplyr.tidyverse.org/reference/select.html) call?
 
-it just prints out the same outcome as if i only used one
+Nothing happens, you just get the variable once.
 
 ```{r}
 flights %>% select(dep_time, dep_time)
 ```
 
-5.What does the [`any_of()`](https://tidyselect.r-lib.org/reference/all_of.html) function do? Why might it be helpful in conjunction with this vector?
+5. What does the [`any_of()`](https://tidyselect.r-lib.org/reference/all_of.html) function do? Why might it be helpful in conjunction with this vector?
 
 ```{r}
 variables <- c("year", "month", "day", "dep_delay", "arr_delay")
