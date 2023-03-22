@@ -15,13 +15,13 @@ because in my_variable theres a 1 instead of an i in variable
 ```{r}
 library(tidyverse)
 
-ggplot(data = mpg) + 
-  geom_point(mapping = aes(x = displ, y = hwy))
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy))
 ```
 
 3.Press Alt + Shift + K. What happens? How can you get to the same place using the menus?
 
-i have no idea pretty cool tho
+pulls up keyboard shortcuts
 
 4.Let's revisit an exercise from the [Section 2.6](https://r4ds.hadley.nz/data-visualize.html#sec-ggsave). Run the following lines of code. Which of the two plots is saved as `mpg-plot.png`? Why?
 
