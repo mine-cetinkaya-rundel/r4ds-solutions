@@ -148,13 +148,14 @@ variables <- c("year", "month", "day", "dep_delay", "arr_delay")
 
 ```
 
-6\.
+6.Does the result of running the following code surprise you? How do the select helpers deal with case by default? How can you change that default?
 
-no it doesn't surprise me.it looks like case doesn't matter.i can change time to dep
+No it doesn't surprise me.it looks like case doesn't matter.i can change time to dep
 
 ```{r}
 select(flights, contains("TIME"))
 ```
+
 
 ## 4.4.6 Exercises
 
@@ -243,7 +244,7 @@ df |>
 
 e.What does the following code do? Run it, analyze the result, and describe what the pipeline does. How is the output different from the one in part (d)
 
-this completely gets rid of the group by part the thing that does this is .groups = "drop"
+This code completely gets rid of the group by part the function that does this is .groups = "drop"
 
 ```{r}
 df |>
@@ -253,7 +254,7 @@ df |>
 
 f.What do the following pipelines do? Run both, analyze the results, and describe what each pipeline does. How are the outputs of the two pipelines different?
 
-these codes do the same thing the only difference is that the first code shows the information in a more efficient way due to summarize
+These codes do the same thing the only difference is that the first code shows the information in a more efficient way due to summarize
 
 ```{r}
 df |>
