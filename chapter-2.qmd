@@ -276,7 +276,7 @@ ggplot(
 Which of the two plots is saved as `mpg-plot.png`?
 Why?
 
-the second line of code is saved,because ggsave saves the last plot you made
+The second line of code is saved, because `ggsave()` saves the last plot you made.
 
 ```{r}
 ggplot(mpg, aes(x = class)) +
