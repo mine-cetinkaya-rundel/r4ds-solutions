@@ -24,7 +24,7 @@ TODO: i don't know how to map a third variable??
 
 ## 2.2.5 Exercises
 
-1.How many rows are in penguins? How many columns?
+1. How many rows are in penguins? How many columns?
 
 344 rows and 8 columns
 
