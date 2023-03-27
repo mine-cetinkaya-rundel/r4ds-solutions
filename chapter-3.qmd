@@ -13,29 +13,25 @@ library(tidyverse)
 
 ## 3.5 Exercises
 
-1.why does this code not work?
+1. Why does this code not work?
 
-because in my_variable theres a 1 instead of an i in variable
+Because in "my_variable" theres a 1 instead of an i in variable
 
-2.tweak each of th R commands so they run properly
+2. Tweak each of the R commands so they run properly
 
 ```{r}
-
 library(tidyverse)
-
 ggplot(mpg) + 
   geom_point(aes(x = displ, y = hwy))
-
-
 ```
 
-3.Press Alt + Shift + K. What happens? How can you get to the same place using the menus?
+3. Press Alt + Shift + K. What happens? How can you get to the same place using the menus?
 
-pulls up keyboard shortcuts
+Pulls up keyboard shortcuts
 
-4.Let's revisit an exercise from the [Section 2.6](https://r4ds.hadley.nz/data-visualize.html#sec-ggsave). Run the following lines of code. Which of the two plots is saved as `mpg-plot.png`? Why?
+4. Let's revisit an exercise from the [Section 2.6](https://r4ds.hadley.nz/data-visualize.html#sec-ggsave). Run the following lines of code. Which of the two plots is saved as `mpg-plot.png`? Why?
 
-the my_bar_plot is saved because thats what was specified
+the "my_bar_plot" is saved because thats what was specified
 
 ```{r}
 my_bar_plot <- ggplot(mpg, aes(x = class)) +
