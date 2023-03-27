@@ -35,8 +35,7 @@ d.  Store back in the appropriate place.
  pivot_wider(
   names_from = type,
   values_from = count
-      ) 
-|> mutate(rate = cases/population * 10000)
+      ) |> mutate(rate = cases/population * 10000)
     ```
 
 ```{r}
