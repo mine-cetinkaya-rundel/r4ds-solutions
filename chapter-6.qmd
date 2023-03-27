@@ -31,11 +31,12 @@ c.  Divide cases by population, and multiply by 10000.
 d.  Store back in the appropriate place.
 
     ```{r}
-    table2 |>
-      pivot_wider(
-        names_from = type,
-        values_from = count
-      ) |> mutate(rate = cases/population * 10000)
+ table2 |>
+ pivot_wider(
+  names_from = type,
+  values_from = count
+      ) 
+|> mutate(rate = cases/population * 10000)
     ```
 
 ```{r}
