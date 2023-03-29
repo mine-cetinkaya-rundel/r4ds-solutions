@@ -31,10 +31,16 @@ read_csv("x,y\n1,'a,b'",quote = "\'")
 5.Identify what is wrong with each of the following inline CSV files. What happens when you run the code?
 
 ```{r}
-read_csv("a,b\n1,2,3\n4,5,6")
-read_csv("a,b,c\n1,2\n1,2,3,4")
-read_csv("a,b\n\1")
-read_csv("a,b\n1,2\na,b")
+read_csv("a,b,c\n1,2,3\n4,5,6")
+
+read_csv("a,b,c,d\n
+          1,2\n
+          1,2,3,4")
+
+read_csv("a\n\1")
+
+read_csv("a,b\n
+          1,2\na,b")
 read_csv2("a;b\n1;3")
 ```
 
@@ -60,5 +66,3 @@ annoying %>% rename(one = `1`,two = `2`) %>%
   mutate( three = two/one) %>% ggplot(aes(x = one,y = two)) +
   geom_point()
 ```
-
-r
