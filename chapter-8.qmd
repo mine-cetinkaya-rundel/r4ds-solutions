@@ -12,11 +12,11 @@ library(tidyverse)
 
 1.What function would you use to read a file where fields were separated with "\|"?
 
-read_delim
+"read_delim"
 
 2.Apart from `file`, `skip`, and `comment`, what other arguments do [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) and [`read_tsv()`](https://readr.tidyverse.org/reference/read_delim.html) have in common?
 
-they have almost all of each others arguments
+They have almost all of each others arguments.
 
 3.What are the most important arguments to [`read_fwf()`](https://readr.tidyverse.org/reference/read_fwf.html)?
 
