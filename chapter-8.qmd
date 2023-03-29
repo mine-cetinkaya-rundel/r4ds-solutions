@@ -2,9 +2,7 @@
 title: "Data import"
 ---
 
-
 ## Solutions
-
 
 ```{r}
 library(tidyverse)
