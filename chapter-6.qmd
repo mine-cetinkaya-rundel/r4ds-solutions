@@ -2,11 +2,6 @@
 title: "Data tidying"
 ---
 
-## Notes
-
-Using prose, describe how the variables and observations are organised in each of the sample tables.
-
-
 ##Solutions
 
 
@@ -16,7 +11,7 @@ library(tidyverse)
 
 ## 6.2.1 Exercises
 
-1.Using prose, describe how the variables and observations are organised in each of the sample tables.
+1. Country is where the case happened,year is when it happened,cases is number of people with the with the disease,population is the number of people in each country,rate is the rate at which people get the disease.
 
 2.  
 
