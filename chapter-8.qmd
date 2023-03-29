@@ -60,3 +60,5 @@ annoying %>% rename(one = `1`,two = `2`) %>%
   mutate( three = two/one) %>% ggplot(aes(x = one,y = two)) +
   geom_point()
 ```
+
+git\@github.com:mine-cetinkaya-rundel/r4ds-solutions.git
