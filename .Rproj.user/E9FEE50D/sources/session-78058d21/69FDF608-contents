@@ -1,0 +1,326 @@
+---
+title: "Layers"
+---
+
+## Notes
+
+spooky new map code
+
+```{r}
+library(tidyverse)
+library(maps)
+```
+
+```{r}
+nz <- map_data("nz")
+ggplot(nz, aes(x = long, y = lat, group = group)) +
+  geom_polygon(fill = "white", color = "black")
+
+ggplot(nz, aes(x = long, y = lat, group = group)) +
+  geom_polygon(fill = "white", color = "black") +
+  coord_quickmap()
+```
+
+better for showing proportions in this way
+
+```{r}
+ggplot(diamonds, aes(x = cut, fill = clarity)) + 
+  geom_bar(position = "fill")
+```
+
+coloring bar chart
+
+```{r}
+ggplot(diamonds, aes(x = cut, color = cut)) + 
+  geom_bar()
+ggplot(diamonds, aes(x = cut, fill = cut)) + 
+  geom_bar()
+```
+
+facet
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  facet_grid(drv ~ cyl)
+```
+
+different types of smooth line plots
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, shape = drv)) + 
+  geom_smooth()
+ggplot(mpg, aes(x = displ, y = hwy, linetype = drv)) + 
+  geom_smooth()
+```
+
+geom ridge
+
+```{r}
+library(ggridges)
+
+ggplot(mpg, aes(x = hwy, y = drv, fill = drv, color = drv)) +
+  geom_density_ridges(alpha = 0.5, show.legend = FALSE)
+#> Picking joint bandwidth of 1.28
+```
+
+
+
+## Solutions
+
+## Exercise 11.2.1
+
+1. Create a scatterplot of `hwy` vs. `displ` where the points are pink filled in triangles.
+
+```{r}
+ggplot(data = mpg,aes(x = hwy, y = displ)) +
+  geom_point(color = "pink",shape = 17)
+```
+
+2. Why did the following code not result in a plot with blue points?
+
+```{r}
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy,color = "blue"))
+```
+
+```{r}
+#fixed version
+ggplot(data = mpg,aes(x = displ, y = hwy)) +
+  geom_point(color = "blue")
+
+```
+
+3. What does the `stroke` aesthetic do? What shapes does it work with? (Hint: use [`?geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html))
+
+stroke controls the size of the stroke for shapes 21-24
+
+4.What happens if you map an aesthetic to something other than a variable name, like `aes(color = displ < 5)`? Note, you'll also need to specify x and y.
+
+it seperates the displ lower than 5
+
+```{r}
+ggplot(mpg,aes(x = hwy, y = displ,color = displ < 5)) + geom_point()
+```
+
+## Exercise 11.3.1
+
+1.  What geom would you use to draw a line chart? A boxplot? A histogram? An area chart?
+
+geom_smooth,geom_boxplot,geom_histogram,geom_area
+
+2.Earlier in this chapter we used `show.legend` without explaining it:\\
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_smooth(aes(color = drv), show.legend = FALSE)
+```
+
+What does `show.legend = FALSE` do here? What happens if you remove it? Why do you think we used it earlier?
+
+it takes away the legend on the side,if you remove it,it will show the legend
+
+3.What does the `se` argument to [`geom_smooth()`](https://ggplot2.tidyverse.org/reference/geom_smooth.html) do?
+
+it displays the confidence interval around the line on the chart
+
+4.Recreate the R code necessary to generate the following graphs. Note that wherever a categorical variable is used in the plot, it's `drv`.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+```
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  geom_smooth(se = FALSE,aes(shape = drv))
+```
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(aes(color = drv)) + 
+  geom_smooth(se = FALSE,aes(shape = drv,color = drv))
+
+```
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(aes(color = drv)) + 
+  geom_smooth(se = FALSE,aes(shape = drv,linetype = drv))
+```
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(aes(shape = "circle open", color = drv))
+```
+
+## Exercise 11.4.1
+
+1.What happens if you facet on a continuous variable?
+
+this is what google says:
+
+**You'll get one row or column for each unique value of the variable**
+
+2.What do the empty cells in plot with `facet_grid(drv ~ cyl)` mean? How do they relate to this plot?
+
+means there was no data in that area i assume
+
+```{r}
+ggplot(mpg) + 
+  geom_point(aes(x = drv, y = cyl)) +
+  facet_grid(drv ~ cyl)
+```
+
+3.What plots does the following code make? What does `.` do?
+
+It means "everything", another way of saying don't facet across columns because we're not diving up the data by a variable's levels across columns. And in the second case it's across rows
+
+```{r}
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy)) +
+  facet_grid(drv ~ .)
+
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy)) +
+  facet_grid(. ~ cyl)
+```
+
+4.Take the first faceted plot in this section:
+
+```{r}
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+```
+
+What are the advantages to using faceting instead of the color aesthetic? What are the disadvantages? How might the balance change if you had a larger dataset?
+
+the advantages of faceting is seeing each subgroup apart from each other to see more clearly. the disadvantages are not seeing the data overlap with each other.im pretty sure they'll just be more points.
+
+5.Read [`?facet_wrap`](https://ggplot2.tidyverse.org/reference/facet_wrap.html). What does `nrow` do? What does `ncol` do? What other options control the layout of the individual panels? Why doesn't [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html) have `nrow` and `ncol` argument
+
+you can choose the number of rows and cols with nrow and ncol.like strink and as.table etc.
+
+for the same reason facet wrap does
+
+6.Which of the following two plots makes it easier to compare engine size (`displ`) across cars with different drive trains? What does this say about when to place a faceting variable across rows or columns?
+
+the second plot makes it easier. use which ever suits best
+
+```{r}
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy)) + 
+  facet_grid(drv ~ .)
+
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy)) + 
+  facet_grid(. ~ drv)
+```
+
+7.Recreate this plot using [`facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html) instead of [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html). How do the positions of the facet labels change?
+
+facet grid chose to use rows instead of columns in the first code
+
+```{r}
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy)) +
+  facet_grid(drv ~ .)
+```
+
+```{r}
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy)) +
+  facet_wrap( ~ drv)
+```
+
+## Exercise 11.5.1
+
+1.What is the default geom associated with [`stat_summary()`](https://ggplot2.tidyverse.org/reference/stat_summary.html)? How could you rewrite the previous plot to use that geom function instead of the stat function?
+
+i believe its geom_point
+
+2.What does [`geom_col()`](https://ggplot2.tidyverse.org/reference/geom_bar.html) do? How is it different from [`geom_bar()`](https://ggplot2.tidyverse.org/reference/geom_bar.html)?
+
+type ?geom_col tells you in the description
+
+3.Most geoms and stats come in pairs that are almost always used in concert. Read through the documentation and make a list of all the pairs. What do they have in common?
+
+alot of the geoms use stat = identity and some use bin and count
+
+4.What variables does [`stat_smooth()`](https://ggplot2.tidyverse.org/reference/geom_smooth.html) compute? What parameters control its behavior?
+
+stat_smooth () provides the following variables, some of which depend on the orientation: **y or x predicted value**
+
+5.In our proportion bar chart, we need to set `group = 1`. Why? In other words, what is the problem with these two graphs?
+
+these graphs don't show any information
+
+```{r}
+ggplot(diamonds, aes(x = cut, y = after_stat(prop))) + 
+  geom_bar()
+ggplot(diamonds, aes(x = cut, fill = color, y = after_stat(prop))) + 
+  geom_bar()
+```
+
+i think i fixed them
+
+```{r}
+ggplot(diamonds, aes(x = cut)) + 
+  geom_bar()
+
+ggplot(diamonds, aes(x = cut, fill = color)) + 
+  geom_bar()
+```
+
+## Exercise 11.6.1
+
+1.What is the problem with this plot? How could you improve it?
+
+```{r}
+ggplot(mpg, aes(x = cty, y = hwy)) + 
+  geom_point()
+```
+
+2.What parameters to [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html) control the amount of jittering?
+
+To adjust the amount of jittering along the x and y axes, one can explicitly set the position adjustment: geom_jitter **(data= d, mapping = aes (x =system, y = runtime), size =1, position = position_jitter (width =0.3, height =0))**
+
+3.Compare and contrast [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html) with [`geom_count()`](https://ggplot2.tidyverse.org/reference/geom_count.html).
+
+they both makes it easier to map out discrete data and helps show overlapping data for plots
+
+4.What's the default position adjustment for [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)? Create a visualization of the `mpg` dataset that demonstrates it.
+
+the default is dodge2
+
+```{r}
+ggplot(data = mpg, aes(x = cty, y = displ)) +
+  geom_boxplot(position = "dodge2")
+```
+
+## Exercise 11.7.1
+
+1.Turn a stacked bar chart into a pie chart using [`coord_polar()`](https://ggplot2.tidyverse.org/reference/coord_polar.html).
+
+```{r}
+ggplot(diamonds, aes(x = cut, fill = clarity)) + 
+  geom_bar(position = "fill")  + coord_polar()
+```
+
+2.What's the difference between [`coord_quickmap()`](https://ggplot2.tidyverse.org/reference/coord_map.html) and [`coord_map()`](https://ggplot2.tidyverse.org/reference/coord_map.html)?
+
+coord quick map sets the aspect ratio correctly for maps while coord map projects a portion of the earth onto a 2d plane so i think coord quick map is like for exact coordinates and coord map is for a bigger representation i think
+
+3.What does the plot below tell you about the relationship between city and highway mpg? Why is [`coord_fixed()`](https://ggplot2.tidyverse.org/reference/coord_fixed.html) important? What does [`geom_abline()`](https://ggplot2.tidyverse.org/reference/geom_abline.html) do?
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_point() + 
+  geom_abline() +
+  coord_fixed()
+```
+
+this plot shows the more city miles per gallon the higher the highway mile per gallon goes,i believe coord fixed makes the plot like taller to show the information better,geom abline shows the same information only on a solid line
