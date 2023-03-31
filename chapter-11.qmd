@@ -1,0 +1,306 @@
+---
+title: "Exploratory data analysis"
+---
+
+## Notes
+
+```{r}
+library(tidyverse)
+library(ggbeeswarm)
+```
+
+Scatterplots become less useful as the size of your dataset grows, because points begin to overplot, and pile up into areas of uniform black (as above). You've already seen one way to fix the problem: using the `alpha` aesthetic to add transparency
+
+But using transparency can be challenging for very large datasets. Another solution is to use bin. Previously you used [`geom_histogram()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html) and [`geom_freqpoly()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html) to bin in one dimension. Now you'll learn how to use [`geom_bin2d()`](https://ggplot2.tidyverse.org/reference/geom_bin_2d.html) and [`geom_hex()`](https://ggplot2.tidyverse.org/reference/geom_hex.html) to bin in two dimensions.
+
+geom_bin2d() and [`geom_hex()`](https://ggplot2.tidyverse.org/reference/geom_hex.html) divide the coordinate plane into 2d bins and then use a fill color to display how many points fall into each bin. [`geom_bin2d()`](https://ggplot2.tidyverse.org/reference/geom_bin_2d.html) creates rectangular bins. [`geom_hex()`](https://ggplot2.tidyverse.org/reference/geom_hex.html) creates hexagonal bins. You will need to install the hexbin package to use [`geom_hex()`](https://ggplot2.tidyverse.org/reference/geom_hex.html).
+
+Heatmaply package and seriation package:
+
+If the categorical variables are unordered, you might want to use the seriation package to simultaneously reorder the rows and columns in order to more clearly reveal interesting patterns. For larger plots, you might want to try the heatmaply package, which creates interactive plots.
+
+Another approach for exploring the relationship between these variables is computing the counts with dplyr:
+
+```{r}
+diamonds |> 
+  count(color, cut)
+#> # A tibble: 35 × 3
+#>   color cut           n
+#>   <ord> <ord>     <int>
+#> 1 D     Fair        163
+#> 2 D     Good        662
+#> 3 D     Very Good  1513
+#> 4 D     Premium    1603
+#> 5 D     Ideal      2834
+#> 6 E     Fair        224
+#> # … with 29 more rows
+```
+
+Then visualize with [`geom_tile()`](https://ggplot2.tidyverse.org/reference/geom_tile.html) and the fill aesthetic:
+
+```{r}
+diamonds |> 
+  count(color, cut) |>  
+  ggplot(aes(x = color, y = cut)) +
+  geom_tile(aes(fill = n))
+```
+
+To visualize the covariation between categorical variables, you'll need to count the number of observations for each combination of levels of these categorical variables. One way to do that is to rely on the built-in `geom_count()`
+
+```{r}
+ggplot(diamonds, aes(x = cut, y = color)) +
+  geom_count()
+```
+
+Instead, we recommend replacing the unusual values with missing values. The easiest way to do this is to use [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) to replace the variable with a modified copy. You can use the [`if_else()`](https://dplyr.tidyverse.org/reference/if_else.html) function to replace unusual values with `NA`:
+
+```{r}
+
+ 
+diamonds |> 
+  mutate(y = if_else(y < 3 | y > 20, NA, y))
+```
+
+coord_cartesian() zoom into y
+
+```{r}
+ggplot(diamonds, aes(x = y)) + 
+  geom_histogram(binwidth = 0.5) +
+  coord_cartesian(ylim = c(0, 50))
+```
+
+## Solutions
+
+## Exercise 12.3.3
+
+1.Explore the distribution of each of the `x`, `y`, and `z` variables in `diamonds`. What do you learn? Think about a diamond and how you might decide which dimension is the length, width, and depth.
+
+look up help ?diamonds
+
+```{r}
+library(tidyverse)
+
+
+ggplot(diamonds, aes(x = x , y = y)) + geom_point()
+```
+
+x is the length, y is the width, z is the depth
+
+2.Explore the distribution of `price`. Do you discover anything unusual or surprising? (Hint: Carefully think about the `binwidth` and make sure you try a wide range of values.)
+
+```{r}
+ggplot(diamonds, aes(x = price)) + geom_histogram(binwidth = 2000)
+```
+
+3.How many diamonds are 0.99 carat? How many are 1 carat? What do you think is the cause of the difference?
+
+```{r}
+ggplot(diamonds, aes(x = carat)) + geom_histogram(binwidth = .1)
+```
+
+4.Compare and contrast [`coord_cartesian()`](https://ggplot2.tidyverse.org/reference/coord_cartesian.html) vs. [`xlim()`](https://ggplot2.tidyverse.org/reference/lims.html) or [`ylim()`](https://ggplot2.tidyverse.org/reference/lims.html) when zooming in on a histogram. What happens if you leave `binwidth` unset? What happens if you try and zoom so only half a bar shows?
+
+```{r}
+ggplot(diamonds, aes(x = carat)) + geom_histogram(binwidth = .1) +
+  coord_cartesian(xlim = c(0,50))
+
+ggplot(diamonds, aes(x = carat)) + geom_histogram(binwidth = .1) + 
+  coord_cartesian(ylim = c(0,50))
+```
+
+so it looks like when you use the xlim it zooms out but when you use the ylim it zooms in
+
+## Exercise 12.4.1
+
+1.What happens to missing values in a histogram? What happens to missing values in a bar chart? Why is there a difference in how missing values are handled in histograms and bar charts?
+
+the missing values are removed with a warning
+
+2.What does `na.rm = TRUE` do in [`mean()`](https://rdrr.io/r/base/mean.html) and [`sum()`](https://rdrr.io/r/base/sum.html)?
+
+for mean it determines whether na's should be removed or not and for sum should na values be removed and certain other values
+
+## Exercise 12.5.1.1
+
+1.Use what you've learned to improve the visualization of the departure times of cancelled vs. non-cancelled flights.
+
+```{r}
+canceled_flights <- nycflights13::flights |> 
+  mutate(
+    cancelled = is.na(dep_time),
+    sched_hour = sched_dep_time %/% 100,
+    sched_min = sched_dep_time %% 100,
+    sched_dep_time = sched_hour + (sched_min / 60)
+  ) 
+
+ggplot(canceled_flights,aes(x = cancelled)) +
+  geom_bar()
+
+```
+
+2.What variable in the diamonds dataset is most important for predicting the price of a diamond? How is that variable correlated with cut? Why does the combination of those two relationships lead to lower quality diamonds being more expensive?
+
+i would say maybe clarity or just straight up price, i think because the lower quality diamonds correspond to people buying them who don't really know about diamonds or don't care about the quality,theres alot more lower quality diamonds than higher quality
+
+?diamonds
+
+3.Instead of exchanging the x and y variables, add [`coord_flip()`](https://ggplot2.tidyverse.org/reference/coord_flip.html) as a new layer to the vertical boxplot to create a horizontal one. How does this compare to using exchanging the variables?
+
+it switching the x and y its alot faster
+
+```{r}
+ggplot(mpg, aes(x = hwy, y = fct_reorder(class, hwy, median))) +
+  geom_boxplot() + coord_flip()
+```
+
+4.One problem with boxplots is that they were developed in an era of much smaller datasets and tend to display a prohibitively large number of "outlying values". One approach to remedy this problem is the letter value plot. Install the lvplot package, and try using `geom_lv()` to display the distribution of price vs. cut. What do you learn? How do you interpret the plots?
+
+my version of r can't get this
+
+5.Compare and contrast [`geom_violin()`](https://ggplot2.tidyverse.org/reference/geom_violin.html) with a faceted [`geom_histogram()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html), or a colored [`geom_freqpoly()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html). What are the pros and cons of each method?
+
+geom_violin shows a basic understanding of the amount of diamonds while geom_histogram shows the further outliers better and where they are and geom_freqpoly shows the count better
+
+```{r}
+ggplot(diamonds,aes(x = price, y = clarity)) +
+  geom_violin()
+```
+
+```{r}
+ggplot(diamonds,aes(x = price)) +
+  geom_histogram() +
+  facet_wrap(~clarity, ncol = 1, scales = "free_y")
+#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`
+```
+
+```{r}
+ggplot(diamonds,aes(x = price, color = clarity)) +
+  geom_freqpoly()
+#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+6.If you have a small dataset, it's sometimes useful to use [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html) to see the relationship between a continuous and categorical variable. The ggbeeswarm package provides a number of methods similar to [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html). List them and briefly describe what each one does
+
+so geom_beeswarm makes it so you have more control over overplotting datasets, while geom_jitter to me seems like just a default that you can use on the go but if you do want more customization ggbeeswarm is better for handling overplotting
+
+## Exercise 12.5.2.1
+
+1.How could you rescale the count dataset above to more clearly show the distribution of cut within color, or color within cut?
+
+i can use this code from earlier that shows exactly that
+
+```{r}
+
+ggplot(diamonds, aes(x = cut, y = color)) +
+  geom_count()
+```
+
+2.How does the segmented bar chart change if color is mapped to the `x` aesthetic and `cut` is mapped to the `fill` aesthetic? Calculate the counts that fall into each of the segments.
+
+```{r}
+count(diamonds,color,cut)
+ 
+ ggplot(diamonds,aes( x = color, fill = cut)) +
+  geom_bar(position = "fill")
+```
+
+3.Use [`geom_tile()`](https://ggplot2.tidyverse.org/reference/geom_tile.html) together with dplyr to explore how average flight delays vary by destination and month of year. What makes the plot difficult to read? How could you improve it?
+
+```{r}
+glimpse(nycflights13::flights)
+
+nycflights13::flights %>% summarise(dest,month,year) %>% 
+  group_by(dest,month)
+
+```
+
+## Exercise 12.5.3.1
+
+```{r}
+smaller <- diamonds |> 
+  filter(carat < 3)
+```
+
+1.Instead of summarizing the conditional distribution with a boxplot, you could use a frequency polygon. What do you need to consider when using [`cut_width()`](https://ggplot2.tidyverse.org/reference/cut_interval.html) vs. [`cut_number()`](https://ggplot2.tidyverse.org/reference/cut_interval.html)? How does that impact a visualization of the 2d distribution of `carat` and `price`?
+
+if you want to use cut_width know you r datas values,if you use cut_number know your sample size
+
+```{r}
+# visualize price binning by carat, cut_width()
+ggplot(smaller, aes(x = price, y = ..density..,)) +
+  geom_freqpoly(aes(color = cut_width(carat, 0.5)))
+
+# visualize price binning by carat, cut_number(), 10 bins
+ggplot(smaller, aes(x = price, y = ..density..,)) +
+  geom_freqpoly(aes(color = cut_number(carat, 10)))
+```
+
+2.Visualize the distribution of `carat`, partitioned by `price`.
+
+```{r}
+ggplot(diamonds, aes(x = price, y = carat)) + 
+  geom_boxplot()
+```
+
+3.How does the price distribution of very large diamonds compare to small diamonds? Is it as you expect, or does it surprise you?
+
+its not what i expect even the large diamonds are the same price as smaller diamonds
+
+```{r}
+
+ggplot(diamonds,aes(x = carat,y = price)) +
+  geom_point()
+```
+
+4.Combine two of the techniques you've learned to visualize the combined distribution of cut, carat, and price.
+
+```{r}
+ggplot(diamonds,aes(x = price,color = cut,fill = cut)) +
+  geom_freqpoly()
+```
+
+```{r}
+ggplot(diamonds,aes(x = carat,color = cut,fill = cut)) +
+  geom_freqpoly()
+```
+
+5.Two dimensional plots reveal outliers that are not visible in one dimensional plots. For example, some points in the following plot have an unusual combination of `x` and `y` values, which makes the points outliers even though their `x` and `y` values appear normal when examined separately. Why is a scatterplot a better display than a binned plot for this case?
+
+because this scatterplot shows outliers and binned plots don't
+
+```{r}
+diamonds |> 
+  filter(x >= 4) |> 
+  ggplot(aes(x = x, y = y)) +
+  geom_point() +
+  coord_cartesian(xlim = c(4, 11), ylim = c(4, 11))
+```
+
+```{r}
+diamonds |> 
+  filter(x >= 4) |> 
+ggplot(aes(x = x)) +
+  geom_histogram()
+```
+
+6.Instead of creating boxes of equal width with [`cut_width()`](https://ggplot2.tidyverse.org/reference/cut_interval.html), we could create boxes that contain roughly equal number of points with [`cut_number()`](https://ggplot2.tidyverse.org/reference/cut_interval.html). What are the advantages and disadvantages of this approach?
+
+if you want to control the width you use cut_width, if you want to choose the number of bins use cut_number
+
+```{r}
+ggplot(smaller, aes(x = carat, y = price)) + 
+  geom_boxplot(aes(group = cut_number(carat, 20)))
+
+smaller %>% 
+  mutate(carat_group = cut_number(carat,20)) %>% 
+  count(carat_group)
+```
+
+```{r}
+ggplot(smaller, aes(x = carat, y = price)) + 
+  geom_boxplot(aes(group = cut_width(carat, .1)))
+
+smaller %>% 
+  mutate(carat_group = cut_width(carat,.1)) %>% 
+  count(carat_group)
+```
