@@ -13,7 +13,6 @@ library(maps)
 
 ```{r}
 nz <- map_data("nz")
-
 ggplot(nz, aes(x = long, y = lat, group = group)) +
   geom_polygon(fill = "white", color = "black")
 
@@ -71,16 +70,14 @@ ggplot(mpg, aes(x = hwy, y = drv, fill = drv, color = drv)) +
 
 ## Exercise 11.2.1
 
-1.  Create a scatterplot of `hwy` vs. `displ` where the points are pink filled in triangles.
+1. Create a scatterplot of `hwy` vs. `displ` where the points are pink filled in triangles.
 
 ```{r}
-library(tidyverse)
-
 ggplot(data = mpg,aes(x = hwy, y = displ)) +
   geom_point(color = "pink",shape = 17)
 ```
 
-2.Why did the following code not result in a plot with blue points?
+2. Why did the following code not result in a plot with blue points?
 
 ```{r}
 ggplot(mpg) + 
@@ -94,7 +91,7 @@ ggplot(data = mpg,aes(x = displ, y = hwy)) +
 
 ```
 
-3.What does the `stroke` aesthetic do? What shapes does it work with? (Hint: use [`?geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html))
+3. What does the `stroke` aesthetic do? What shapes does it work with? (Hint: use [`?geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html))
 
 stroke controls the size of the stroke for shapes 21-24
 
