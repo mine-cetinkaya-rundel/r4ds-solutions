@@ -2,13 +2,6 @@
 title: "Data transformation"
 ---
 
-
-
-## Questions
-
-
-
-
 ```{r}
 library(nycflights13)
 library(tidyverse)
@@ -161,7 +154,7 @@ select(flights, contains("TIME"))
 
 1.  Which carrier has the worst delays? Challenge: can you disentangle the effects of bad airports vs. bad carriers? Why/why not? (Hint: think about `flights |> group_by(carrier, dest) |> summarize(n())`)
 
-it looks like 9e has the worst delays
+it looks like 9E has the worst delays
 
 ```{r}
 flights |> group_by(carrier, dep_delay) |> summarize(n())
