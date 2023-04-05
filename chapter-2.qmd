@@ -62,9 +62,7 @@ ggplot(data = penguins, aes(x = bill_depth_mm, y = bill_length_mm)) + geom_point
 Just at the geom level,bill depth should be mapped to color.
 
 ```{r}
-
 ggplot(data = penguins,aes( x = flipper_length_mm, y = body_mass_g, color = bill_depth_mm)) + geom_point() + geom_smooth()
-
 ```
 
 9.Run this code in your head and predict what the output will look like. Then, run the code in R and check your predictions.
@@ -72,14 +70,12 @@ ggplot(data = penguins,aes( x = flipper_length_mm, y = body_mass_g, color = bill
 It came out somewhat of what i thought it looked like.
 
 ```{r}
-
 ggplot(
   data = penguins,
   mapping = aes(x = flipper_length_mm, y = body_mass_g, color = island)
 ) +
   geom_point() +
   geom_smooth(se = FALSE)
-
 ```
 
 10.Will these two graphs look different? Why/why not?
