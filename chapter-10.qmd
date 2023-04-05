@@ -2,82 +2,20 @@
 title: "Layers"
 ---
 
-## Notes
-
-spooky new map code
-
-```{r}
-library(tidyverse)
-library(maps)
-```
-
-```{r}
-nz <- map_data("nz")
-ggplot(nz, aes(x = long, y = lat, group = group)) +
-  geom_polygon(fill = "white", color = "black")
-
-ggplot(nz, aes(x = long, y = lat, group = group)) +
-  geom_polygon(fill = "white", color = "black") +
-  coord_quickmap()
-```
-
-better for showing proportions in this way
-
-```{r}
-ggplot(diamonds, aes(x = cut, fill = clarity)) + 
-  geom_bar(position = "fill")
-```
-
-coloring bar chart
-
-```{r}
-ggplot(diamonds, aes(x = cut, color = cut)) + 
-  geom_bar()
-ggplot(diamonds, aes(x = cut, fill = cut)) + 
-  geom_bar()
-```
-
-facet
-
-```{r}
-ggplot(mpg, aes(x = displ, y = hwy)) + 
-  geom_point() + 
-  facet_grid(drv ~ cyl)
-```
-
-different types of smooth line plots
-
-```{r}
-ggplot(mpg, aes(x = displ, y = hwy, shape = drv)) + 
-  geom_smooth()
-ggplot(mpg, aes(x = displ, y = hwy, linetype = drv)) + 
-  geom_smooth()
-```
-
-geom ridge
-
-```{r}
-library(ggridges)
-
-ggplot(mpg, aes(x = hwy, y = drv, fill = drv, color = drv)) +
-  geom_density_ridges(alpha = 0.5, show.legend = FALSE)
-#> Picking joint bandwidth of 1.28
-```
-
-
-
 ## Solutions
 
 ## Exercise 11.2.1
 
-1. Create a scatterplot of `hwy` vs. `displ` where the points are pink filled in triangles.
+1.  Create a scatterplot of `hwy` vs. `displ` where the points are pink filled in triangles.
 
 ```{r}
 ggplot(data = mpg,aes(x = hwy, y = displ)) +
   geom_point(color = "pink",shape = 17)
 ```
 
-2. Why did the following code not result in a plot with blue points?
+2.  Why did the following code not result in a plot with blue points?
+
+The aes should be in the ggplot and you should also seperate the color aes into the geom like i did below,also the first code i believe thinks your trying to call a variable for color.
 
 ```{r}
 ggplot(mpg) + 
@@ -88,16 +26,15 @@ ggplot(mpg) +
 #fixed version
 ggplot(data = mpg,aes(x = displ, y = hwy)) +
   geom_point(color = "blue")
-
 ```
 
-3. What does the `stroke` aesthetic do? What shapes does it work with? (Hint: use [`?geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html))
+3.  What does the `stroke` aesthetic do? What shapes does it work with? (Hint: use [`?geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html))
 
-stroke controls the size of the stroke for shapes 21-24
+Stroke controls the size of the edge/border of the points for shapes 21-24.
 
 4.What happens if you map an aesthetic to something other than a variable name, like `aes(color = displ < 5)`? Note, you'll also need to specify x and y.
 
-it seperates the displ lower than 5
+For that specific code part it seperates the points into true and false,But if you are talking about using that part or anything thats not a known variable you get a error.
 
 ```{r}
 ggplot(mpg,aes(x = hwy, y = displ,color = displ < 5)) + geom_point()
@@ -107,7 +44,7 @@ ggplot(mpg,aes(x = hwy, y = displ,color = displ < 5)) + geom_point()
 
 1.  What geom would you use to draw a line chart? A boxplot? A histogram? An area chart?
 
-geom_smooth,geom_boxplot,geom_histogram,geom_area
+You would use geom_smooth or geom_area.
 
 2.Earlier in this chapter we used `show.legend` without explaining it:\\
 
@@ -118,11 +55,11 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 
 What does `show.legend = FALSE` do here? What happens if you remove it? Why do you think we used it earlier?
 
-it takes away the legend on the side,if you remove it,it will show the legend
+It takes away the legend on the side,if you remove it,it will show the legend.
 
 3.What does the `se` argument to [`geom_smooth()`](https://ggplot2.tidyverse.org/reference/geom_smooth.html) do?
 
-it displays the confidence interval around the line on the chart
+It displays the confidence interval around the line on the chart,also if you use se = false it takes away the display around the line.
 
 4.Recreate the R code necessary to generate the following graphs. Note that wherever a categorical variable is used in the plot, it's `drv`.
 
@@ -142,7 +79,6 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(aes(color = drv)) + 
   geom_smooth(se = FALSE,aes(shape = drv,color = drv))
-
 ```
 
 ```{r}
@@ -160,13 +96,13 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 
 1.What happens if you facet on a continuous variable?
 
-this is what google says:
+This is what google says:
 
-**You'll get one row or column for each unique value of the variable**
+**You'll get one row or column for each unique value of the variable.**
 
 2.What do the empty cells in plot with `facet_grid(drv ~ cyl)` mean? How do they relate to this plot?
 
-means there was no data in that area i assume
+Having no data in a plot means there was no data to show.
 
 ```{r}
 ggplot(mpg) + 
@@ -176,7 +112,7 @@ ggplot(mpg) +
 
 3.What plots does the following code make? What does `.` do?
 
-It means "everything", another way of saying don't facet across columns because we're not diving up the data by a variable's levels across columns. And in the second case it's across rows
+The period means "everything", another way of saying don't facet across columns because we're not diving up the data by a variable's levels across columns. And in the second case it's across rows.
 
 ```{r}
 ggplot(mpg) + 
@@ -198,17 +134,15 @@ ggplot(mpg) +
 
 What are the advantages to using faceting instead of the color aesthetic? What are the disadvantages? How might the balance change if you had a larger dataset?
 
-the advantages of faceting is seeing each subgroup apart from each other to see more clearly. the disadvantages are not seeing the data overlap with each other.im pretty sure they'll just be more points.
+The advantages of faceting is seeing each subgroup apart from each other to see more clearly. the disadvantages are not seeing the data overlap with each other.im pretty sure they'll just be more points.
 
 5.Read [`?facet_wrap`](https://ggplot2.tidyverse.org/reference/facet_wrap.html). What does `nrow` do? What does `ncol` do? What other options control the layout of the individual panels? Why doesn't [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html) have `nrow` and `ncol` argument
 
-you can choose the number of rows and cols with nrow and ncol.like strink and as.table etc.
-
-for the same reason facet wrap does
+You can choose the number of rows and cols with nrow and ncol,like dir controls whether the panels are horizontal or vertical.Because facet grid goes off of the catagorical variable levels.
 
 6.Which of the following two plots makes it easier to compare engine size (`displ`) across cars with different drive trains? What does this say about when to place a faceting variable across rows or columns?
 
-the second plot makes it easier. use which ever suits best
+The second plot makes it easier,use which ever suits best.
 
 ```{r}
 ggplot(mpg) + 
@@ -222,7 +156,7 @@ ggplot(mpg) +
 
 7.Recreate this plot using [`facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html) instead of [`facet_grid()`](https://ggplot2.tidyverse.org/reference/facet_grid.html). How do the positions of the facet labels change?
 
-facet grid chose to use rows instead of columns in the first code
+Facet grid chose to use rows instead of columns in the first code.
 
 ```{r}
 ggplot(mpg) + 
@@ -240,15 +174,27 @@ ggplot(mpg) +
 
 1.What is the default geom associated with [`stat_summary()`](https://ggplot2.tidyverse.org/reference/stat_summary.html)? How could you rewrite the previous plot to use that geom function instead of the stat function?
 
-i believe its geom_point
+The default geom of stat summary is geom_pointrange.
+
+```{r}
+diamonds |>
+  group_by(cut) |>
+  summarize(
+    lower = min(depth),
+    upper = max(depth),
+    midpoint = median(depth)
+  ) |>
+  ggplot(aes(x = cut, y = midpoint)) +
+  geom_pointrange(aes(ymin = lower, ymax = upper))
+```
 
 2.What does [`geom_col()`](https://ggplot2.tidyverse.org/reference/geom_bar.html) do? How is it different from [`geom_bar()`](https://ggplot2.tidyverse.org/reference/geom_bar.html)?
 
-type ?geom_col tells you in the description
+Type ?geom_col tells you in the description,geom_bar makes the height of the bar proportional to the number of cases in each group while geom_col,"If you want the heights of the bars to represent values in the data, use `geom_col()`".
 
 3.Most geoms and stats come in pairs that are almost always used in concert. Read through the documentation and make a list of all the pairs. What do they have in common?
 
-alot of the geoms use stat = identity and some use bin and count
+Alot of the geoms use stat = identity and some use bin and count.
 
 4.What variables does [`stat_smooth()`](https://ggplot2.tidyverse.org/reference/geom_smooth.html) compute? What parameters control its behavior?
 
@@ -256,7 +202,7 @@ stat_smooth () provides the following variables, some of which depend on the ori
 
 5.In our proportion bar chart, we need to set `group = 1`. Why? In other words, what is the problem with these two graphs?
 
-these graphs don't show any information
+These graphs don't show any information.
 
 ```{r}
 ggplot(diamonds, aes(x = cut, y = after_stat(prop))) + 
@@ -265,7 +211,7 @@ ggplot(diamonds, aes(x = cut, fill = color, y = after_stat(prop))) +
   geom_bar()
 ```
 
-i think i fixed them
+I think i fixed them.
 
 ```{r}
 ggplot(diamonds, aes(x = cut)) + 
@@ -286,11 +232,11 @@ ggplot(mpg, aes(x = cty, y = hwy)) +
 
 2.What parameters to [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html) control the amount of jittering?
 
-To adjust the amount of jittering along the x and y axes, one can explicitly set the position adjustment: geom_jitter **(data= d, mapping = aes (x =system, y = runtime), size =1, position = position_jitter (width =0.3, height =0))**
+To adjust the amount of jittering along the x and y axes, one can explicitly set the position adjustment: geom_jitter **(data= d, mapping = aes (x =system, y = runtime), size =1, position = position_jitter (width =0.3, height =0)).**
 
 3.Compare and contrast [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html) with [`geom_count()`](https://ggplot2.tidyverse.org/reference/geom_count.html).
 
-they both makes it easier to map out discrete data and helps show overlapping data for plots
+They both makes it easier to map out discrete data and helps show overlapping data for plots.
 
 4.What's the default position adjustment for [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)? Create a visualization of the `mpg` dataset that demonstrates it.
 
@@ -312,7 +258,7 @@ ggplot(diamonds, aes(x = cut, fill = clarity)) +
 
 2.What's the difference between [`coord_quickmap()`](https://ggplot2.tidyverse.org/reference/coord_map.html) and [`coord_map()`](https://ggplot2.tidyverse.org/reference/coord_map.html)?
 
-coord quick map sets the aspect ratio correctly for maps while coord map projects a portion of the earth onto a 2d plane so i think coord quick map is like for exact coordinates and coord map is for a bigger representation i think
+Coord quick map sets the aspect ratio correctly for maps while coord map projects a portion of the earth onto a 2d plane so i think coord quick map is like for exact coordinates and coord map is for a bigger representation i think.
 
 3.What does the plot below tell you about the relationship between city and highway mpg? Why is [`coord_fixed()`](https://ggplot2.tidyverse.org/reference/coord_fixed.html) important? What does [`geom_abline()`](https://ggplot2.tidyverse.org/reference/geom_abline.html) do?
 
@@ -323,4 +269,4 @@ ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
   coord_fixed()
 ```
 
-this plot shows the more city miles per gallon the higher the highway mile per gallon goes,i believe coord fixed makes the plot like taller to show the information better,geom abline shows the same information only on a solid line
+This plot shows the more city miles per gallon the higher the highway mile per gallon goes,i believe coord fixed makes the plot like taller to show the information better,geom abline shows the same information only on a solid line.
