@@ -69,7 +69,7 @@ ggplot(data = penguins,aes( x = flipper_length_mm, y = body_mass_g, color = bill
 
 9.Run this code in your head and predict what the output will look like. Then, run the code in R and check your predictions.
 
-It came out somewhat of what i thought it looked like i didn't really understand the se = FALSE argument
+It came out somewhat of what i thought it looked like.
 
 ```{r}
 
