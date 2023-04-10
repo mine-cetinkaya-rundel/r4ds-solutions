@@ -27,14 +27,14 @@ ggplot(data = penguins, aes(x = bill_depth_mm, y = bill_length_mm)) +
   geom_point()
 ```
 
-4. Species is a categorical variable and a scatterplot of a categorical variable is not that useful as it's difficult to use it to describe the distribution of bill depth across species.
+4.  Species is a categorical variable and a scatterplot of a categorical variable is not that useful as it's difficult to use it to describe the distribution of bill depth across species.
 
 ```{r}
 ggplot(data = penguins, aes(x = bill_depth_mm, y = species)) + 
   geom_point()
 ```
 
-5. No aesthetic mappings for `x` and `y` are provided and these are required aesthetics for the point geom.
+5.  No aesthetic mappings for `x` and `y` are provided and these are required aesthetics for the point geom.
 
 ```{r}
 #| error: true
@@ -43,14 +43,14 @@ ggplot(data = penguins) +
   geom_point()
 ```
 
-6. Setting the `na.rm` argument to `TRUE` removes the missing values without a warning. The value for this argument is `FALSE` by default.
+6.  Setting the `na.rm` argument to `TRUE` removes the missing values without a warning. The value for this argument is `FALSE` by default.
 
 ```{r}
 ggplot(data = penguins, aes(x = bill_depth_mm, y = bill_length_mm)) + 
   geom_point(na.rm = TRUE)
 ```
 
-7. The plot from the previous exercise with caption added is provided below.
+7.  The plot from the previous exercise with caption added is provided below.
 
 ```{r}
 ggplot(data = penguins, aes(x = bill_depth_mm, y = bill_length_mm)) + 
@@ -66,7 +66,7 @@ ggplot(data = penguins,aes(x = flipper_length_mm, y = body_mass_g)) +
   geom_smooth()
 ```
 
-9. I would expect the a scatterplot of body mass vs. flipper length with points and smooth lines for each species in a different color. The plot below indeed shows this.
+9.  I would expect the a scatterplot of body mass vs. flipper length with points and smooth lines for each species in a different color. The plot below indeed shows this.
 
 ```{r}
 ggplot(
