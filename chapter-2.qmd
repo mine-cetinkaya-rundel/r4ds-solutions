@@ -1,73 +1,72 @@
----
-title: "Data visualization"
----
+# Data visualization {#sec-data-visualization}
+
+```{r}
+#| results: "asis"
+#| echo: false
+
+source("_common.R")
+```
 
 ```{r}
 #| message: false
+
 library(tidyverse)
 library(palmerpenguins)
 ```
 
-## 2.2.5 Exercises
+## 2.2.5 Exercises {.unnumbered}
 
-1.  How many rows are in penguins? How many columns?
+1.  There are `r nrow(penguins)` rows and `r ncol(penguins)` columns in the `penguins` data frame.
 
-344 rows and 8 columns
+2.  The `bill_depth_mm` denotes the bill depth in millimeters.
 
-```{r}
-library(tidyverse)
-library(palmerpenguins)
-```
-
-2.  What does the bill_depth_mm variable in the penguins data frame describe? Read the help for ?penguins to find out.
-
-?penguins
-
-A number denoting bill depth (millimeters)
-
-3.  Make a scatterplot of bill_depth_mm vs. bill_length_mm. Describe the relationship between these two variables.
-
-    It looks like to me that there can be long narrow beaks and long wide beaks aswell as shorter beaks that have more depth seems pretty balanced.
+3.  There is a positive, linear, and somewhat strong association between bill depth and bill length of penguins.
 
 ```{r}
-ggplot(data = penguins, aes(x = bill_depth_mm, y = bill_length_mm)) + geom_point()
+ggplot(data = penguins, aes(x = bill_depth_mm, y = bill_length_mm)) + 
+  geom_point()
 ```
 
-4.What happens if you make a scatterplot of species vs bill_depth_mm? Why is the plot not useful?
+4. Species is a categorical variable and a scatterplot of a categorical variable is not that useful as it's difficult to use it to describe the distribution of bill depth across species.
 
 ```{r}
-ggplot(data = penguins, aes(x = species, y = bill_depth_mm)) + geom_point()
+ggplot(data = penguins, aes(x = bill_depth_mm, y = species)) + 
+  geom_point()
 ```
 
-5.Why does the following give an error and how would you fix it?
-
-That code has no x or y mapping.
-
-6.What does the na.rm argument do in geom_point()? What is the default value of the argument? Create a scatterplot where you successfully use this argument set to TRUE.
-
-The na.rm argument takes away the warning message. The default is false.
+5. No aesthetic mappings for `x` and `y` are provided and these are required aesthetics for the point geom.
 
 ```{r}
-ggplot(data = penguins, aes(x = bill_depth_mm, y = bill_length_mm)) + geom_point(na.rm = TRUE)
+#| error: true
+
+ggplot(data = penguins) + 
+  geom_point()
 ```
 
-7.Add the following caption to the plot you made in the previous exercise: "Data come from the palmerpenguins package." Hint: Take a look at the documentation for labs().
+6. Setting the `na.rm` argument to `TRUE` removes the missing values without a warning. The value for this argument is `FALSE` by default.
 
 ```{r}
-ggplot(data = penguins, aes(x = bill_depth_mm, y = bill_length_mm)) + geom_point(na.rm = TRUE) + labs(caption = "Data come from the palmerpenguins package")
+ggplot(data = penguins, aes(x = bill_depth_mm, y = bill_length_mm)) + 
+  geom_point(na.rm = TRUE)
 ```
 
-8.Recreate the following visualization. What aesthetic should bill_depth_mm be mapped to? And should it be mapped at the global level or at the geom level?
-
-Just at the geom level,bill depth should be mapped to color.
+7. The plot from the previous exercise with caption added is provided below.
 
 ```{r}
-ggplot(data = penguins,aes( x = flipper_length_mm, y = body_mass_g, color = bill_depth_mm)) + geom_point() + geom_smooth()
+ggplot(data = penguins, aes(x = bill_depth_mm, y = bill_length_mm)) + 
+  geom_point(na.rm = TRUE) + 
+  labs(caption = "Data come from the palmerpenguins package.")
 ```
 
-9.Run this code in your head and predict what the output will look like. Then, run the code in R and check your predictions.
+8.  The code for recreating the visualization is provided below. The `bill_depth_mm` variable should be mapped at the local level, only for the point geom, as it is not used for the smooth geom -- the points are colored for bill depth but the smooth line is a single color.
 
-It came out somewhat of what i thought it looked like.
+```{r}
+ggplot(data = penguins,aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point(aes(color = bill_depth_mm)) + 
+  geom_smooth()
+```
+
+9. I would expect the a scatterplot of body mass vs. flipper length with points and smooth lines for each species in a different color. The plot below indeed shows this.
 
 ```{r}
 ggplot(
@@ -78,20 +77,18 @@ ggplot(
   geom_smooth(se = FALSE)
 ```
 
-10.Will these two graphs look different? Why/why not?
-
-Yes they will look the same because they are doing the same thing one is just writen out.
+10. The two plots will look the same as in the first plot the aesthetic mappings are at the global level and passed down to both geoms, and in the second plot both geoms have the same aesthetic mappings, each defined at the local level.
 
 ```{r}
+#| layout-ncol: 2
+
 ggplot(
   data = penguins,
   mapping = aes(x = flipper_length_mm, y = body_mass_g)
 ) +
   geom_point() +
   geom_smooth()
-```
 
-```{r}
 ggplot() +
   geom_point(
     data = penguins,
@@ -103,7 +100,7 @@ ggplot() +
   )
 ```
 
-## 2.4.3 Exercises
+## 2.4.3 Exercises {.unnumbered}
 
 1.Make a bar plot of species of penguins, where you assign species to the y aesthetic. How is this plot different?
 
@@ -139,7 +136,7 @@ ggplot(diamonds,aes(x = carat)) + geom_histogram(binwidth = .10)
 
 I think .10 binwidth shows the most results.
 
-## 2.5.5 Exercises
+## 2.5.5 Exercises {.unnumbered}
 
 1.  Which variables in `mpg` are categorical? Which variables are continuous? (Hint: type [`?mpg`](https://ggplot2.tidyverse.org/reference/mpg.html) to read the documentation for the dataset). How can you see this information when you run `mpg`?
 
@@ -198,7 +195,7 @@ ggplot(
   geom_point() 
 ```
 
-## 2.6.1 Exercises
+## 2.6.1 Exercises {.unnumbered}
 
 1.Run the following lines of code. Which of the two plots is saved as `mpg-plot.png`? Why?
 
@@ -209,8 +206,13 @@ ggplot(mpg, aes(x = class)) +
   geom_bar()
 ggplot(mpg, aes(x = cty, y = hwy)) +
   geom_point()
-
 ggsave("mpg-plot.png")
+```
+
+```{r}
+#| include: false
+
+fs::file_delete("mpg-plot.png")
 ```
 
 2.What do you need to change in the code above to save the plot as a PDF instead of a PNG?
