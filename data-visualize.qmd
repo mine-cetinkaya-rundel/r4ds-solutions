@@ -110,7 +110,7 @@ ggplot(penguins, aes(y = species)) +
 ```
 
 
-2. The first code outlines the bars while the second code completely shades in the bars,the second is more useful.
+2. In the first plot, the borders of the bars are colored. In the second plot, the bars are filled in with colors. The fill aesthetic is more useful for changing the color of the bars.
 
 ```{r}
 ggplot(penguins, aes(x = species)) +
