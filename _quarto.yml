@@ -23,7 +23,7 @@ book:
 
     - part: "Whole game"
       chapters:
-        - chapter-2.qmd
+        - data-visualize.qmd
 
 format:
   html:
