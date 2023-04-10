@@ -1,4 +1,4 @@
-project: 
+project:
   type: book
   output-dir: docs
 
@@ -8,8 +8,8 @@ book:
 
   page-footer:
     left: |
-      The Solutions to Exercises for R for Data Science (2e) was written by 
-      Jabir, Davon Person, and Mine Çetinkaya-Rundel.
+      The Solutions to Exercises for R for Data Science (2e) was written by
+      Jabir Ghaffar, Davon Person, and Mine Çetinkaya-Rundel.
     right: |
       This book was built with <a href="https://quarto.org/">Quarto</a>.
 
@@ -31,8 +31,8 @@ format:
       - cosmo
       - r4ds.scss
     code-link: true
-    
-    author-meta: "Jabir, Davon Person, and Mine Çetinkaya-Rundel"
+
+    author-meta: "Jabir Ghaffar, Davon Person, and Mine Çetinkaya-Rundel"
     callout-appearance: simple
 
 editor: visual
