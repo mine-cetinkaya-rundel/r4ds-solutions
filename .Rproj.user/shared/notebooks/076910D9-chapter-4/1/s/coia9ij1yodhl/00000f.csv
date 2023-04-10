@@ -1,0 +1,17 @@
+"0","#| error: true"
+"0","flights |> "
+"0","  slice_min(-n)"
+"1","[1m[33mError[39m in `slice_min()`:[22m
+[38;5;254m[33m![38;5;254m Can't compute indices.[39m
+[1mCaused by error in `-n`:[22m
+[33m![39m invalid argument to unary operator
+Backtrace:
+[90m  1. [39m[1mdplyr[22m::slice_min(flights, -n)
+[90m 13. [39m[1mbase[22m::local(...)
+[90m 14. [39mbase::eval.parent(substitute(eval(quote(expr), envir)))
+[90m 15. [39mbase::eval(expr, p)
+[90m 16. [39mbase::eval(expr, p)
+[90m 17. [39mbase::eval(...)
+[90m 18. [39mbase::eval(...)
+[90m 19. [39m-n
+"

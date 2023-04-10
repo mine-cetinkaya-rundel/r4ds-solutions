@@ -1,0 +1,35 @@
+---
+title: "Workflow: basics"
+---
+
+## Solutions
+
+```{r}
+#| label: load-packages
+#| message: false
+
+library(tidyverse)
+```
+
+## 3.5 Exercises
+
+1. Because in "my_variable" theres a 1 instead of an i in variable.
+
+2.
+
+```{r}
+ggplot(mpg) + 
+  geom_point(aes(x = displ, y = hwy))
+```
+
+3. Alt + Shift + K Pulls up keyboard shortcuts.
+
+4. The "my_bar_plot" is saved because thats what was specified.
+
+```{r}
+my_bar_plot <- ggplot(mpg, aes(x = class)) +
+  geom_bar()
+my_scatter_plot <- ggplot(mpg, aes(x = cty, y = hwy)) +
+  geom_point()
+ggsave(filename = "mpg-plot.png", plot = my_bar_plot)
+```
