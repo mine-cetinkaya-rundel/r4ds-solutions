@@ -1,0 +1,32 @@
+---
+title: "Data tidying"
+---
+
+##Solutions
+
+```{r}
+library(tidyverse)
+```
+
+## 6.2.1 Exercises
+
+1.  Country is where the cases happened,year is when it happened,cases is number of people with the disease,population is the number of people in each country,rate is the rate at which people get the disease.
+
+2.
+
+    ```{r}
+     table2 |>
+     pivot_wider(
+      names_from = type,
+      values_from = count
+      ) |> mutate(rate = cases/population * 10000)
+    ```
+
+```{r}
+table4a |>
+  pivot_longer(
+    cols = -country,
+    names_to = "year",
+    values_to = "n"
+  )
+```
