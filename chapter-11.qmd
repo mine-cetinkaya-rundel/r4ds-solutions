@@ -2,7 +2,6 @@
 title: "Exploratory data analysis"
 ---
 
-
 ## Solutions
 
 ```{r}
@@ -13,7 +12,7 @@ library(lvplot)
 
 ## Exercise 12.3.3
 
-1. look up help ?diamonds
+1.  look up help ?diamonds
 
 ```{r}
 ggplot(diamonds, aes(x = x , y = y)) + geom_point()
@@ -21,19 +20,19 @@ ggplot(diamonds, aes(x = x , y = y)) + geom_point()
 
 `x` is the length, `y` is the width, `z` is the depth
 
-2.
+2.  
 
 ```{r}
 ggplot(diamonds, aes(x = price)) + geom_histogram(binwidth = 2000)
 ```
 
-3.
+3.  
 
 ```{r}
 ggplot(diamonds, aes(x = carat)) + geom_histogram(binwidth = .1)
 ```
 
-4. It looks like when you use the `xlim` it zooms out but when you use the `ylim` it zooms in.
+4.  It looks like when you use the `xlim` it zooms out but when you use the `ylim` it zooms in.
 
 ```{r}
 ggplot(diamonds, aes(x = carat)) + geom_histogram(binwidth = .1) +
@@ -45,13 +44,13 @@ ggplot(diamonds, aes(x = carat)) + geom_histogram(binwidth = .1) +
 
 ## Exercise 12.4.1
 
-1. The missing values are removed with a warning.
+1.  The missing values are removed with a warning.
 
-2. For mean it determines whether na's should be removed or not and for sum should na values be removed and certain other values.
+2.  For mean it determines whether na's should be removed or not and for sum should na values be removed and certain other values.
 
 ## Exercise 12.5.1.1
 
-1.
+1.  
 
 ```{r}
 canceled_flights <- nycflights13::flights |> 
@@ -70,7 +69,7 @@ ggplot(canceled_flights,aes(x = cancelled)) +
 
 ?diamonds
 
-3. It switching the x and y its alot faster.
+3.  It switching the x and y its alot faster.
 
 ```{r}
 ggplot(mpg, aes(x = hwy, y = fct_reorder(class, hwy, median))) +
@@ -79,12 +78,11 @@ ggplot(mpg, aes(x = hwy, y = fct_reorder(class, hwy, median))) +
 
 4.One problem with boxplots is that they were developed in an era of much smaller datasets and tend to display a prohibitively large number of "outlying values". One approach to remedy this problem is the letter value plot. Install the lvplot package, and try using `geom_lv()` to display the distribution of price vs. cut. What do you learn? How do you interpret the plots?
 
-
-
 ```{r}
 ggplot(diamonds,aes(x = cut,y = price)) +
   geom_lv()
 ```
+
 5.Compare and contrast [`geom_violin()`](https://ggplot2.tidyverse.org/reference/geom_violin.html) with a faceted [`geom_histogram()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html), or a colored [`geom_freqpoly()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html). What are the pros and cons of each method?
 
 geom_violin shows a basic understanding of the amount of diamonds while geom_histogram shows the further outliers better and where they are and geom_freqpoly shows the count better
