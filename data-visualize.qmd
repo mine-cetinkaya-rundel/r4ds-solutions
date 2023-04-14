@@ -122,53 +122,59 @@ ggplot(penguins, aes(x = species)) +
   geom_bar(fill = "red")
 ```
 
-3. It determines the width or size of the bars.
+3. It determines the number of bins.
 
 4.
 
 ```{r}
-ggplot(diamonds,aes(x = carat)) + geom_histogram(binwidth = .10)
+ggplot(diamonds,aes(x = carat)) +
+  geom_histogram(binwidth = 0.10)
 ```
 
 I think .10 binwidth shows the most results.
 
 ## 2.5.5 Exercises {.unnumbered}
 
-1. 6 categorical,displ is continous,glimpse(mpg) or type mpg or the help function ?mpg
-
+1. Manufacturer,class,fl,drv,model,and trans are all categorical variables.Displ,year,cyl,cty,and hwy are all numerical variables. You can run `glimpse` `mpg` or run ?mpg to see the variables.
 2.
 
 ```{r}
-ggplot(mpg,aes(x = hwy, y = displ,color = cty)) + geom_point()
+ggplot(mpg,aes(x = hwy, y = displ, color = cty)) + 
+  geom_point()
 ```
 
 ```{r}
-ggplot(mpg,aes(x = hwy, y = displ,size = cty)) + geom_point()
+ggplot(mpg,aes(x = hwy, y = displ, size = cty)) + 
+  geom_point()
 ```
 
 ```{r}
-ggplot(mpg,aes(x = hwy, y = displ,size = cty,color = cty)) + geom_point()
+ggplot(mpg,aes(x = hwy, y = displ, size = cty, color = cty)) + 
+  geom_point()
 ```
 
-3. There is no line to alter.
+3.  Since there is no line to alter the width of, nothing happens. The code runs as though that aesthetic was not specified.
 
 ```{r}
-ggplot(mpg,aes(x = hwy, y = displ,linewidth = cty)) + geom_point()
+ggplot(mpg,aes(x = hwy, y = displ, linewidth = cty)) + 
+  geom_point()
 ```
 
-4. This code only shows 1 variable compared to itself,which isn't helpful.
+4. See below for a sample plot that maps `hwy` to `x`, `y`y, and `color` aesthetics. ggplot2 will allow you to map the same variable to multiple aesthetics, but the resulting plot is not useful.
 
 ```{r}
-ggplot(mpg,aes(x = hwy, y = hwy, color  = hwy)) + geom_point()
+ggplot(mpg,aes(x = hwy, y = hwy, color = hwy)) + 
+  geom_point()
 ```
 
-5. That adelies tend to have more depth in their bills while gentoo are longer all while chinstrap are both long and have depth.
+5. Adelies tend to have higher bill depth while Gentoo have longer bills and Chinstrap have deeper and longer bills.
 
 ```{r}
-ggplot(penguins,aes(x = bill_depth_mm, y = bill_length_mm,color = species)) + geom_point()
+ggplot(penguins,aes(x = bill_depth_mm, y = bill_length_mm, color = species)) + 
+  geom_point()
 ```
 
-6. Because the labs argument makes another legend, i just took that argument out.
+6.  The code provided in the exercise yields two separate legends because the legend for `color` is renamed to `"Species"` but the legend for shape is not, and is named `"species"` by default instead. To fix it, we would need to explicitly rename the shape legend as well.
 
 ```{r}
 ggplot(
@@ -178,12 +184,16 @@ ggplot(
     color = species, shape = species
   )
 ) +
-  geom_point() 
+  geom_point() +
+labs(
+  color = "Species",
+  shape = "Species"
+)
 ```
 
 ## 2.6.1 Exercises {.unnumbered}
 
-1. The second line of code is saved, because `ggsave()` saves the last plot you made.
+1. The second plot is saved, because `ggsave()` saves the last plot you made.
 
 ```{r}
 ggplot(mpg, aes(x = class)) +
@@ -199,4 +209,4 @@ ggsave("mpg-plot.png")
 fs::file_delete("mpg-plot.png")
 ```
 
-2. You just have to change the png to pdf in the last ggsave code chunk.
+2. You just have to change the suffix of the file from png to pdf in the ggsave() call.
