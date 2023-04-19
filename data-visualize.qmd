@@ -136,7 +136,7 @@ I think .10 binwidth shows the most results.
 ## 2.5.5 Exercises {.unnumbered}
 
 1. Manufacturer,class,fl,drv,model,and trans are all categorical variables.Displ,year,cyl,cty,and hwy are all numerical variables. You can run `glimpse` `mpg` or run ?mpg to see the variables.
-2.
+2. The difference is a numerical variable doesn't work with shape aesthetic but a categorical variable does.
 
 ```{r}
 ggplot(mpg,aes(x = hwy, y = displ, color = cty)) + 
@@ -150,6 +150,11 @@ ggplot(mpg,aes(x = hwy, y = displ, size = cty)) +
 
 ```{r}
 ggplot(mpg,aes(x = hwy, y = displ, size = cty, color = cty)) + 
+  geom_point()
+```
+
+```{r}
+ggplot(mpg,aes(x = hwy, y = displ, size = cty, color = cty, shape = drv)) + 
   geom_point()
 ```
 
