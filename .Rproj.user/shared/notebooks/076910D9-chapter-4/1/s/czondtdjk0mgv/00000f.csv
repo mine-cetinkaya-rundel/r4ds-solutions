@@ -1,4 +1,0 @@
-"0","flights |> "
-"0","  group_by(dep_delay,dest) |> "
-"0","  summarise(n())"
-"2","`summarise()` has grouped output by 'dep_delay'. You can override using the `.groups` argument."
