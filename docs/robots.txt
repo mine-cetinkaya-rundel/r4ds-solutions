@@ -1,0 +1,1 @@
+Sitemap: https://r4ds.hadley.nz/sitemap.xml
