@@ -1,3 +1,0 @@
-"0","ggplot(mpg,aes(x = hwy,y = displ,color = drv)) +"
-"0","  geom_point() +"
-"0","  geom_label(aes(label = drv))"
