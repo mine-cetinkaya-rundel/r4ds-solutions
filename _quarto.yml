@@ -24,6 +24,7 @@ book:
     - part: "Whole game"
       chapters:
         - data-visualize.qmd
+        - workflow-style.qmd
 
 format:
   html:
