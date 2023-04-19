@@ -40,5 +40,12 @@
     "title": "2  Data visualization",
     "section": "2.6.1 Exercises",
     "text": "2.6.1 Exercises\n1.Run the following lines of code. Which of the two plots is saved as mpg-plot.png? Why?\nThe second line of code is saved, because ggsave() saves the last plot you made.\n\nggplot(mpg, aes(x = class)) +\n  geom_bar()\nggplot(mpg, aes(x = cty, y = hwy)) +\n  geom_point()\nggsave(\"mpg-plot.png\")\n#&gt; Saving 6 x 4 in image\n\n\n\n\n\n\n\n2.What do you need to change in the code above to save the plot as a PDF instead of a PNG?\nYou just have to change the png to pdf in the last ggsave code chunk."
+  },
+  {
+    "objectID": "workflow-style.html#exercises-5.6",
+    "href": "workflow-style.html#exercises-5.6",
+    "title": "\n3  Workflow: code style\n",
+    "section": "\n3.1 Exercises 5.6",
+    "text": "3.1 Exercises 5.6\n\nRestyled pipelines are given below\n\n\nflights |&gt;\n  filter(dest == \"IAH\") |&gt;\n  group_by(year, month, day) |&gt;\n  summarize(\n    n = n(),\n    delay = mean(arr_delay, na.rm = TRUE)\n  ) |&gt;\n  filter(n &gt; 10)\n\n`summarise()` has grouped output by 'year', 'month'. You can override using the\n`.groups` argument.\n\n\n# A tibble: 365 × 5\n# Groups:   year, month [12]\n    year month   day     n delay\n   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;\n 1  2013     1     1    20 17.8 \n 2  2013     1     2    20  7   \n 3  2013     1     3    19 18.3 \n 4  2013     1     4    20 -3.2 \n 5  2013     1     5    13 20.2 \n 6  2013     1     6    18  9.28\n 7  2013     1     7    19 -7.74\n 8  2013     1     8    19  7.79\n 9  2013     1     9    19 18.1 \n10  2013     1    10    19  6.68\n# ℹ 355 more rows\n\n\n\nflights |&gt;\n  filter(\n    carrier == \"UA\", \n    dest %in% c(\"IAH\", \"HOU\"), \n    sched_dep_time &gt; 0900, \n    sched_arr_time &lt; 2000\n  ) |&gt;\n  group_by(flight) |&gt;\n  summarize(\n    delay = mean(arr_delay, na.rm = TRUE), \n    cancelled = sum(is.na(arr_delay)), n = n()\n  ) |&gt;\n  filter(n &gt; 10)\n\n# A tibble: 74 × 4\n   flight delay cancelled     n\n    &lt;int&gt; &lt;dbl&gt;     &lt;int&gt; &lt;int&gt;\n 1     53 12.5          2    18\n 2    112 14.1          0    14\n 3    205 -1.71         0    14\n 4    235 -5.36         0    14\n 5    255 -9.47         0    15\n 6    268 38.6          1    15\n 7    292  6.57         0    21\n 8    318 10.7          1    20\n 9    337 20.1          2    21\n10    370 17.5          0    11\n# ℹ 64 more rows"
   }
 ]
