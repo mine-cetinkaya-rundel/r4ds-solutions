@@ -13,18 +13,20 @@ library(tidyverse)
 
 ## 3.5 Exercises
 
-1. Because in "my_variable" theres a 1 instead of an i in variable.
+1.  Because in `my_variable` theres a 1 (i without dot) instead of an i in variable.
 
-2.
+2.  
 
 ```{r}
+library(tidyverse)
 ggplot(mpg) + 
-  geom_point(aes(x = displ, y = hwy))
+  geom_point(aes(x = displ, y = hwy)) +
+  geom_smooth(method = "lm")
 ```
 
-3. Alt + Shift + K Pulls up keyboard shortcuts.
+3.  Alt + Shift + K pulls up keyboard shortcuts.
 
-4. The "my_bar_plot" is saved because thats what was specified.
+4. The `my_bar_plot` object is saved because that's what was specified in the `plot` argument of the `ggsave()` call.
 
 ```{r}
 my_bar_plot <- ggplot(mpg, aes(x = class)) +
