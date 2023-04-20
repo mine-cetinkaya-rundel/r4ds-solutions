@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "R for Data Science (2e) - Solutions to Exercises",
+    "section": "",
+    "text": "Welcome\nThis is the website for the work-in-progress Solutions to Exercises for the 2nd edition of “R for Data Science”."
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "There are no exercises in this chapter."
+  },
+  {
+    "objectID": "data-visualize.html#exercises",
+    "href": "data-visualize.html#exercises",
+    "title": "2  Data visualization",
+    "section": "2.2.5 Exercises",
+    "text": "2.2.5 Exercises\n\nThere are 344 rows and 8 columns in the penguins data frame.\nThe bill_depth_mm denotes the bill depth in millimeters.\nThere is a positive, linear, and somewhat strong association between bill depth and bill length of penguins.\n\n\nggplot(data = penguins, aes(x = bill_depth_mm, y = bill_length_mm)) + \n  geom_point()\n#&gt; Warning: Removed 2 rows containing missing values (`geom_point()`).\n\n\n\n\n\nSpecies is a categorical variable and a scatterplot of a categorical variable is not that useful as it’s difficult to use it to describe the distribution of bill depth across species.\n\n\nggplot(data = penguins, aes(x = bill_depth_mm, y = species)) + \n  geom_point()\n#&gt; Warning: Removed 2 rows containing missing values (`geom_point()`).\n\n\n\n\n\nNo aesthetic mappings for x and y are provided and these are required aesthetics for the point geom.\n\n\nggplot(data = penguins) + \n  geom_point()\n#&gt; Error in `geom_point()`:\n#&gt; ! Problem while setting up geom.\n#&gt; ℹ Error occurred in the 1st layer.\n#&gt; Caused by error in `compute_geom_1()`:\n#&gt; ! `geom_point()` requires the following missing aesthetics: x and y\n\n\nSetting the na.rm argument to TRUE removes the missing values without a warning. The value for this argument is FALSE by default.\n\n\nggplot(data = penguins, aes(x = bill_depth_mm, y = bill_length_mm)) + \n  geom_point(na.rm = TRUE)\n\n\n\n\n\nThe plot from the previous exercise with caption added is provided below.\n\n\nggplot(data = penguins, aes(x = bill_depth_mm, y = bill_length_mm)) + \n  geom_point(na.rm = TRUE) + \n  labs(caption = \"Data come from the palmerpenguins package.\")\n\n\n\n\n\nThe code for recreating the visualization is provided below. The bill_depth_mm variable should be mapped at the local level, only for the point geom, as it is not used for the smooth geom – the points are colored for bill depth but the smooth line is a single color.\n\n\nggplot(data = penguins,aes(x = flipper_length_mm, y = body_mass_g)) +\n  geom_point(aes(color = bill_depth_mm)) + \n  geom_smooth()\n#&gt; `geom_smooth()` using method = 'loess' and formula = 'y ~ x'\n#&gt; Warning: Removed 2 rows containing non-finite values (`stat_smooth()`).\n#&gt; Warning: Removed 2 rows containing missing values (`geom_point()`).\n\n\n\n\n\nI would expect the a scatterplot of body mass vs. flipper length with points and smooth lines for each species in a different color. The plot below indeed shows this.\n\n\nggplot(\n  data = penguins,\n  mapping = aes(x = flipper_length_mm, y = body_mass_g, color = island)\n) +\n  geom_point() +\n  geom_smooth(se = FALSE)\n#&gt; `geom_smooth()` using method = 'loess' and formula = 'y ~ x'\n#&gt; Warning: Removed 2 rows containing non-finite values (`stat_smooth()`).\n#&gt; Warning: Removed 2 rows containing missing values (`geom_point()`).\n\n\n\n\n\nThe two plots will look the same as in the first plot the aesthetic mappings are at the global level and passed down to both geoms, and in the second plot both geoms have the same aesthetic mappings, each defined at the local level.\n\n\nggplot(\n  data = penguins,\n  mapping = aes(x = flipper_length_mm, y = body_mass_g)\n) +\n  geom_point() +\n  geom_smooth()\n#&gt; `geom_smooth()` using method = 'loess' and formula = 'y ~ x'\n#&gt; Warning: Removed 2 rows containing non-finite values (`stat_smooth()`).\n#&gt; Warning: Removed 2 rows containing missing values (`geom_point()`).\n\nggplot() +\n  geom_point(\n    data = penguins,\n    mapping = aes(x = flipper_length_mm, y = body_mass_g)\n  ) +\n  geom_smooth(\n    data = penguins,\n    mapping = aes(x = flipper_length_mm, y = body_mass_g)\n  )\n#&gt; `geom_smooth()` using method = 'loess' and formula = 'y ~ x'\n#&gt; Warning: Removed 2 rows containing non-finite values (`stat_smooth()`).\n#&gt; Removed 2 rows containing missing values (`geom_point()`)."
+  },
+  {
+    "objectID": "data-visualize.html#exercises-1",
+    "href": "data-visualize.html#exercises-1",
+    "title": "2  Data visualization",
+    "section": "2.4.3 Exercises",
+    "text": "2.4.3 Exercises\n1.Make a bar plot of species of penguins, where you assign species to the y aesthetic. How is this plot different?\nAll it does is make the bars horizontal instead of vertical.\n\nggplot(penguins, aes(y = species)) + geom_bar()\n\n\n\n\n2.How are the following two plots different? Which aesthetic, color or fill, is more useful for changing the color of bars?\nThe first code outlines the bars while the second code completely shades in the bars,the second is more useful.\n\nggplot(penguins, aes(x = species)) +\n  geom_bar(color = \"red\")\n\n\n\n\n\nggplot(penguins, aes(x = species)) +\n  geom_bar(fill = \"red\")\n\n\n\n\n3.What does the bins argument in geom_histogram() do?\nIt determines the width or size of the bars.\n4.Make a histogram of the carat variable in the diamonds dataset. Experiment with different binwidths. What binwidth reveals the most interesting patterns?\n\nggplot(diamonds,aes(x = carat)) + geom_histogram(binwidth = .10)\n\n\n\n\nI think .10 binwidth shows the most results."
+  },
+  {
+    "objectID": "data-visualize.html#exercises-2",
+    "href": "data-visualize.html#exercises-2",
+    "title": "2  Data visualization",
+    "section": "2.5.5 Exercises",
+    "text": "2.5.5 Exercises\n\nWhich variables in mpg are categorical? Which variables are continuous? (Hint: type ?mpg to read the documentation for the dataset). How can you see this information when you run mpg?\n\n6 categorical,displ is continous,glimpse(mpg) or type mpg or the help function ?mpg\n\nMake a scatterplot of hwy vs. displ using the mpg data frame. Next, map a third, numerical variable to color, then size, then both color and size, then shape. How do these aesthetics behave differently for categorical vs. numerical variables?\n\n\nggplot(mpg,aes(x = hwy, y = displ,color = cty)) + geom_point()\n\n\n\n\n\nggplot(mpg,aes(x = hwy, y = displ,size = cty)) + geom_point()\n\n\n\n\n\nggplot(mpg,aes(x = hwy, y = displ,size = cty,color = cty)) + geom_point()\n\n\n\n\n3.In the scatterplot of hwy vs. displ, what happens if you map a third variable to linewidth?\nThere is no line to alter.\n\nggplot(mpg,aes(x = hwy, y = displ,linewidth = cty)) + geom_point()\n\n\n\n\n4.what happens if you map the same variable to multiple aesthetics?\nThis code only shows 1 variable compared to itself,which isn’t helpful.\n\nggplot(mpg,aes(x = hwy, y = hwy, color  = hwy)) + geom_point()\n\n\n\n\n5.Make a scatterplot of bill_depth_mm vs. bill_length_mm and color the points by species. What does adding coloring by species reveal about the relationship between these two variables?\nThat adelies tend to have more depth in their bills while gentoo are longer all while chinstrap are both long and have depth.\n\nggplot(penguins,aes(x = bill_depth_mm, y = bill_length_mm,color = species)) + geom_point()\n#&gt; Warning: Removed 2 rows containing missing values (`geom_point()`).\n\n\n\n\n6.Why does the following yield two separate legends? How would you fix it to combine the two legends?\nBecause the labs argument makes another legend, i just took that argument out.\n\nggplot(\n  data = penguins,\n  mapping = aes(\n    x = bill_length_mm, y = bill_depth_mm, \n    color = species, shape = species\n  )\n) +\n  geom_point() \n#&gt; Warning: Removed 2 rows containing missing values (`geom_point()`)."
+  },
+  {
+    "objectID": "data-visualize.html#exercises-3",
+    "href": "data-visualize.html#exercises-3",
+    "title": "2  Data visualization",
+    "section": "2.6.1 Exercises",
+    "text": "2.6.1 Exercises\n1.Run the following lines of code. Which of the two plots is saved as mpg-plot.png? Why?\nThe second line of code is saved, because ggsave() saves the last plot you made.\n\nggplot(mpg, aes(x = class)) +\n  geom_bar()\nggplot(mpg, aes(x = cty, y = hwy)) +\n  geom_point()\nggsave(\"mpg-plot.png\")\n#&gt; Saving 6 x 4 in image\n\n\n\n\n\n\n\n2.What do you need to change in the code above to save the plot as a PDF instead of a PNG?\nYou just have to change the png to pdf in the last ggsave code chunk."
+  },
+  {
+    "objectID": "workflow-style.html#exercises-5.6",
+    "href": "workflow-style.html#exercises-5.6",
+    "title": "\n3  Workflow: code style\n",
+    "section": "\n3.1 Exercises 5.6",
+    "text": "3.1 Exercises 5.6\n\nRestyled pipelines are given below\n\n\nflights |&gt;\n  filter(dest == \"IAH\") |&gt;\n  group_by(year, month, day) |&gt;\n  summarize(\n    n = n(),\n    delay = mean(arr_delay, na.rm = TRUE)\n  ) |&gt;\n  filter(n &gt; 10)\n\n`summarise()` has grouped output by 'year', 'month'. You can override using the\n`.groups` argument.\n\n\n# A tibble: 365 × 5\n# Groups:   year, month [12]\n    year month   day     n delay\n   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;\n 1  2013     1     1    20 17.8 \n 2  2013     1     2    20  7   \n 3  2013     1     3    19 18.3 \n 4  2013     1     4    20 -3.2 \n 5  2013     1     5    13 20.2 \n 6  2013     1     6    18  9.28\n 7  2013     1     7    19 -7.74\n 8  2013     1     8    19  7.79\n 9  2013     1     9    19 18.1 \n10  2013     1    10    19  6.68\n# ℹ 355 more rows\n\n\n\nflights |&gt;\n  filter(\n    carrier == \"UA\", \n    dest %in% c(\"IAH\", \"HOU\"), \n    sched_dep_time &gt; 0900, \n    sched_arr_time &lt; 2000\n  ) |&gt;\n  group_by(flight) |&gt;\n  summarize(\n    delay = mean(arr_delay, na.rm = TRUE), \n    cancelled = sum(is.na(arr_delay)), n = n()\n  ) |&gt;\n  filter(n &gt; 10)\n\n# A tibble: 74 × 4\n   flight delay cancelled     n\n    &lt;int&gt; &lt;dbl&gt;     &lt;int&gt; &lt;int&gt;\n 1     53 12.5          2    18\n 2    112 14.1          0    14\n 3    205 -1.71         0    14\n 4    235 -5.36         0    14\n 5    255 -9.47         0    15\n 6    268 38.6          1    15\n 7    292  6.57         0    21\n 8    318 10.7          1    20\n 9    337 20.1          2    21\n10    370 17.5          0    11\n# ℹ 64 more rows"
+  },
+  {
+    "objectID": "workflow-help.html",
+    "href": "workflow-help.html",
+    "title": "4  Workflow: getting help",
+    "section": "",
+    "text": "There are no exercises in this chapter."
+  }
+]
