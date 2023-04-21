@@ -13,7 +13,7 @@ library(tidyverse)
 
 ## 3.5 Exercises
 
-1.  Because in `my_variable` theres a 1 (i without dot) instead of an i in variable.
+1. Because in `my_variable` theres a 1 (i without dot) instead of an i in variable.
 
 2.  
 
