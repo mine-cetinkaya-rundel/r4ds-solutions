@@ -7,6 +7,7 @@ title: "Data transformation"
 ```{r}
 library(nycflights13)
 library(tidyverse)
+
 #> ── Attaching packages ──────────────────────────────────── tidyverse 1.3.2 ──
 #> ✔ ggplot2 3.4.0           ✔ purrr   1.0.1.9000 
 #> ✔ tibble  3.1.8           ✔ dplyr   1.0.99.9000
@@ -21,77 +22,74 @@ library(tidyverse)
 
 ## 4.2.5 Exercises
 
-1.  
+1\. Pipelines for each part are given below.
 
-```{=html}
-<!-- -->
-```
-a.  
-
-```{r}
-filter(flights,arr_delay >= 2) |> 
-  arrange(desc(arr_delay))
-```
-
-b.  Flew to houston (IAH or HOU)
+a\.
 
 ```{r}
 flights |>
-  filter(dest %in% c("IAH","HOU"))
+filter(arr_delay >= 2) |> 
+  arrange(desc(arr_delay))
+```
+
+b.
+
+```{r}
+flights |>
+  filter(dest %in% c("IAH", "HOU"))
 ```
 
 c.  
 
 ```{r}
 flights |>
-  filter(carrier %in% c("UA","DL","AA"))
+  filter(carrier %in% c("UA", "DL", "AA"))
 ```
 
 d.  
 
 ```{r}
 flights |>
-  filter(month %in% c(7,8,9))
+  filter(month %in% c(7, 8, 9))
 ```
 
 e.  
 
 ```{r}
 flights |> 
-  filter(dep_delay >= 0,arr_delay < -2)
+  filter(dep_delay >= 0, arr_delay < -2)
 ```
 
 f.  
 
 ```{r}
 flights |> 
-  filter(dep_delay <= -1,arr_delay > 30)
+  filter(dep_delay <= -1, arr_delay > 30)
 ```
 
-2.  
+2.  Flights with longest departure delays and flights that left earliest in the morning.
 
 ```{r}
 flights |> 
-  arrange(dep_delay) |> 
+  arrange(desc(dep_delay)) |> 
   arrange(time_hour)
 ```
 
-3.  
+3. Flights with the fastest arrival times.
 
 ```{r}
 flights |> 
-  arrange(desc(arr_delay))
+  mutate(speed = distance / air_time)
 ```
 
-4.Yes
+4. Yes, there was a flight on every day of 2013.
 
 ```{r}
 flights |> 
-  arrange(desc(day)) |> 
-  arrange(desc(month))
+  distinct(year, month, day)
 ```
 
-5.  
+5. Flights traveled the farthest distance and shortest distance.
 
 ```{r}
 flights |> 
@@ -103,20 +101,24 @@ flights |>
   arrange(desc(distance))
 ```
 
-6.  I don't think it matters the two functions would go over each other with no problems either way.
+6. The order doesn't matter because we filter based on a condition, not based on row number.
 
 ## 4.3.5 Exercises
 
-1.  No they don't match.
+1.  Yes, these times do match.
 
     ```{r}
     flights |> 
-      mutate(timearrdep = arr_time - dep_time)
+      mutate(new = dep_time - sched_dep_time) |>
+      relocate(new, dep_delay)
     ```
 
-2.  They show when a plane left when it was supposed to leave and if there was a delay.
+2. They show when a plane left when it was supposed to leave and if there was a delay.
 
-3.  
+```{r}
+flights |>
+select(dep_time:arr_delay, -c(contains("sched")))
+```
 
 ```{r}
 flights |> 
@@ -127,28 +129,48 @@ flights |>
 select(flights, dep_time:arr_delay, -sched_dep_time,-sched_arr_time)
 ```
 
-4.  Nothing happens, you just get the variable once.
+3.  Nothing happens, you just get the variable once.
 
 ```{r}
 flights |> 
   select(dep_time, dep_time)
 ```
 
-5.  You ask if `any_of()` these variables have a certain thing you are looking for.
+4. You ask if `any_of()` these variables have a certain thing you are looking for.
 
 ```{r}
 variables <- c("year", "month", "day", "dep_delay", "arr_delay")
+
+flights |> 
+  select(any_of(variables))
+  
 ```
 
-6.  No it doesn't surprise me.it looks like case doesn't matter.i can change time to dep.
+5.  No it doesn't surprise me.it looks like case doesn't matter.i can change time to dep.
 
 ```{r}
 select(flights, contains("TIME"))
 ```
+6.
+```{r}
+flights |>
+  mutate(air_time_min = air_time) |>
+  relocate(air_time_min)
+```
 
+7. This doesn't work because the code has only 1 variable after selecting `tailnum` you can't arrange a variable that wasn't selected.
+```{r}
+flights |> 
+  select(tailnum) |> 
+  arrange(arr_delay)
+#> Error in `arrange()`:
+#> ℹ In argument: `..1 = arr_delay`.
+#> Caused by error:
+#> ! object 'arr_delay' not found
+```
 ## 4.4.6 Exercises
 
-1.  It looks like 9E has the worst delays.
+1.  It looks like 9E has the worst delays.9E is a mexican airline called Endeavour Air.
 
 ```{r}
 flights |> 
@@ -160,18 +182,16 @@ flights |>
 ```
 
 2.  
-
 ```{r}
 flights |> 
-  group_by(dep_delay,dest) |> 
-  summarise(n())
+  group_by(dest) |> 
+  arrange(desc(dep_delay))
 ```
 
 3.  
 
 ```{r}
-#| eval: false
-ggplot(flights,aes(x = time_hour,y = dep_delay)) + 
+ggplot(flights, aes(x = time_hour, y = dep_delay)) + 
   geom_smooth()
 ```
 
@@ -183,7 +203,7 @@ flights |>
   slice_min(-n)
 ```
 
-5.Count,counts the number of things in each specific group,will show the largest group at the top.
+5.  `count()` counts the number of observations in each group, setting the `sort` argument to `TRUE` arranges the categories in descending order of number of observations.
 
 6.  
 
@@ -233,7 +253,7 @@ df |>
   summarize(mean_x = mean(x), .groups = "drop")
 ```
 
-f.  These codes do the same thing the only difference is that the first code shows the information in a more efficient way due to summarize.
+f.  These codes do the same thing the only difference is that the first code shows the information in a clean way due to `summarize()`.
 
 ```{r}
 df |>
