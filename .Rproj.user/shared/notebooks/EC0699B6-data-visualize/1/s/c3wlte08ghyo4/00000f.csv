@@ -1,2 +1,0 @@
-"0","ggplot(penguins, aes(y = species)) + "
-"0","  geom_bar()"

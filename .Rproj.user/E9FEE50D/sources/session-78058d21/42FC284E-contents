@@ -23,9 +23,8 @@ library(tidyverse)
 
 1.  
 
-```{=html}
 <!-- -->
-```
+
 a.  
 
 ```{r}

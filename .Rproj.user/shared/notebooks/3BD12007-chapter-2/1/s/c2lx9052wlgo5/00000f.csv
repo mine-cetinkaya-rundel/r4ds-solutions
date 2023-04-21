@@ -1,8 +1,0 @@
-"0","ggplot("
-"0","  data = penguins,"
-"0","  mapping = aes("
-"0","    x = bill_length_mm, y = bill_depth_mm, "
-"0","    color = species, shape = species"
-"0","  )"
-"0",") +"
-"0","  geom_point() "
