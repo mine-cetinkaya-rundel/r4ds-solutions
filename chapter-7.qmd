@@ -3,3 +3,5 @@ title: "Workflow: scripts and projects"
 ---
 
 1.  If you go to Tools \> Global options \> appearance you can change the theme of your R studio.
+
+2.**Warn if variable used has no definition in scope**
