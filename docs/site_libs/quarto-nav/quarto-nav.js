@@ -193,11 +193,7 @@ window.document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener(
     "hashchange",
     function (e) {
-      if (
-        getComputedStyle(document.documentElement).scrollBehavior !== "smooth"
-      ) {
-        window.scrollTo(0, window.pageYOffset - headerOffset());
-      }
+      window.scrollTo(0, window.pageYOffset - headerOffset());
     },
     false
   );
