@@ -2,22 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://r4ds.hadley.nz/index.html</loc>
-    <lastmod>2023-04-26T04:29:46.593Z</lastmod>
+    <lastmod>2023-04-26T04:32:20.285Z</lastmod>
   </url>
   <url>
     <loc>https://r4ds.hadley.nz/intro.html</loc>
-    <lastmod>2023-04-26T04:29:46.598Z</lastmod>
+    <lastmod>2023-04-26T04:32:20.292Z</lastmod>
   </url>
   <url>
     <loc>https://r4ds.hadley.nz/data-visualize.html</loc>
-    <lastmod>2023-04-26T04:29:46.629Z</lastmod>
+    <lastmod>2023-04-26T04:32:20.325Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r4ds.hadley.nz/workflow-basics.html</loc>
+    <lastmod>2023-04-26T04:32:20.338Z</lastmod>
   </url>
   <url>
     <loc>https://r4ds.hadley.nz/workflow-style.html</loc>
-    <lastmod>2023-04-26T04:29:46.641Z</lastmod>
+    <lastmod>2023-04-26T04:32:20.349Z</lastmod>
   </url>
   <url>
     <loc>https://r4ds.hadley.nz/workflow-help.html</loc>
-    <lastmod>2023-04-26T04:29:46.646Z</lastmod>
+    <lastmod>2023-04-26T04:32:20.354Z</lastmod>
   </url>
 </urlset>
