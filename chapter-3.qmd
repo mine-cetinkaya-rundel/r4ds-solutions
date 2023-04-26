@@ -13,25 +13,36 @@ library(tidyverse)
 
 ## 3.5 Exercises
 
-1. Because in `my_variable` theres a 1 (i without dot) instead of an i in variable.
+1.  The variable is called `my_variable` while the next line calls it `my_varıable`, with an an `ı` (`i` without a dot) in the variable name.
+    Therefore the error is due to the mismatch in variable names.
 
-2.  
+2.  The corrected code is provided below.
 
 ```{r}
 library(tidyverse)
+
 ggplot(mpg) + 
   geom_point(aes(x = displ, y = hwy)) +
   geom_smooth(method = "lm")
 ```
 
-3.  Alt + Shift + K pulls up keyboard shortcuts.
+3.  Option + Shift + K / Alt + Shift + K pulls up keyboard shortcuts.
+    Alternatively, you can get to the same place with Help \> Keyboard Shortcuts Help.
 
-4. The `my_bar_plot` object is saved because that's what was specified in the `plot` argument of the `ggsave()` call.
+4.  The `my_bar_plot` object is saved because that's what was specified in the `plot` argument of the `ggsave()` call.
 
 ```{r}
 my_bar_plot <- ggplot(mpg, aes(x = class)) +
   geom_bar()
+
 my_scatter_plot <- ggplot(mpg, aes(x = cty, y = hwy)) +
   geom_point()
+
 ggsave(filename = "mpg-plot.png", plot = my_bar_plot)
+```
+
+```{r}
+#| invlude: false
+
+fs::file_delete("mpg-plot.png")
 ```
