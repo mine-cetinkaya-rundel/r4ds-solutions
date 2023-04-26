@@ -1,0 +1,245 @@
+# Data visualization {#sec-data-visualization}
+
+```{r}
+#| results: "asis"
+#| echo: false
+
+source("_common.R")
+```
+
+```{r}
+#| message: false
+
+library(tidyverse)
+library(palmerpenguins)
+```
+
+## 2.2.5 Exercises {.unnumbered}
+
+1.  There are `r nrow(penguins)` rows and `r ncol(penguins)` columns in the `penguins` data frame.
+
+2.  The `bill_depth_mm` denotes the bill depth in millimeters.
+
+3.  There is a positive, linear, and somewhat strong association between bill depth and bill length of penguins.
+
+```{r}
+ggplot(
+  data = penguins, 
+  aes(x = bill_depth_mm, y = bill_length_mm)
+) + 
+  geom_point()
+
+```
+
+4.  Species is a categorical variable and a scatterplot of a categorical variable is not that useful as it's difficult to use it to describe the distribution of bill depth across species.
+
+```{r}
+ggplot(
+  data = penguins, 
+  aes(x = bill_depth_mm, y = species)
+) + 
+  geom_point()
+```
+
+5.  No aesthetic mappings for `x` and `y` are provided and these are required aesthetics for the point geom.
+
+```{r}
+#| error: true
+
+ggplot(data = penguins) + 
+  geom_point()
+```
+
+6.  Setting the `na.rm` argument to `TRUE` removes the missing values without a warning. The value for this argument is `FALSE` by default.
+
+```{r}
+ggplot(
+  data = penguins, 
+  aes(x = bill_depth_mm, y = bill_length_mm)
+) + 
+  geom_point(na.rm = TRUE)
+```
+
+7.  The plot from the previous exercise with caption added is provided below.
+
+```{r}
+ggplot(
+  data = penguins,
+  aes(x = bill_depth_mm, y = bill_length_mm)
+) +
+  geom_point(na.rm = TRUE) +
+  labs(caption = "Data come from the palmerpenguins package.")
+```
+
+8.  The code for recreating the visualization is provided below. The `bill_depth_mm` variable should be mapped at the local level, only for the point geom, as it is not used for the smooth geom -- the points are colored for bill depth but the smooth line is a single color.
+
+```{r}
+ggplot(
+  data = penguins,
+  aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(aes(color = bill_depth_mm)) + 
+  geom_smooth()
+```
+
+9.  I would expect the a scatterplot of body mass vs. flipper length with points and smooth lines for each species in a different color. The plot below indeed shows this.
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g, color = island)
+) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+```
+
+10. The two plots will look the same as in the first plot the aesthetic mappings are at the global level and passed down to both geoms, and in the second plot both geoms have the same aesthetic mappings, each defined at the local level.
+
+```{r}
+#| layout-ncol: 2
+
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point() +
+  geom_smooth()
+
+ggplot() +
+  geom_point(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  ) +
+  geom_smooth(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  )
+```
+
+## 2.4.3 Exercises {.unnumbered}
+
+1.  This code makes the bars horizontal instead of vertical.
+
+```{r}
+ggplot(penguins, aes(y = species)) + 
+  geom_bar()
+```
+
+2.  In the first plot, the borders of the bars are colored. In the second plot, the bars are filled in with colors. The fill aesthetic is more useful for changing the color of the bars.
+
+```{r}
+ggplot(penguins, aes(x = species)) +
+  geom_bar(color = "red")
+```
+
+```{r}
+ggplot(penguins, aes(x = species)) +
+  geom_bar(fill = "red")
+```
+
+3.  It determines the number of bins.
+
+4.  
+
+```{r}
+ggplot(diamonds, aes(x = carat)) +
+  geom_histogram(binwidth = 0.10)
+```
+
+I think .10 binwidth shows the most results.
+
+## 2.5.5 Exercises {.unnumbered}
+
+1.  `manufacturer`, `class`, `fl`, `drv`, `model`, and `trans` are all categorical variables. `displ`, `year`, `cyl`, `cty`, and `hwy` are all numerical variables. You can run `glimpse(mpg)` or `?mpg` to see a list of the variables.
+2.  The difference is a numerical variable doesn't work with shape aesthetic but a categorical variable does. Also, the color scale is different for numerical and categorical variables.
+
+```{r}
+#| layout-ncol: 2
+
+ggplot(
+  mpg, 
+  aes(x = hwy, y = displ, color = cty)
+) + 
+  geom_point()
+
+ggplot(
+  mpg, 
+  aes(x = hwy, y = displ, size = cty)
+) + 
+  geom_point()
+
+ggplot(
+  mpg, 
+  aes(x = hwy, y = displ, size = cty, color = cty)
+) + 
+  geom_point()
+
+ggplot(
+  mpg, 
+  aes(x = hwy, y = displ, size = cty, color = cty, shape = drv)
+) + 
+  geom_point()
+```
+
+3.  Since there is no line to alter the width of, nothing happens. The code runs as though that aesthetic was not specified.
+
+```{r}
+ggplot(mpg, aes(x = hwy, y = displ, linewidth = cty)) + 
+  geom_point()
+```
+
+4.  See below for a sample plot that maps `hwy` to `x`, `y`y, and `color` aesthetics. ggplot2 will allow you to map the same variable to multiple aesthetics, but the resulting plot is not useful.
+
+```{r}
+ggplot(mpg, aes(x = hwy, y = hwy, color = hwy)) + 
+  geom_point()
+```
+
+5.  Adelies tend to have higher bill depth while Gentoo have longer bills and Chinstrap have deeper and longer bills.
+
+```{r}
+ggplot(
+  penguins,
+  aes(x = bill_depth_mm, y = bill_length_mm, color = species)
+) + 
+  geom_point()
+```
+
+6.  The code provided in the exercise yields two separate legends because the legend for `color` is renamed to `"Species"` but the legend for shape is not, and is named `"species"` by default instead. To fix it, we would need to explicitly rename the shape legend as well.
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = bill_length_mm, y = bill_depth_mm, 
+    color = species, shape = species
+  )
+) +
+  geom_point() +
+labs(
+  color = "Species",
+  shape = "Species"
+)
+```
+
+## 2.6.1 Exercises {.unnumbered}
+
+1.  The second plot is saved, because `ggsave()` saves the last plot you made.
+
+```{r}
+ggplot(mpg, aes(x = class)) +
+  geom_bar()
+
+ggplot(mpg, aes(x = cty, y = hwy)) +
+  geom_point()
+
+ggsave("mpg-plot.png")
+```
+
+```{r}
+#| include: false
+
+fs::file_delete("mpg-plot.png")
+```
+
+2.  You just have to change the suffix of the file from png to pdf in the `ggsave()` call.

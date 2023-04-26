@@ -1,0 +1,45 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "R for Data Science (2e) - Solutions to Exercises"
+  reader-mode: true
+
+  page-footer:
+    left: |
+      The Solutions to Exercises for R for Data Science (2e) was written by
+      Jabir Ghaffar, Davon Person, and Mine Çetinkaya-Rundel.
+    right: |
+      This book was built with <a href="https://quarto.org/">Quarto</a>.
+
+  site-url: https://r4ds.hadley.nz/
+  repo-url: https://github.com/mine-cetinkaya-rundel/r4ds-solutions/
+  repo-branch: main
+  repo-actions: [edit, issue]
+  chapters:
+    - index.qmd
+    - intro.qmd
+
+    - part: "Whole game"
+      chapters:
+        - data-visualize.qmd
+        - workflow-basics.qmd
+        #- data-transform.qmd
+        - workflow-style.qmd
+        #- data-tidy.qmd
+        #- workflow-scripts.qmd
+        #- data-import.qmd
+        - workflow-help.qmd
+
+format:
+  html:
+    theme:
+      - cosmo
+      - r4ds.scss
+    code-link: true
+
+    author-meta: "Jabir Ghaffar, Davon Person, and Mine Çetinkaya-Rundel"
+    callout-appearance: simple
+
+editor: visual
