@@ -2,6 +2,8 @@
 title: "Workflow: scripts and projects"
 ---
 
-1.  If you go to Tools \> Global options \> appearance you can change the theme of your R studio.
+## 7.3 Exercises {.unnumbered}
 
-2. **Warn if variable used has no definition in scope**
+1.  If you go to Tools \> Global Options \> Appearance you can change the theme of your RStudio.
+
+2.  RStudio will warn with a caution icon (orange triangle with an exclamation point in it) if variable used in your code is not defined in your scope (i.e., your environment).
