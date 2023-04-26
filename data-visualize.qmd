@@ -7,9 +7,9 @@
 source("_common.R")
 ```
 
-```{r}
-#| message: false
+## Prerequisites {.unnumbered}
 
+```{r}
 library(tidyverse)
 library(palmerpenguins)
 ```
