@@ -13,9 +13,8 @@ library(tidyverse)
 
 1. Country is where the cases happened,year is when it happened,cases is number of people with the disease,population is the number of people in each country,rate is the rate at which people get the disease.
 
-2.  
 
-Sketch out the process you'd use to calculate the `rate` for `table2` and `table4a` + `table4b`. You will need to perform four operations:
+2.  Sketch out the process you'd use to calculate the `rate` for `table2` and `table4a` + `table4b`. You will need to perform four operations:
 
 a.  Extract the number of TB cases per country per year.
 
