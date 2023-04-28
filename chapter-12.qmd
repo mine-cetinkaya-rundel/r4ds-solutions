@@ -35,7 +35,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 2.  
 
 ```{r}
-mpg |> ggplot(aes(x = cty,y = hwy,color = drv,shape = drv)) +
+mpg |> ggplot(aes(x = cty, y = hwy, color = drv, shape = drv)) +
   geom_point() +
   labs(x = "City MPG",
         y = "Highway MPG",
@@ -52,7 +52,7 @@ mpg |> ggplot(aes(x = cty,y = hwy,color = drv,shape = drv)) +
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point() +
  annotate(geom = "text",
-          x = 7,y = 45, label = "help",
+          x = 7, y = 45, label = "help",
           color = "red")
 ```
 
@@ -60,7 +60,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point() +
  annotate(geom = "text",
-          x = 1,y = 45, label = "help",
+          x = 1, y = 45, label = "help",
           color = "red")
 ```
 
@@ -68,7 +68,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point() +
  annotate(geom = "text",
-          x = 1,y = 1, label = "help",
+          x = 1, y = 1, label = "help",
           color = "red")
 ```
 
@@ -76,7 +76,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point() +
  annotate(geom = "text",
-          x = 7,y = 1, label = "help",
+          x = 7, y = 1, label = "help",
           color = "red")
 ```
 
@@ -109,7 +109,8 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(alpha = 0.1) +
   facet_wrap(~drv) +
-  geom_text(data = mpg |> filter(drv == "f"), aes(label = drv), nudge_x = 1)
+  geom_text(data = mpg |> 
+              filter(drv == "f"), aes(label = drv), nudge_x = 1)
 
 
 
@@ -119,14 +120,12 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_text(data = mpg |> filter(drv == "f"), aes(label = drv), nudge_x = 1) +
    geom_text(data = mpg |> filter(drv == "4"), aes(label = drv), nudge_x = 1) +
    geom_text(data = mpg |> filter(drv == "r"), aes(label = drv), nudge_x = 1)
-
-
 ```
 
 4\.
 
 ```{r}
-ggplot(mpg,aes(x = hwy,y = displ,color = drv)) +
+ggplot(mpg,aes(x = hwy, y = displ, color = drv)) +
   geom_point() +
   geom_label(aes(label = drv))
 ```
@@ -196,7 +195,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 
 ## Exercises 12.4.6
 
-1.Because geom hex already fills this in you could use scale_fill instead.
+1.  Because geom hex already fills this in you could use scale_fill instead.
 
 ```{r}
 df <- tibble(
@@ -210,11 +209,9 @@ ggplot(df, aes(x, y)) +
   coord_fixed()
 ```
 
-2.What is the first argument to every scale? How does it compare to [`labs()`](https://ggplot2.tidyverse.org/reference/labs.html)?
+2.  Name or palette ,you can label your x and y axis with scale_x\_continous and also labs.
 
-Name or palette ,you can label your x and y axis with scale_x\_continous and also labs.
-
-3\.
+3.  
 
 ```{r}
 presidential |>
@@ -231,7 +228,7 @@ scale_y_continuous(
 )
 ```
 
-4\.
+4.  
 
 ```{r}
 ggplot(diamonds, aes(x = carat, y = price)) +
@@ -241,7 +238,7 @@ ggplot(diamonds, aes(x = carat, y = price)) +
 
 ## Exercises 12.5.1
 
-1\.
+1.  
 
 ```{r}
 ggplot(diamonds, aes(x = carat, y = price)) +
