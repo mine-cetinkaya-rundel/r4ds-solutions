@@ -78,14 +78,14 @@ ggplot(mpg, aes(x = hwy, y = fct_reorder(class, hwy, median))) +
 
 4.One problem with boxplots is that they were developed in an era of much smaller datasets and tend to display a prohibitively large number of "outlying values". One approach to remedy this problem is the letter value plot. Install the lvplot package, and try using `geom_lv()` to display the distribution of price vs. cut. What do you learn? How do you interpret the plots?
 
+
+
 ```{r}
 ggplot(diamonds,aes(x = cut,y = price)) +
   geom_lv()
 ```
 
-5.Compare and contrast [`geom_violin()`](https://ggplot2.tidyverse.org/reference/geom_violin.html) with a faceted [`geom_histogram()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html), or a colored [`geom_freqpoly()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html). What are the pros and cons of each method?
-
-geom_violin shows a basic understanding of the amount of diamonds while geom_histogram shows the further outliers better and where they are and geom_freqpoly shows the count better
+5. geom_violin shows a basic understanding of the amount of diamonds while geom_histogram shows the further outliers better and where they are and geom_freqpoly shows the count better
 
 ```{r}
 ggplot(diamonds,aes(x = price, y = clarity)) +
@@ -105,23 +105,18 @@ ggplot(diamonds,aes(x = price, color = clarity)) +
 #> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-6.If you have a small dataset, it's sometimes useful to use [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html) to see the relationship between a continuous and categorical variable. The ggbeeswarm package provides a number of methods similar to [`geom_jitter()`](https://ggplot2.tidyverse.org/reference/geom_jitter.html). List them and briefly describe what each one does
-
-so geom_beeswarm makes it so you have more control over overplotting datasets, while geom_jitter to me seems like just a default that you can use on the go but if you do want more customization ggbeeswarm is better for handling overplotting
+6. `geom_beeswarm()` makes it so you have more control over overplotting datasets, while geom_jitter to me seems like just a default that you can use on the go but if you do want more customization ggbeeswarm is better for handling overplotting.
 
 ## Exercise 12.5.2.1
 
-1.How could you rescale the count dataset above to more clearly show the distribution of cut within color, or color within cut?
-
-i can use this code from earlier that shows exactly that
+1.
 
 ```{r}
-
 ggplot(diamonds, aes(x = cut, y = color)) +
   geom_count()
 ```
 
-2.How does the segmented bar chart change if color is mapped to the `x` aesthetic and `cut` is mapped to the `fill` aesthetic? Calculate the counts that fall into each of the segments.
+2.
 
 ```{r}
 count(diamonds,color,cut)
@@ -130,14 +125,12 @@ count(diamonds,color,cut)
   geom_bar(position = "fill")
 ```
 
-3.Use [`geom_tile()`](https://ggplot2.tidyverse.org/reference/geom_tile.html) together with dplyr to explore how average flight delays vary by destination and month of year. What makes the plot difficult to read? How could you improve it?
+3.
 
 ```{r}
-glimpse(nycflights13::flights)
-
-nycflights13::flights %>% summarise(dest,month,year) %>% 
+nycflights13::flights |> 
+  summarise(dest,month,year) |> 
   group_by(dest,month)
-
 ```
 
 ## Exercise 12.5.3.1
@@ -147,9 +140,7 @@ smaller <- diamonds |>
   filter(carat < 3)
 ```
 
-1.Instead of summarizing the conditional distribution with a boxplot, you could use a frequency polygon. What do you need to consider when using [`cut_width()`](https://ggplot2.tidyverse.org/reference/cut_interval.html) vs. [`cut_number()`](https://ggplot2.tidyverse.org/reference/cut_interval.html)? How does that impact a visualization of the 2d distribution of `carat` and `price`?
-
-if you want to use cut_width know you r datas values,if you use cut_number know your sample size
+1. If you want to use cut_width know you r datas values,if you use cut_number know your sample size.
 
 ```{r}
 # visualize price binning by carat, cut_width()
@@ -168,31 +159,26 @@ ggplot(diamonds, aes(x = price, y = carat)) +
   geom_boxplot()
 ```
 
-3.How does the price distribution of very large diamonds compare to small diamonds? Is it as you expect, or does it surprise you?
-
-its not what i expect even the large diamonds are the same price as smaller diamonds
+3. Its not what i expect even the large diamonds are the same price as smaller diamonds.
 
 ```{r}
-
-ggplot(diamonds,aes(x = carat,y = price)) +
+ggplot(diamonds,aes(x = carat, y = price)) +
   geom_point()
 ```
 
-4.Combine two of the techniques you've learned to visualize the combined distribution of cut, carat, and price.
+4.
 
 ```{r}
-ggplot(diamonds,aes(x = price,color = cut,fill = cut)) +
+ggplot(diamonds,aes(x = price, color = cut, fill = cut)) +
   geom_freqpoly()
 ```
 
 ```{r}
-ggplot(diamonds,aes(x = carat,color = cut,fill = cut)) +
+ggplot(diamonds,aes(x = carat, color = cut, fill = cut)) +
   geom_freqpoly()
 ```
 
-5.Two dimensional plots reveal outliers that are not visible in one dimensional plots. For example, some points in the following plot have an unusual combination of `x` and `y` values, which makes the points outliers even though their `x` and `y` values appear normal when examined separately. Why is a scatterplot a better display than a binned plot for this case?
-
-because this scatterplot shows outliers and binned plots don't
+5. This scatterplot shows outliers and binned plots don't.
 
 ```{r}
 diamonds |> 
@@ -209,16 +195,14 @@ ggplot(aes(x = x)) +
   geom_histogram()
 ```
 
-6.Instead of creating boxes of equal width with [`cut_width()`](https://ggplot2.tidyverse.org/reference/cut_interval.html), we could create boxes that contain roughly equal number of points with [`cut_number()`](https://ggplot2.tidyverse.org/reference/cut_interval.html). What are the advantages and disadvantages of this approach?
-
-if you want to control the width you use cut_width, if you want to choose the number of bins use cut_number
+6. If you want to control the width you use cut_width, if you want to choose the number of bins use cut_number.
 
 ```{r}
 ggplot(smaller, aes(x = carat, y = price)) + 
   geom_boxplot(aes(group = cut_number(carat, 20)))
 
-smaller %>% 
-  mutate(carat_group = cut_number(carat,20)) %>% 
+smaller |> 
+  mutate(carat_group = cut_number(carat,20)) |>
   count(carat_group)
 ```
 
@@ -226,7 +210,7 @@ smaller %>%
 ggplot(smaller, aes(x = carat, y = price)) + 
   geom_boxplot(aes(group = cut_width(carat, .1)))
 
-smaller %>% 
-  mutate(carat_group = cut_width(carat,.1)) %>% 
+smaller |>
+  mutate(carat_group = cut_width(carat,.1)) |> 
   count(carat_group)
 ```
