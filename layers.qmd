@@ -2,9 +2,20 @@
 title: "Layers"
 ---
 
-## Solutions
+```{r}
+#| results: "asis"
+#| echo: false
 
-## Exercise 11.2.1
+source("_common.R")
+```
+
+## Prerequisites {.unnumbered}
+
+```{r}
+library(tidyverse)
+```
+
+## 10.2.1 Exercises {.unnumbered}
 
 1.  
 
@@ -34,7 +45,7 @@ ggplot(data = mpg,aes(x = displ, y = hwy)) +
 ggplot(mpg,aes(x = hwy, y = displ, color = displ < 5)) + geom_point()
 ```
 
-## Exercise 11.3.1
+## 10.3.1 Exercises {.unnumbered}
 
 1.  You would use geom_smooth or geom_area.
 
@@ -73,7 +84,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(aes(shape = "circle open", color = drv))
 ```
 
-## Exercise 11.4.1
+## 10.4.1 Exercises {.unnumbered}
 
 1.  This is what google says:
 
@@ -99,7 +110,8 @@ ggplot(mpg) +
   facet_grid(. ~ cyl)
 ```
 
-4.  The advantages of faceting is seeing each subgroup apart from each other to see more clearly. the disadvantages are not seeing the data overlap with each other.im pretty sure they'll just be more points.
+4.  The advantages of faceting is seeing each subgroup apart from each other to see more clearly.
+    the disadvantages are not seeing the data overlap with each other.im pretty sure they'll just be more points.
 
 5.  You can choose the number of rows and cols with nrow and ncol,like dir controls whether the panels are horizontal or vertical.Because facet grid goes off of the catagorical variable levels.
 
@@ -129,7 +141,7 @@ ggplot(mpg) +
   facet_wrap( ~ drv)
 ```
 
-## Exercise 11.5.1
+## 10.5.1 Exercises {.unnumbered}
 
 1.  The default geom of stat summary is geom_pointrange.
 
@@ -145,7 +157,8 @@ diamonds |>
   geom_pointrange(aes(ymin = lower, ymax = upper))
 ```
 
-2.  Type ?g eom_col tells you in the description,geom_bar makes the height of the bar proportional to the number of cases in each group while geom_col,"If you want the heights of the bars to represent values in the data, use `geom_col()`".
+2.  Type ?g
+    eom_col tells you in the description,geom_bar makes the height of the bar proportional to the number of cases in each group while geom_col,"If you want the heights of the bars to represent values in the data, use `geom_col()`".
 
 3.  A lot of the geoms use stat = identity and some use bin and count.
 
@@ -170,7 +183,7 @@ ggplot(diamonds, aes(x = cut, fill = color)) +
   geom_bar()
 ```
 
-## Exercise 11.6.1
+## 10.6.1 Exercises {.unnumbered}
 
 1.  
 
@@ -190,7 +203,7 @@ ggplot(data = mpg, aes(x = cty, y = displ)) +
   geom_boxplot(position = "dodge2")
 ```
 
-## Exercise 11.7.1
+## 10.7.1 Exercises {.unnumbered}
 
 1.  
 
