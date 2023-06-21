@@ -15,37 +15,53 @@ source("_common.R")
 library(tidyverse)
 ```
 
-## Exercise 8.2.4 {.unnumbered}
+## 8.2.4 Exercises {.unnumbered}
 
-1.  "read_delim"
+1.  For reading a file delimited with `|`, use `read_delim()` with argument `delim = "|"`.
 
-2.  They have almost all of each others arguments.
+2.  All other arguments are common among the two functions.
 
-3.  i don't know i've never used it
+3.  `col_positions` is an important argument since it defines the beginning and end of columns.
 
-4.  
-
-```{r}
-read_csv("x,y\n1,'a,b'",quote = "\'")
-```
-
-5.  
+4.  We need to specify the `quote` argument.
 
 ```{r}
-read_csv("a,b,c\n1,2,3\n4,5,6")
-
-read_csv("a,b,c,d\n
-          1,2\n
-          1,2,3,4")
-
-read_csv("a\n\1")
-
-read_csv("a,b\n
-          1,2\na,b")
-read_csv2("a;b\n1;3")
+read_csv("x,y\n1,'a,b'", quote = "\'")
 ```
 
-6.  
+5.  Problems with each `read_csv()` statement is shown below:\\
+
+    -   There are only two column headers but three values in each row, so the last two get merged:
+
+        ```{r}
+        read_csv("a,b\n1,2,3\n4,5,6")
+        ```
+
+    -   There are only three column headers, first row is missing a value in the last column so gets an `NA` there, the second row has four values so the last two get merged:
+
+        ```{r}
+        read_csv("a,b,c\n1,2\n1,2,3,4")
+        ```
+
+    -   No rows are read in:
+
+        ```{r}
+        read_csv("a,b\n\"1")
+        ```
+
+    -   Each column has a numerical and a character value, so the column type is coerced to character:
+
+        ```{r}
+        read_csv("a,b\n1,2\na,b")
+        ```
+
+    -   The delimiter is `;` but it's not specified, therefore this is read in as a single-column data frame with a single observation:
+
+        ```{r}
+        read_csv("a;b\n1;3")
+        ```
+
+6.  The non-syntactic names can be read in as follows.
 
 ```{r}
 annoying <- tibble(
@@ -54,8 +70,39 @@ annoying <- tibble(
 )
 ```
 
+a\.
+Extracting the variable called `1`:
+
 ```{r}
-annoying %>% rename(one = `1`,two = `2`) %>%  
-  mutate( three = two/one) %>% ggplot(aes(x = one,y = two)) +
+annoying |>
+  select(`1`)
+```
+
+b\.
+Plotting a scatterplot of `1` vs. `2`:
+
+```{r}
+ggplot(annoying, aes(x = `2`, y = `1`)) +
   geom_point()
+```
+
+c\.
+Creating a new column called `3`, which is `2` divided by `1`:
+
+```{r}
+annoying |>
+  mutate(`3` = `2` / `1`)
+```
+
+d\.
+Renaming the columns to `one`, `two`, and `three`:
+
+```{r}
+annoying |>
+  mutate(`3` = `2` / `1`) |>
+  rename(
+    "one" = `1`,
+    "two" = `2`,
+    "three" = `3`
+  )
 ```
