@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.3.353">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jabir Ghaffar, Davon Person, and Mine Çetinkaya-Rundel">
-<title>R for Data Science (2e) - Solutions to Exercises - 6&nbsp; Data tidying</title>
+<title>R for Data Science (2e) - Solutions to Exercises - 8&nbsp; Data import</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -61,8 +61,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./workflow-scripts.html" rel="next">
-<link href="./workflow-style.html" rel="prev">
+<link href="./workflow-help.html" rel="next">
+<link href="./workflow-scripts.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -98,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data-visualize.html">Whole game</a></li><li class="breadcrumb-item"><a href="./data-tidy.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data tidying</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data-visualize.html">Whole game</a></li><li class="breadcrumb-item"><a href="./data-import.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Data import</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -174,7 +174,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data-tidy.html" class="sidebar-item-text sidebar-link active">
+  <a href="./data-tidy.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data tidying</span></span></a>
   </div>
 </li>
@@ -186,7 +186,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data-import.html" class="sidebar-item-text sidebar-link">
+  <a href="./data-import.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Data import</span></span></a>
   </div>
 </li>
@@ -207,13 +207,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
 <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites">Prerequisites</a></li>
-  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">6.2.1 Exercises</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mine-cetinkaya-rundel/r4ds-solutions/edit/main/data-tidy.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/mine-cetinkaya-rundel/r4ds-solutions/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">8.2.4 Exercises</a></li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mine-cetinkaya-rundel/r4ds-solutions/edit/main/data-import.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/mine-cetinkaya-rundel/r4ds-solutions/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title">
-<span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data tidying</span>
+<span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Data import</span>
 </h1>
 </div>
 
@@ -241,53 +241,196 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span></span>
 <span><span class="co">#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="exercises" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="exercises">6.2.1 Exercises</h2>
+</section><section id="exercises" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="exercises">8.2.4 Exercises</h2>
 <ol type="1">
-<li><p>In each of <code>table1</code>, <code>table2</code>, and <code>table3</code>, each observation represents a country. In <code>table1</code>, <code>country</code> is the country name, <code>year</code> is the year of data collection, <code>cases</code> is the number of people with the disease in that year, and <code>population</code> is the number of people in each country in that year. In <code>table2</code>, <code>country</code> and <code>year</code> are the same as in <code>table1</code>, <code>type</code> is the type of number, and <code>count</code> is the number of observations (either <code>cases</code> or <code>population</code> depending on <code>type</code>). Finally, in <code>table3</code>, <code>country</code> and <code>year</code> are again the same as in <code>table1</code>, and <code>rate</code> is the rate of disease (cases divided by population).</p></li>
-<li>
-<p>For <code>table2</code>, we need to reshape the data have a column for cases and a column for population and then divide the two to calculate the rate. A possible approach is shown below.</p>
+<li><p>For reading a file delimited with <code>|</code>, use <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_delim()</a></code> with argument <code>delim = "|"</code>.</p></li>
+<li><p>All other arguments are common among the two functions.</p></li>
+<li><p><code>col_positions</code> is an important argument since it defines the beginning and end of columns.</p></li>
+<li><p>We need to specify the <code>quote</code> argument.</p></li>
+</ol>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">table2</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span></span>
-<span>    names_from <span class="op">=</span> <span class="va">type</span>,</span>
-<span>    values_from <span class="op">=</span> <span class="va">count</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="va">cases</span> <span class="op">/</span> <span class="va">population</span> <span class="op">*</span> <span class="fl">10000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 5</span></span>
-<span><span class="co">#&gt;   country      year  cases population  rate</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 Afghanistan  1999    745   19987071 0.373</span></span>
-<span><span class="co">#&gt; 2 Afghanistan  2000   2666   20595360 1.29 </span></span>
-<span><span class="co">#&gt; 3 Brazil       1999  37737  172006362 2.19 </span></span>
-<span><span class="co">#&gt; 4 Brazil       2000  80488  174504898 4.61 </span></span>
-<span><span class="co">#&gt; 5 China        1999 212258 1272915272 1.67 </span></span>
-<span><span class="co">#&gt; 6 China        2000 213766 1280428583 1.67</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"x,y\n1,'a,b'"</span>, quote <span class="op">=</span> <span class="st">"\'"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 1 Columns: 2</span></span>
+<span><span class="co">#&gt; ── Column specification ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Delimiter: ","</span></span>
+<span><span class="co">#&gt; chr (1): y</span></span>
+<span><span class="co">#&gt; dbl (1): x</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 2</span></span>
+<span><span class="co">#&gt;       x y    </span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1     1 a,b</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>For <code>table3</code>, we need to separate cases and population into their own columns and then divide them. A possible approach is shown below.</p>
+<ol start="5" type="1">
+<li>
+<p>Problems with each <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code> statement is shown below:\</p>
+<ul>
+<li>
+<p>There are only two column headers but three values in each row, so the last two get merged:</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">table3</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html">separate_wider_delim</a></span><span class="op">(</span></span>
-<span>    cols <span class="op">=</span> <span class="va">rate</span>, </span>
-<span>    delim <span class="op">=</span> <span class="st">"/"</span>, </span>
-<span>    names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cases"</span>, <span class="st">"population"</span><span class="op">)</span>,</span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
-<span>    cases <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">cases</span><span class="op">)</span>,</span>
-<span>    population <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">population</span><span class="op">)</span>,</span>
-<span>    rate <span class="op">=</span> <span class="va">cases</span> <span class="op">/</span> <span class="va">population</span> <span class="op">*</span> <span class="fl">10000</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 5</span></span>
-<span><span class="co">#&gt;   country      year  cases population  rate</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 Afghanistan  1999    745   19987071 0.373</span></span>
-<span><span class="co">#&gt; 2 Afghanistan  2000   2666   20595360 1.29 </span></span>
-<span><span class="co">#&gt; 3 Brazil       1999  37737  172006362 2.19 </span></span>
-<span><span class="co">#&gt; 4 Brazil       2000  80488  174504898 4.61 </span></span>
-<span><span class="co">#&gt; 5 China        1999 212258 1272915272 1.67 </span></span>
-<span><span class="co">#&gt; 6 China        2000 213766 1280428583 1.67</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"a,b\n1,2,3\n4,5,6"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: One or more parsing issues, call `problems()` on your data frame for</span></span>
+<span><span class="co">#&gt; details, e.g.:</span></span>
+<span><span class="co">#&gt;   dat &lt;- vroom(...)</span></span>
+<span><span class="co">#&gt;   problems(dat)</span></span>
+<span><span class="co">#&gt; Rows: 2 Columns: 2</span></span>
+<span><span class="co">#&gt; ── Column specification ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Delimiter: ","</span></span>
+<span><span class="co">#&gt; dbl (1): a</span></span>
+<span><span class="co">#&gt; num (1): b</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 2</span></span>
+<span><span class="co">#&gt;       a     b</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     1    23</span></span>
+<span><span class="co">#&gt; 2     4    56</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </li>
+<li>
+<p>There are only three column headers, first row is missing a value in the last column so gets an <code>NA</code> there, the second row has four values so the last two get merged:</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"a,b,c\n1,2\n1,2,3,4"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: One or more parsing issues, call `problems()` on your data frame for</span></span>
+<span><span class="co">#&gt; details, e.g.:</span></span>
+<span><span class="co">#&gt;   dat &lt;- vroom(...)</span></span>
+<span><span class="co">#&gt;   problems(dat)</span></span>
+<span><span class="co">#&gt; Rows: 2 Columns: 3</span></span>
+<span><span class="co">#&gt; ── Column specification ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Delimiter: ","</span></span>
+<span><span class="co">#&gt; dbl (2): a, b</span></span>
+<span><span class="co">#&gt; num (1): c</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 3</span></span>
+<span><span class="co">#&gt;       a     b     c</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     1     2    NA</span></span>
+<span><span class="co">#&gt; 2     1     2    34</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</li>
+<li>
+<p>No rows are read in:</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"a,b\n\"1"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 0 Columns: 2</span></span>
+<span><span class="co">#&gt; ── Column specification ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Delimiter: ","</span></span>
+<span><span class="co">#&gt; chr (2): a, b</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span><span class="co">#&gt; # A tibble: 0 × 2</span></span>
+<span><span class="co">#&gt; # ℹ 2 variables: a &lt;chr&gt;, b &lt;chr&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</li>
+<li>
+<p>Each column has a numerical and a character value, so the column type is coerced to character:</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"a,b\n1,2\na,b"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 2 Columns: 2</span></span>
+<span><span class="co">#&gt; ── Column specification ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Delimiter: ","</span></span>
+<span><span class="co">#&gt; chr (2): a, b</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 2</span></span>
+<span><span class="co">#&gt;   a     b    </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1 1     2    </span></span>
+<span><span class="co">#&gt; 2 a     b</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</li>
+<li>
+<p>The delimiter is <code>;</code> but it’s not specified, therefore this is read in as a single-column data frame with a single observation:</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"a;b\n1;3"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 1 Columns: 1</span></span>
+<span><span class="co">#&gt; ── Column specification ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Delimiter: ","</span></span>
+<span><span class="co">#&gt; chr (1): a;b</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 1</span></span>
+<span><span class="co">#&gt;   `a;b`</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1 1;3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>The non-syntactic names can be read in as follows.</p></li>
 </ol>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">annoying</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  `1` <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,</span>
+<span>  `2` <span class="op">=</span> <span class="va">`1`</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">`1`</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>a. Extracting the variable called <code>1</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">annoying</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">`1`</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 × 1</span></span>
+<span><span class="co">#&gt;     `1`</span></span>
+<span><span class="co">#&gt;   &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1     1</span></span>
+<span><span class="co">#&gt; 2     2</span></span>
+<span><span class="co">#&gt; 3     3</span></span>
+<span><span class="co">#&gt; 4     4</span></span>
+<span><span class="co">#&gt; 5     5</span></span>
+<span><span class="co">#&gt; 6     6</span></span>
+<span><span class="co">#&gt; # ℹ 4 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>b. Plotting a scatterplot of <code>1</code> vs.&nbsp;<code>2</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">annoying</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">`2`</span>, y <span class="op">=</span> <span class="va">`1`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="data-import_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>c. Creating a new column called <code>3</code>, which is <code>2</code> divided by <code>1</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">annoying</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>`3` <span class="op">=</span> <span class="va">`2`</span> <span class="op">/</span> <span class="va">`1`</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 × 3</span></span>
+<span><span class="co">#&gt;     `1`    `2`   `3`</span></span>
+<span><span class="co">#&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     1  0.600 0.600</span></span>
+<span><span class="co">#&gt; 2     2  4.26  2.13 </span></span>
+<span><span class="co">#&gt; 3     3  3.56  1.19 </span></span>
+<span><span class="co">#&gt; 4     4  7.99  2.00 </span></span>
+<span><span class="co">#&gt; 5     5 10.6   2.12 </span></span>
+<span><span class="co">#&gt; 6     6 13.1   2.19 </span></span>
+<span><span class="co">#&gt; # ℹ 4 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>d. Renaming the columns to <code>one</code>, <code>two</code>, and <code>three</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">annoying</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>`3` <span class="op">=</span> <span class="va">`2`</span> <span class="op">/</span> <span class="va">`1`</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span></span>
+<span>    <span class="st">"one"</span> <span class="op">=</span> <span class="va">`1`</span>,</span>
+<span>    <span class="st">"two"</span> <span class="op">=</span> <span class="va">`2`</span>,</span>
+<span>    <span class="st">"three"</span> <span class="op">=</span> <span class="va">`3`</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 × 3</span></span>
+<span><span class="co">#&gt;     one    two three</span></span>
+<span><span class="co">#&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     1  0.600 0.600</span></span>
+<span><span class="co">#&gt; 2     2  4.26  2.13 </span></span>
+<span><span class="co">#&gt; 3     3  3.56  1.19 </span></span>
+<span><span class="co">#&gt; 4     4  7.99  2.00 </span></span>
+<span><span class="co">#&gt; 5     5 10.6   2.12 </span></span>
+<span><span class="co">#&gt; 6     6 13.1   2.19 </span></span>
+<span><span class="co">#&gt; # ℹ 4 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
@@ -523,13 +666,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./workflow-style.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Workflow: code style</span></span>
+      <a href="./workflow-scripts.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Workflow: scripts and projects</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./workflow-scripts.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Workflow: scripts and projects</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./workflow-help.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Workflow: getting help</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
