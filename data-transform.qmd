@@ -1,0 +1,293 @@
+---
+title: "Data transformation"
+---
+
+```{r}
+#| results: "asis"
+#| echo: false
+
+source("_common.R")
+```
+
+## Prerequisites {.unnumbered}
+
+```{r}
+library(nycflights13)
+library(tidyverse)
+```
+
+## 4.2.5 Exercises {.unnumbered}
+
+1.  Pipelines for each part are given below.
+
+<!-- -->
+
+a.  
+
+```{r}
+flights |>
+  filter(arr_delay >= 120) |>
+  arrange(desc(arr_delay))
+```
+
+b.  
+
+```{r}
+flights |>
+  filter(dest %in% c("IAH", "HOU"))
+```
+
+c.  
+
+```{r}
+flights |>
+  filter(carrier %in% c("UA", "DL", "AA"))
+```
+
+d.  
+
+```{r}
+flights |>
+  filter(month %in% c(7, 8, 9))
+```
+
+e.  
+
+```{r}
+flights |> 
+  filter(arr_delay >= 120 & dep_delay <= 0) |> view()
+```
+
+f.  
+
+```{r}
+flights |> 
+  filter(dep_delay >= 60 & dep_delay - arr_delay > 30)
+```
+
+2.  Flights with longest departure delays and, among those, flights that left earliest in the morning:
+
+```{r}
+flights |> 
+  arrange(desc(dep_delay)) |> 
+  arrange(sched_dep_time) |>
+  relocate(dep_delay, sched_dep_time)
+```
+
+3.  Fastest flights, measured as miles per hour:
+
+```{r}
+flights |> 
+  mutate(speed = distance / (air_time / 60)) |>
+  arrange(desc(speed)) |>
+  relocate(speed)
+```
+
+4.  Yes, there was a flight on every day of 2013 since there are 365 distinct combinations of `year`, `month`, and `day`, which is equal to the number of days in the year 2013.
+
+```{r}
+flights |> 
+  distinct(year, month, day) |>
+  nrow()
+```
+
+5.  Flights that traveled the farthest distance:
+
+```{r}
+flights |> 
+  arrange(desc(distance)) |>
+  relocate(distance)
+```
+
+Flights that travelled the shortest distance
+
+```{r}
+flights |> 
+  arrange(distance) |>
+  relocate(distance)
+```
+
+6.  The order doesn't matter because we filter based on a condition, not based on row number.
+
+## 4.3.5 Exercises {.unnumbered}
+
+1.  I would expect `dep_time` to be `sched_dep_time + dep_delay`.
+
+```{r}
+flights |> 
+  relocate(dep_time, sched_dep_time, dep_delay)
+```
+
+2.  The following are some of the ways these variables can be selected.
+
+```{r}
+flights |> 
+  select(dep_time, dep_delay, arr_time, arr_delay)
+
+flights |> 
+  select(starts_with("dep"), starts_with("arr"))
+
+flights |>
+  select(dep_time:arr_delay, -contains("sched"))
+```
+
+3.  You get the variable just once.
+
+```{r}
+flights |> 
+  select(dep_time, dep_time)
+```
+
+4.  You ask if `any_of()` these variables have a certain thing you are looking for.
+
+```{r}
+variables <- c("year", "month", "day", "dep_delay", "arr_delay")
+
+flights |> 
+  select(any_of(variables))
+```
+
+5.  Yes, it does surprise me since the variable names are lowercase but the string in `contains()` is uppercase. By default, `contains()` ignores case.
+
+```{r}
+flights |> 
+  select(contains("TIME"))
+```
+
+To change this default behavior, set `ignore.case = FALSE`.
+
+```{r}
+flights |> 
+  select(contains("TIME", ignore.case = FALSE))
+```
+
+6.  Below we rename `air_time` to `air_time_min` and move it to the beginning of the data frame.
+
+```{r}
+flights |>
+  rename(air_time_min = air_time) |>
+  relocate(air_time_min)
+```
+
+7.  This doesn't work because the result of the `select()` step is a data frame with only the `tailnum` variable, so it's not possible to arrange it by another variable, `arr_delay`.
+
+```{r}
+#| error: true
+
+flights |> 
+  select(tailnum) |> 
+  arrange(arr_delay)
+```
+
+## 4.5.7 Exercises {.unnumbered}
+
+1.  F9 (Frontier Airlines) has the worst average delays.
+
+```{r}
+flights |>
+  group_by(carrier) |>
+  summarize(avg_dep_delay = mean(dep_delay, na.rm = TRUE)) |>
+  arrange(desc(avg_dep_delay))
+```
+
+2.  The following are the top 5 most departure delayed flights from each destination.
+
+```{r}
+flights |> 
+  group_by(dest) |> 
+  arrange(dest, desc(dep_delay)) |>
+  slice_head(n = 5) |>
+  relocate(dest, dep_delay)
+```
+
+3.  Over the course of the day, hourly average departure delay increases until about 7pm, and then declines again, however doesn't go as low as the beginning of the day.
+
+```{r}
+flights |>
+  group_by(hour) |>
+  summarize(avg_dep_delay = mean(dep_delay, na.rm = TRUE)) |>
+  ggplot(aes(x = hour, y = avg_dep_delay)) + 
+  geom_smooth()
+```
+
+4.  Supplying a negative value arranges the data frame in either ascending (with `slice_min()`) or descending (with `slice_max()`) order, but it doesn't actually slice the data frame for the lowest/highest values of the given variable.
+
+```{r}
+flights |> 
+  slice_min(dep_delay, n = -5) |>
+  relocate(dep_delay)
+
+flights |> 
+  slice_min(dep_delay, n = 5) |>
+  relocate(dep_delay)
+
+flights |> 
+  slice_max(dep_delay, n = -5) |>
+  relocate(dep_delay)
+
+flights |> 
+  slice_max(dep_delay, n = 5) |>
+  relocate(dep_delay)
+```
+
+5.  `count()` counts the number of observations in each group, setting the `sort` argument to `TRUE` arranges the categories in descending order of number of observations.
+
+6.  First, let's define the data frame `df`.
+
+```{r}
+df <- tibble(
+  x = 1:5,
+  y = c("a", "b", "a", "a", "b"),
+  z = c("K", "K", "L", "L", "K")
+)
+```
+
+a.  The following groups `df` by `y`.
+
+```{r}
+df |>
+  group_by(y)
+```
+
+b.  The following arranges `df` in ascending order of the value of `y`.
+
+```{r}
+df |>
+  arrange(y)
+```
+
+c.  The following groups `df` by `y` and then calculates the average value of `x` for each group.
+
+```{r}
+df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+```
+
+d.  The following groups `df` by `y` and `z`, and then calculates the average value of `x` for each group combination. The resulting data frame is grouped by `y`.
+
+```{r}
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x))
+```
+
+e.  The following groups `df` by `y` and `z`, and then calculates the average value of `x` for each group combination. The resulting data frame is not grouped.
+
+```{r}
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x), .groups = "drop")
+```
+
+f.  Each of the following groups `df` by `y` and `z`, and then calculates the average value of `x` for each group combination. With `summarize()` the resulting data frame has one row per group combination while with `mutate()` the resulting data frame has the same number of rows as the original data frame.
+
+```{r}
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x))
+
+df |>
+  group_by(y, z) |>
+  mutate(mean_x = mean(x))
+```
