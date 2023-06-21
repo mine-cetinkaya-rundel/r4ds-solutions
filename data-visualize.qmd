@@ -249,4 +249,4 @@ ggsave("mpg-plot.png")
 fs::file_delete("mpg-plot.png")
 ```
 
-2.  You just have to change the suffix of the file from png to pdf in the `ggsave()` call.
+2.  You need to change the suffix of the file from `png` to `pdf` in the `ggsave()` call.
