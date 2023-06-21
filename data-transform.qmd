@@ -20,6 +20,8 @@ library(tidyverse)
 
 1.  Pipelines for each part are given below.
 
+<!-- -->
+
 a.  
 
 ```{r}
@@ -145,8 +147,7 @@ flights |>
   select(any_of(variables))
 ```
 
-5.  Yes, it does surprise me since the variable names are lowercase but the string in `contains()` is uppercase.
-By default, `contains()` ignores case.
+5.  Yes, it does surprise me since the variable names are lowercase but the string in `contains()` is uppercase. By default, `contains()` ignores case.
 
 ```{r}
 flights |> 
@@ -209,7 +210,7 @@ flights |>
   geom_smooth()
 ```
 
-4. Supplying a negative value arranges the data frame in either ascending (with `slice_min()`) or descending (with `slice_max()`) order, but it doesn't actually slice the data frame for the lowest/highest values of the given variable.
+4.  Supplying a negative value arranges the data frame in either ascending (with `slice_min()`) or descending (with `slice_max()`) order, but it doesn't actually slice the data frame for the lowest/highest values of the given variable.
 
 ```{r}
 flights |> 
