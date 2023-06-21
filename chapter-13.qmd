@@ -1,0 +1,118 @@
+---
+title: "chapter-13"
+editor: visual
+---
+
+## Solutions
+
+## Prerequisites
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+```
+
+## Exercises 13.2.4
+
+1.Near basically tells you if a number is near another number, so for example you could ask if 1.99999 is near 2 and it'll say true or false.
+
+```{r}
+near(sqrt(2)^2,2)
+```
+
+2\. Dep_time and dep_delay has the same amount of NA's because if there wasn't a flight then there wouldn't be a dep_delay.
+
+```{r}
+colSums(is.na(flights))
+```
+
+## Exercises 13.3.4
+
+1\.
+
+```{r}
+flights |>
+  mutate(arr_delay1 = is.na(arr_delay))
+```
+
+```{r}
+flights |>
+  mutate(arr_delay1 = is.na(arr_delay)) |>
+  select(arr_delay1, arr_time, sched_arr_time)
+```
+
+2.8,255 NA's in dep_time, these rows represent cancelled flights.
+
+```{r}
+colSums(is.na(flights))
+```
+
+3.There is no pattern or connection between the two.
+
+```{r}
+
+
+# Filter out flights with missing departure times
+flights_filtered <- filter(flights, !is.na(dep_time))
+
+# Calculate number of cancelled flights per day
+cancelled_flights_per_day <- flights_filtered %>%
+  group_by(year, month, day) %>%
+  summarise(cancelled_flights = sum(is.na(dep_delay)))
+
+# Calculate proportion of cancelled flights and average delay of non-cancelled flights per day
+proportion_delay_per_day <- flights_filtered %>%
+  group_by(year, month, day) %>%
+  summarise(proportion_cancelled = sum(is.na(dep_delay))/n(),
+            avg_delay = mean(dep_delay[!is.na(dep_delay)]))
+
+
+```
+
+## Exercises 13.4.4
+
+1.It will give you the total amount of NA's in x, and mean would give you the average number of NA's.
+
+2.When prod() is applied to a logical vector, it coerces it to numeric and then returns the product of all the values present in the vector. [If any value is missing or NaN, the result is NaN](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/prod).
+
+The **`min()`** function returns the minimum value of its arguments. When applied to a logical vector, it coerces it to numeric and then returns the minimum value of all the values present in the vector. [If any value is missing or NaN, the result is NaN](https://stackoverflow.com/questions/2190756/how-to-count-true-values-in-a-logical-vector).
+
+Both min and prod are similar to as.numeric.
+
+## Exercises 13.5.4
+
+1\.
+
+```{r}
+if_else(x %% 2 == 0, "even", "odd")
+```
+
+## 
+
+2\.
+
+```{r}
+if_else(y %in% "Saturday", "weekend", "weekday")
+```
+
+3\.
+
+```{r}
+if_else(abs(x) >= 0, "yes", "no")
+```
+
+4\.
+
+```{r}
+flights |>
+  mutate(holiday = case_when(
+    month == 1 & day == 1 ~ "New Years Day",
+    month == 7 & day == 4 ~ "4th of July",
+    month == 12 & day == 25 ~ "Christmas"
+  )) |>
+  mutate(yesnoholidays = case_when(
+    holiday == "New Years Day" ~ "TRUE",
+    holiday == "4th of July" ~ "TRUE",
+    holiday == "Christmas" ~ "TRUE"
+  ))
+```
