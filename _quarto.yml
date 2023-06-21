@@ -29,7 +29,7 @@ book:
         - workflow-style.qmd
         - data-tidy.qmd
         - workflow-scripts.qmd
-        #- data-import.qmd
+        - data-import.qmd
         - workflow-help.qmd
 
 format:
