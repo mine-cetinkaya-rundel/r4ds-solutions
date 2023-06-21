@@ -32,7 +32,7 @@
     "href": "data-visualize.html#exercises-1",
     "title": "2  Data visualization",
     "section": "2.4.3 Exercises",
-    "text": "2.4.3 Exercises\n\nThis code makes the bars horizontal instead of vertical.\n\n\nggplot(penguins, aes(y = species)) + \n  geom_bar()\n\n\n\n\n\nIn the first plot, the borders of the bars are colored. In the second plot, the bars are filled in with colors. The fill aesthetic is more useful for changing the color of the bars.\n\n\nggplot(penguins, aes(x = species)) +\n  geom_bar(color = \"red\")\n\n\n\n\n\nggplot(penguins, aes(x = species)) +\n  geom_bar(fill = \"red\")\n\n\n\n\n\nIt determines the number of bins.\n\n\n\nggplot(diamonds, aes(x = carat)) +\n  geom_histogram(binwidth = 0.10)\n\n\n\n\nI think .10 binwidth shows the most results."
+    "text": "2.4.3 Exercises\n\nThis code makes the bars horizontal instead of vertical.\n\n\nggplot(penguins, aes(y = species)) + \n  geom_bar()\n\n\n\n\n\nIn the first plot, the borders of the bars are colored. In the second plot, the bars are filled in with colors. The fill aesthetic is more useful for changing the color of the bars.\n\n\nggplot(penguins, aes(x = species)) +\n  geom_bar(color = \"red\")\n\n\n\n\n\nggplot(penguins, aes(x = species)) +\n  geom_bar(fill = \"red\")\n\n\n\n\n\nIt determines the number of bins (bars) in a histogram.\nBelow are histograms with three different binwidths. I think a binwidth of 0.10 shows reveals the most interesting patterns.\n\n\nggplot(diamonds, aes(x = carat)) +\n  geom_histogram(binwidth = 0.01)\n\nggplot(diamonds, aes(x = carat)) +\n  geom_histogram(binwidth = 0.10)\n\nggplot(diamonds, aes(x = carat)) +\n  geom_histogram(binwidth = 1)"
   },
   {
     "objectID": "data-visualize.html#exercises-2",
@@ -46,7 +46,7 @@
     "href": "data-visualize.html#exercises-3",
     "title": "2  Data visualization",
     "section": "2.6.1 Exercises",
-    "text": "2.6.1 Exercises\n\nThe second plot is saved, because ggsave() saves the last plot you made.\n\n\nggplot(mpg, aes(x = class)) +\n  geom_bar()\n\nggplot(mpg, aes(x = cty, y = hwy)) +\n  geom_point()\n\nggsave(\"mpg-plot.png\")\n#&gt; Saving 6 x 4 in image\n\n\n\n\n\n\n\n\nYou just have to change the suffix of the file from png to pdf in the ggsave() call."
+    "text": "2.6.1 Exercises\n\nThe second plot is saved, because ggsave() saves the last plot you made.\n\n\nggplot(mpg, aes(x = class)) +\n  geom_bar()\n\nggplot(mpg, aes(x = cty, y = hwy)) +\n  geom_point()\n\nggsave(\"mpg-plot.png\")\n#&gt; Saving 6 x 4 in image\n\n\n\n\n\n\n\n\nYou need to change the suffix of the file from png to pdf in the ggsave() call."
   },
   {
     "objectID": "workflow-basics.html#prerequisites",
