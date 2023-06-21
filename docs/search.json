@@ -105,16 +105,30 @@
     "text": "5.1 Exercises 5.6\n\nRestyled pipelines are given below\n\n\nflights |&gt;\n  filter(dest == \"IAH\") |&gt;\n  group_by(year, month, day) |&gt;\n  summarize(\n    n = n(),\n    delay = mean(arr_delay, na.rm = TRUE)\n  ) |&gt;\n  filter(n &gt; 10)\n#&gt; `summarise()` has grouped output by 'year', 'month'. You can override using\n#&gt; the `.groups` argument.\n#&gt; # A tibble: 365 × 5\n#&gt; # Groups:   year, month [12]\n#&gt;    year month   day     n delay\n#&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;\n#&gt; 1  2013     1     1    20 17.8 \n#&gt; 2  2013     1     2    20  7   \n#&gt; 3  2013     1     3    19 18.3 \n#&gt; 4  2013     1     4    20 -3.2 \n#&gt; 5  2013     1     5    13 20.2 \n#&gt; 6  2013     1     6    18  9.28\n#&gt; # ℹ 359 more rows\n\n\nflights |&gt;\n  filter(\n    carrier == \"UA\", \n    dest %in% c(\"IAH\", \"HOU\"), \n    sched_dep_time &gt; 0900, \n    sched_arr_time &lt; 2000\n  ) |&gt;\n  group_by(flight) |&gt;\n  summarize(\n    delay = mean(arr_delay, na.rm = TRUE), \n    cancelled = sum(is.na(arr_delay)), n = n()\n  ) |&gt;\n  filter(n &gt; 10)\n#&gt; # A tibble: 74 × 4\n#&gt;   flight delay cancelled     n\n#&gt;    &lt;int&gt; &lt;dbl&gt;     &lt;int&gt; &lt;int&gt;\n#&gt; 1     53 12.5          2    18\n#&gt; 2    112 14.1          0    14\n#&gt; 3    205 -1.71         0    14\n#&gt; 4    235 -5.36         0    14\n#&gt; 5    255 -9.47         0    15\n#&gt; 6    268 38.6          1    15\n#&gt; # ℹ 68 more rows"
   },
   {
+    "objectID": "data-tidy.html#prerequisites",
+    "href": "data-tidy.html#prerequisites",
+    "title": "\n6  Data tidying\n",
+    "section": "Prerequisites",
+    "text": "Prerequisites\n\nlibrary(tidyverse)\n#&gt; ── Attaching core tidyverse packages ───────────────────── tidyverse 2.0.0 ──\n#&gt; ✔ dplyr     1.1.2     ✔ readr     2.1.4\n#&gt; ✔ forcats   1.0.0     ✔ stringr   1.5.0\n#&gt; ✔ ggplot2   3.4.2     ✔ tibble    3.2.1\n#&gt; ✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n#&gt; ✔ purrr     1.0.1     \n#&gt; ── Conflicts ─────────────────────────────────────── tidyverse_conflicts() ──\n#&gt; ✖ dplyr::filter() masks stats::filter()\n#&gt; ✖ dplyr::lag()    masks stats::lag()\n#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors"
+  },
+  {
+    "objectID": "data-tidy.html#exercises",
+    "href": "data-tidy.html#exercises",
+    "title": "\n6  Data tidying\n",
+    "section": "6.2.1 Exercises",
+    "text": "6.2.1 Exercises\n\nIn each of table1, table2, and table3, each observation represents a country. In table1, country is the country name, year is the year of data collection, cases is the number of people with the disease in that year, and population is the number of people in each country in that year. In table2, country and year are the same as in table1, type is the type of number, and count is the number of observations (either cases or population depending on type). Finally, in table3, country and year are again the same as in table1, and rate is the rate of disease (cases divided by population).\n\nFor table2, we need to reshape the data have a column for cases and a column for population and then divide the two to calculate the rate. A possible approach is shown below.\n\ntable2 |&gt;\n  pivot_wider(\n    names_from = type,\n    values_from = count\n  ) |&gt; \n  mutate(rate = cases / population * 10000)\n#&gt; # A tibble: 6 × 5\n#&gt;   country      year  cases population  rate\n#&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;\n#&gt; 1 Afghanistan  1999    745   19987071 0.373\n#&gt; 2 Afghanistan  2000   2666   20595360 1.29 \n#&gt; 3 Brazil       1999  37737  172006362 2.19 \n#&gt; 4 Brazil       2000  80488  174504898 4.61 \n#&gt; 5 China        1999 212258 1272915272 1.67 \n#&gt; 6 China        2000 213766 1280428583 1.67\n\nFor table3, we need to separate cases and population into their own columns and then divide them. A possible approach is shown below.\n\ntable3 |&gt;\n  separate_wider_delim(\n    cols = rate, \n    delim = \"/\", \n    names = c(\"cases\", \"population\"),\n  ) |&gt;\n  mutate(\n    cases = as.numeric(cases),\n    population = as.numeric(population),\n    rate = cases / population * 10000\n  )\n#&gt; # A tibble: 6 × 5\n#&gt;   country      year  cases population  rate\n#&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;\n#&gt; 1 Afghanistan  1999    745   19987071 0.373\n#&gt; 2 Afghanistan  2000   2666   20595360 1.29 \n#&gt; 3 Brazil       1999  37737  172006362 2.19 \n#&gt; 4 Brazil       2000  80488  174504898 4.61 \n#&gt; 5 China        1999 212258 1272915272 1.67 \n#&gt; 6 China        2000 213766 1280428583 1.67"
+  },
+  {
     "objectID": "workflow-scripts.html#exercises",
     "href": "workflow-scripts.html#exercises",
-    "title": "6  Workflow: scripts and projects",
+    "title": "7  Workflow: scripts and projects",
     "section": "7.3 Exercises",
     "text": "7.3 Exercises\n\nIf you go to Tools &gt; Global Options &gt; Appearance you can change the theme of your RStudio.\nRStudio will warn with a caution icon (orange triangle with an exclamation point in it) if variable used in your code is not defined in your scope (i.e., your environment)."
   },
   {
     "objectID": "workflow-help.html",
     "href": "workflow-help.html",
-    "title": "7  Workflow: getting help",
+    "title": "8  Workflow: getting help",
     "section": "",
     "text": "There are no exercises in this chapter."
   }
