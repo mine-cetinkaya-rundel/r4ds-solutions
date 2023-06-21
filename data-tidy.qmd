@@ -4,18 +4,20 @@ title: "Data tidying"
 
 ##Solutions
 
-
 ```{r}
 library(tidyverse)
 ```
 
 ## 6.2.1 Exercises
 
-1. Country is where the cases happened,year is when it happened,cases is number of people with the disease,population is the number of people in each country,rate is the rate at which people get the disease.
+1.  Country is where the cases happened,year is when it happened,cases is number of people with the disease,population is the number of people in each country,rate is the rate at which people get the disease.
 
+2.  Sketch out the process you'd use to calculate the `rate` for `table2` and `table4a` + `table4b`.
+    You will need to perform four operations:
 
-2.  Sketch out the process you'd use to calculate the `rate` for `table2` and `table4a` + `table4b`. You will need to perform four operations:
-
+```{=html}
+<!-- -->
+```
 a.  Extract the number of TB cases per country per year.
 
 b.  Extract the matching population per country per year.
@@ -25,10 +27,10 @@ c.  Divide cases by population, and multiply by 10000.
 d.  Store back in the appropriate place.
 
     ```{r}
- table2 |>
- pivot_wider(
-  names_from = type,
-  values_from = count
+     table2 |>
+     pivot_wider(
+      names_from = type,
+      values_from = count
       ) |> mutate(rate = cases/population * 10000)
     ```
 
