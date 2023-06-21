@@ -1,0 +1,52 @@
+---
+title: "Data tidying"
+---
+
+```{r}
+#| results: "asis"
+#| echo: false
+
+source("_common.R")
+```
+
+## Prerequisites {.unnumbered}
+
+```{r}
+library(tidyverse)
+```
+
+## 6.2.1 Exercises {.unnumbered}
+
+1.  In each of `table1`, `table2`, and `table3`, each observation represents a country.
+    In `table1`, `country` is the country name, `year` is the year of data collection, `cases` is the number of people with the disease in that year, and `population` is the number of people in each country in that year.
+    In `table2`, `country` and `year` are the same as in `table1`, `type` is the type of number, and `count` is the number of observations (either `cases` or `population` depending on `type`).
+    Finally, in `table3`, `country` and `year` are again the same as in `table1`, and `rate` is the rate of disease (cases divided by population).
+
+2.  For `table2`, we need to reshape the data have a column for cases and a column for population and then divide the two to calculate the rate.
+    A possible approach is shown below.
+
+    ```{r}
+    table2 |>
+      pivot_wider(
+        names_from = type,
+        values_from = count
+      ) |> 
+      mutate(rate = cases / population * 10000)
+    ```
+
+    For `table3`, we need to separate cases and population into their own columns and then divide them.
+    A possible approach is shown below.
+
+    ```{r}
+    table3 |>
+      separate_wider_delim(
+        cols = rate, 
+        delim = "/", 
+        names = c("cases", "population"),
+      ) |>
+      mutate(
+        cases = as.numeric(cases),
+        population = as.numeric(population),
+        rate = cases / population * 10000
+      )
+    ```
