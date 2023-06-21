@@ -137,16 +137,23 @@ ggplot(penguins, aes(x = species)) +
   geom_bar(fill = "red")
 ```
 
-3.  It determines the number of bins.
+3.  It determines the number of bins (bars) in a histogram.
 
-4.  
+4.  Below are histograms with three different binwidths.
+    I think a binwidth of 0.10 shows reveals the most interesting patterns.
 
 ```{r}
+#| layout-ncol: 3
+
+ggplot(diamonds, aes(x = carat)) +
+  geom_histogram(binwidth = 0.01)
+
 ggplot(diamonds, aes(x = carat)) +
   geom_histogram(binwidth = 0.10)
-```
 
-I think .10 binwidth shows the most results.
+ggplot(diamonds, aes(x = carat)) +
+  geom_histogram(binwidth = 1)
+```
 
 ## 2.5.5 Exercises {.unnumbered}
 
