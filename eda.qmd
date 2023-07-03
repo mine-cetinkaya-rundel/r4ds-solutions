@@ -2,7 +2,14 @@
 title: "Exploratory data analysis"
 ---
 
-## Solutions
+```{r}
+#| results: "asis"
+#| echo: false
+
+source("_common.R")
+```
+
+## Prerequisites {.unnumbered}
 
 ```{r}
 library(tidyverse)
@@ -10,7 +17,7 @@ library(ggbeeswarm)
 library(lvplot)
 ```
 
-## Exercise 12.3.3
+## 11.3.3 Exercises {.unnumbered}
 
 1.  look up help ?diamonds
 
@@ -42,13 +49,13 @@ ggplot(diamonds, aes(x = carat)) + geom_histogram(binwidth = .1) +
   coord_cartesian(ylim = c(0,50))
 ```
 
-## Exercise 12.4.1
+## 11.4.1 Exercises {.unnumbered}
 
 1.  The missing values are removed with a warning.
 
 2.  For mean it determines whether na's should be removed or not and for sum should na values be removed and certain other values.
 
-## Exercise 12.5.1.1
+## 11.5.1.1 Exercises {.unnumbered}
 
 1.  
 
@@ -76,16 +83,18 @@ ggplot(mpg, aes(x = hwy, y = fct_reorder(class, hwy, median))) +
   geom_boxplot() + coord_flip()
 ```
 
-4.One problem with boxplots is that they were developed in an era of much smaller datasets and tend to display a prohibitively large number of "outlying values". One approach to remedy this problem is the letter value plot. Install the lvplot package, and try using `geom_lv()` to display the distribution of price vs. cut. What do you learn? How do you interpret the plots?
-
-
+4.One problem with boxplots is that they were developed in an era of much smaller datasets and tend to display a prohibitively large number of "outlying values".
+One approach to remedy this problem is the letter value plot.
+Install the lvplot package, and try using `geom_lv()` to display the distribution of price vs. cut.
+What do you learn?
+How do you interpret the plots?
 
 ```{r}
 ggplot(diamonds,aes(x = cut,y = price)) +
   geom_lv()
 ```
 
-5. geom_violin shows a basic understanding of the amount of diamonds while geom_histogram shows the further outliers better and where they are and geom_freqpoly shows the count better
+5.  geom_violin shows a basic understanding of the amount of diamonds while geom_histogram shows the further outliers better and where they are and geom_freqpoly shows the count better
 
 ```{r}
 ggplot(diamonds,aes(x = price, y = clarity)) +
@@ -105,18 +114,18 @@ ggplot(diamonds,aes(x = price, color = clarity)) +
 #> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-6. `geom_beeswarm()` makes it so you have more control over overplotting datasets, while geom_jitter to me seems like just a default that you can use on the go but if you do want more customization ggbeeswarm is better for handling overplotting.
+6.  `geom_beeswarm()` makes it so you have more control over overplotting datasets, while geom_jitter to me seems like just a default that you can use on the go but if you do want more customization ggbeeswarm is better for handling overplotting.
 
-## Exercise 12.5.2.1
+## 11.5.2.1 Exercises {.unnumbered}
 
-1.
+1.  
 
 ```{r}
 ggplot(diamonds, aes(x = cut, y = color)) +
   geom_count()
 ```
 
-2.
+2.  
 
 ```{r}
 count(diamonds,color,cut)
@@ -125,7 +134,7 @@ count(diamonds,color,cut)
   geom_bar(position = "fill")
 ```
 
-3.
+3.  
 
 ```{r}
 nycflights13::flights |> 
@@ -133,14 +142,14 @@ nycflights13::flights |>
   group_by(dest,month)
 ```
 
-## Exercise 12.5.3.1
+## 11.5.3.1 Exercises {.unnumbered}
 
 ```{r}
 smaller <- diamonds |> 
   filter(carat < 3)
 ```
 
-1. If you want to use cut_width know you r datas values,if you use cut_number know your sample size.
+1.  If you want to use cut_width know you r datas values,if you use cut_number know your sample size.
 
 ```{r}
 # visualize price binning by carat, cut_width()
@@ -159,14 +168,14 @@ ggplot(diamonds, aes(x = price, y = carat)) +
   geom_boxplot()
 ```
 
-3. Its not what i expect even the large diamonds are the same price as smaller diamonds.
+3.  Its not what i expect even the large diamonds are the same price as smaller diamonds.
 
 ```{r}
 ggplot(diamonds,aes(x = carat, y = price)) +
   geom_point()
 ```
 
-4.
+4.  
 
 ```{r}
 ggplot(diamonds,aes(x = price, color = cut, fill = cut)) +
@@ -178,7 +187,7 @@ ggplot(diamonds,aes(x = carat, color = cut, fill = cut)) +
   geom_freqpoly()
 ```
 
-5. This scatterplot shows outliers and binned plots don't.
+5.  This scatterplot shows outliers and binned plots don't.
 
 ```{r}
 diamonds |> 
@@ -195,7 +204,7 @@ ggplot(aes(x = x)) +
   geom_histogram()
 ```
 
-6. If you want to control the width you use cut_width, if you want to choose the number of bins use cut_number.
+6.  If you want to control the width you use cut_width, if you want to choose the number of bins use cut_number.
 
 ```{r}
 ggplot(smaller, aes(x = carat, y = price)) + 
