@@ -32,6 +32,12 @@ book:
         - data-import.qmd
         - workflow-help.qmd
 
+    - part: "Visualize"
+      chapters:
+        #- layers.qmd
+        - EDA.qmd
+        #- communication.qmd
+
 format:
   html:
     theme:
