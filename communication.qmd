@@ -22,32 +22,36 @@ library(ggthemes)
 
 ## 12.2.1 Exercises {.unnumbered}
 
-1.  
+1.  The plot below shows the relationship between displacement and highway mileage with customized labels.
 
-```{r}
-ggplot(mpg, aes(x = displ, y = hwy)) +
-  geom_point(aes(color = class)) +
-  geom_smooth(se = FALSE) +
-  labs( title = "insert title here",
-        subtitle = "insert subtitle here",
-        caption = "insert source here",
-    x = "Engine displacement (L)",
-    y = "Highway fuel economy (mpg)",
-    color = "Car type"
-  )
-```
+    ```{r}
+    ggplot(mpg, aes(x = displ, y = hwy)) +
+      geom_point(aes(color = class)) +
+      geom_smooth(se = FALSE) +
+      labs(
+        title = "Fuel economy vs. engine displacement",
+        subtitle = "For 38 popular models of cars",
+        caption = "Source: https://fueleconomy.gov",
+        x = "Engine displacement (L)",
+        y = "Highway fuel economy (mpg)",
+        color = "Car type"
+      )
+    ```
 
-2.  
+2.  Below is the code for recreating the plot given.
 
-```{r}
-mpg |> ggplot(aes(x = cty, y = hwy, color = drv, shape = drv)) +
-  geom_point() +
-  labs(x = "City MPG",
+    ```{r}
+    ggplot(mpg, aes(x = cty, y = hwy, color = drv, shape = drv)) +
+      geom_point() +
+      labs(
+        x = "City MPG",
         y = "Highway MPG",
-        shape = "Type of drive train",
-       color = "Type of drive train"
-       )
-```
+        shape = "Type of\ndrive train",
+        color = "Type of\ndrive train"
+      )
+    ```
+
+3.  **TO DO:** Add response.
 
 ## 12.3.1 Exercises  {.unnumbered}
 
