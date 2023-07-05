@@ -19,26 +19,112 @@ library(lvplot)
 
 ## 11.3.3 Exercises {.unnumbered}
 
-1.  look up help ?diamonds
+1.  All distributions are multimodal, right skewed, and have extreme outliers.
 
-```{r}
-ggplot(diamonds, aes(x = x , y = y)) + geom_point()
+    ```{r}
+    #| layout-ncol: 3
+
+    ggplot(diamonds, aes(x = x)) +
+      geom_histogram(binwidth = 0.01)
+    ggplot(diamonds, aes(x = y)) +
+      geom_histogram(binwidth = 0.01)
+    ggplot(diamonds, aes(x = z)) +
+      geom_histogram(binwidth = 0.01)
+    ```
+
+    Typical values for `x` and `y` are larger than `z`, which might suggest `z` is the depth, which matches up with the documentation. Typical values for `x` and `y` are ver similar, but the maximum for `y` is much higher, therefore I would guess that `y` is width, since we generally expect width to be larger than length.
+
+    ```{r}
+    diamonds |>
+      select(x, y, z) |>
+      pivot_longer(cols = everything(), names_to = "measurement") |>
+      group_by(measurement) |>
+      summarize(
+        min = min(value),
+        mean = mean(value),
+        median = median(value),
+        sd = sd(value),
+        iqr = IQR(value),
+        max = max(value)
+      )
+    ```
+
+```{=html}
+<!-- -->
 ```
+2.  The distribution of price is right skewed with a median of \$2,401.
+    There is a gap in the distribution with very few diamonds around \$1,500, which is curious -- I can't think of a specific reason why that would be the case.
 
-`x` is the length, `y` is the width, `z` is the depth
+    ```{r}
+    #| fig-width: 8
 
-2.  
+    ggplot(diamonds, aes(x = price)) + 
+      geom_histogram(binwidth = 100) +
+      scale_x_continuous(breaks = seq(0, 20000, 2000))
+    ```
 
-```{r}
-ggplot(diamonds, aes(x = price)) + geom_histogram(binwidth = 2000)
+    ```{r}
+    diamonds |>
+      summarize(
+        min = min(price),
+        mean = mean(price),
+        median = median(price),
+        sd = sd(price),
+        iqr = IQR(price),
+        max = max(price)
+      )
+    ```
+
+```{=html}
+<!-- -->
 ```
+3.  Only 23 diamonds are 0.99 carats and 1,558 diamonds are 1 carat.
+    This is likely because the market for 0.99 carat diamonds is small.
+    If you can get a 1 carat diamond for just a little but of increase in price.
+    We can see that the typical price for a 1 carat diamond is less than \$100 more than the typical price for a 0.99 carat diamond.
+    For that small a difference, compared to the actual price of a diamond, many people might be willing to go up to a full carat.
 
-3.  
+    ```{r}
+    diamonds |>
+      filter(carat %in% c(0.99, 1)) |>
+      group_by(carat) |>
+      summarize(
+        n = n(),
+        median_price = median(price)
+      )
+    ```
 
-```{r}
-ggplot(diamonds, aes(x = carat)) + geom_histogram(binwidth = .1)
+4.  Specifying `xlim()` filters out any observations not in the specified range while specifying the `xlim` argument in `coord_cartesian()` zooms into the original plot without filtering.
+
+    ```{r}
+    #| layout-ncol: 3
+
+    ggplot(diamonds, aes(x = price)) +
+      geom_histogram(binwidth = 500)
+    ggplot(diamonds, aes(x = price)) +
+      geom_histogram(binwidth = 500) +
+      xlim(0, 5000)
+    ggplot(diamonds, aes(x = price)) +
+      geom_histogram(binwidth = 500) +
+      coord_cartesian(xlim = c(0, 5000))
+    ```
+
+    This is similar for specifying limits for `y` as well.
+
+    ```{r}
+    ggplot(diamonds, aes(x = price)) +
+      geom_histogram(binwidth = 500)
+    ggplot(diamonds, aes(x = price)) +
+      geom_histogram(binwidth = 500) +
+      ylim(0, 1000)
+    ggplot(diamonds, aes(x = price)) +
+      geom_histogram(binwidth = 500) +
+      coord_cartesian(ylim = c(0, 1000))
+    ```
+
+```{=html}
+<!-- -->
 ```
-
 4.  It looks like when you use the `xlim` it zooms out but when you use the `ylim` it zooms in.
 
 ```{r}
