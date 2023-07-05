@@ -318,9 +318,8 @@ ggplot(mpg, aes(x = hwy, y = displ, color = displ < 5)) +
       coord_polar(theta = "y")
     ```
 
-```{=html}
 <!-- -->
-```
+
 2.  `coord_map()` projects the portion of the earth you're plotting onto a flat 2D plane using a given projection.
     `coord_quickmap()` is an approximation of this projection.
 
