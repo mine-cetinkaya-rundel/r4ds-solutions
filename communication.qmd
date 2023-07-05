@@ -2,6 +2,13 @@
 title: "Communication"
 ---
 
+```{r}
+#| results: "asis"
+#| echo: false
+
+source("_common.R")
+```
+
 ## Prerequisites
 
 ```{r}
@@ -13,9 +20,7 @@ library(patchwork)
 library(ggthemes)
 ```
 
-## Solutions
-
-## Exercises 12.2.1
+## 12.2.1 Exercises {.unnumbered}
 
 1.  
 
@@ -44,7 +49,7 @@ mpg |> ggplot(aes(x = cty, y = hwy, color = drv, shape = drv)) +
        )
 ```
 
-## Exercises 12.3.1
+## 12.3.1 Exercises  {.unnumbered}
 
 1.  
 
@@ -193,7 +198,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   )
 ```
 
-## Exercises 12.4.6
+## 12.4.6 Exercises {.unnumbered}
 
 1.  Because geom hex already fills this in you could use scale_fill instead.
 
@@ -209,7 +214,7 @@ ggplot(df, aes(x, y)) +
   coord_fixed()
 ```
 
-2.  Name or palette ,you can label your x and y axis with scale_x\_continous and also labs.
+2.  Name or palette ,you can label your x and y axis with scale_x_continous and also labs.
 
 3.  
 
@@ -236,7 +241,7 @@ ggplot(diamonds, aes(x = carat, y = price)) +
     guides(color = guide_legend(override.aes = list(alpha = 1) ) )
 ```
 
-## Exercises 12.5.1
+## 12.5.1 Exercises {.unnumbered}
 
 1.  
 
@@ -260,7 +265,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   theme(axis.title = element_text(color = "blue",face = "bold"))
 ```
 
-## Exercises 12.6.1
+## 12.6.1 Exercises {.unnumbered}
 
 1.It looks like it turns the plots like vertical if that makes sense.
 
