@@ -51,11 +51,32 @@ library(ggthemes)
       )
     ```
 
-3.  **TO DO:** Add response.
+    3.below is my take on tornadoes.
 
-## 12.3.1 Exercises  {.unnumbered}
+    ```{r}
+    tornado <- read_csv("tornado.csv")
 
-1.  
+    most_tornadoes <- tornado |>
+      select(st,ns) |>
+      group_by(st) |>
+      summarise(n = n()) |>
+      arrange(desc(n)) |>
+      top_n(10)
+
+    most_tornadoes |>
+      ggplot(aes(x = reorder(st, -n), y = n)) +
+      geom_bar(stat = "identity", fill = "#d16002") +
+      labs(
+       title = "States with the most tornadoes over the years",
+       x = "states in abbreviations",
+       y = "number of tornadoes"
+      ) +
+      theme_dark()
+    ```
+
+## 12.3.1 Exercises {.unnumbered}
+
+1.  These chunks of code is placing text at each corner.
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy)) +
@@ -89,7 +110,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
           color = "red")
 ```
 
-2.  
+2.  Customizing the shape, size, or color of the point
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy)) +
@@ -119,19 +140,20 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(alpha = 0.1) +
   facet_wrap(~drv) +
   geom_text(data = mpg |> 
-              filter(drv == "f"), aes(label = drv), nudge_x = 1)
-
+  filter(drv == "f"), aes(label = drv), nudge_x = 1)
 
 
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(alpha = 0.1) +
   facet_wrap(~drv) +
   geom_text(data = mpg |> filter(drv == "f"), aes(label = drv), nudge_x = 1) +
-   geom_text(data = mpg |> filter(drv == "4"), aes(label = drv), nudge_x = 1) +
-   geom_text(data = mpg |> filter(drv == "r"), aes(label = drv), nudge_x = 1)
+  geom_text(data = mpg |> filter(drv == "4"), aes(label = drv), nudge_x = 1) +
+  geom_text(data = mpg |> filter(drv == "r"), aes(label = drv), nudge_x = 1)
 ```
 
-4\.
+4.**`colour`**: This argument sets the color of the border of the background box.
+Similar to the **`fill`** argument, you can use color names, hexadecimal color codes, or numeric values.
+The default value is "black".
 
 ```{r}
 ggplot(mpg,aes(x = hwy, y = displ, color = drv)) +
@@ -139,7 +161,24 @@ ggplot(mpg,aes(x = hwy, y = displ, color = drv)) +
   geom_label(aes(label = drv))
 ```
 
-5\.
+5.the **`arrow()`** function is used to draw arrows on a plot.
+It has four arguments that control the appearance and behavior of the arrows.
+The four arguments are:
+
+1.  **`angle`**: This argument determines the angle at which the arrowhead is drawn.
+    It takes a numeric value that represents the angle in degrees.
+    The default value is 30, which creates an arrowhead with a 30-degree angle.
+
+2.  **`length`**: It sets the length of the arrowhead.
+    You can provide a numeric value to specify the length in user coordinates.
+    The default value is 0.25, meaning the length is one-fourth of the total arrow length.
+
+3.  **`ends`**: This argument specifies whether arrows should be drawn at the starting point (**`ends = "first"`**), ending point (**`ends = "last"`**), or both (**`ends = "both"`**) of the line.
+    The default value is "last", which draws an arrow only at the end of the line.
+
+4.  **`type`**: It controls the style of the arrowhead.
+    There are three options for this argument: **`"open"`** (default), **`"closed"`**, and **`"curved"`**.
+    The "open" style draws a V-shaped arrowhead, the "closed" style draws a triangular arrowhead, and the "curved" style draws a rounded arrowhead.
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy)) +
@@ -150,7 +189,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
     hjust = "left", color = "red"
   ) +
   annotate(
-    geom = "segment",
+   geom = "segment",
     x = 3, y = 35, xend = 5, yend = 25, color = "blue",
     arrow = arrow(type = "closed")
   )
@@ -204,7 +243,8 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 
 ## 12.4.6 Exercises {.unnumbered}
 
-1.  Because geom hex already fills this in you could use scale_fill instead.
+1\.
+Geom hex already fills this in you could use scale_fill instead.
 
 ```{r}
 df <- tibble(
@@ -218,9 +258,9 @@ ggplot(df, aes(x, y)) +
   coord_fixed()
 ```
 
-2.  Name or palette ,you can label your x and y axis with scale_x_continous and also labs.
+2.  Name or palette ,you can label your x and y axis with scale_x\_continous and also labs.
 
-3.  
+3.  Changed the display of the presidential terms.
 
 ```{r}
 presidential |>
@@ -229,7 +269,7 @@ presidential |>
   geom_point() +
   geom_segment(aes(xend = end, yend = id)) +
   scale_color_manual(values = c(Republican = "#E81B23", Democratic = "#00AEF3")) +
-    scale_x_date(name = "Term", breaks = seq(from = ymd("1953-01-20"), to = ymd("2021-01-20"), by = "4 years"), date_labels = "'%y") +
+  scale_x_date(name = "Term", breaks = seq(from = ymd("1953-01-20"), to = ymd("2021-01-20"), by = "4 years"), date_labels = "'%y") +
 scale_y_continuous(
   name = "president",
   breaks = 34:45,
@@ -237,26 +277,26 @@ scale_y_continuous(
 )
 ```
 
-4.  
+4.  Making the legend easier to see with override.aes.
 
 ```{r}
 ggplot(diamonds, aes(x = carat, y = price)) +
   geom_point(aes(color = cut), alpha = 1/20) +
-    guides(color = guide_legend(override.aes = list(alpha = 1) ) )
+  guides(color = guide_legend(override.aes = list(alpha = 1) ) )
 ```
 
 ## 12.5.1 Exercises {.unnumbered}
 
-1.  
+1.  This theme from the ggthemes package looks good.
 
 ```{r}
 ggplot(diamonds, aes(x = carat, y = price)) +
   geom_point(aes(color = cut), alpha = 1/20) +
-    guides(color = guide_legend(override.aes = list(alpha = 1) ) ) +
+  guides(color = guide_legend(override.aes = list(alpha = 1) ) ) +
   theme_economist()
 ```
 
-2\.
+2.The first plot bolds while the second plot bolds and blue.
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy)) +
@@ -287,7 +327,7 @@ p3 <- ggplot(mpg, aes(x = cty, y = hwy)) +
 (p1 | p2) / p3
 ```
 
-2\.
+2.Fully recreated patchwork below.
 
 ```{r}
 p3 / (p2 | p1)
