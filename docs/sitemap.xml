@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://r4ds.hadley.nz/workflow-basics.html</loc>
-    <lastmod>2023-06-21T21:15:23.946Z</lastmod>
+    <lastmod>2023-07-05T16:23:13.003Z</lastmod>
   </url>
   <url>
     <loc>https://r4ds.hadley.nz/data-transform.html</loc>
@@ -22,7 +22,7 @@
   </url>
   <url>
     <loc>https://r4ds.hadley.nz/workflow-style.html</loc>
-    <lastmod>2023-06-21T21:15:24.010Z</lastmod>
+    <lastmod>2023-07-05T16:23:13.023Z</lastmod>
   </url>
   <url>
     <loc>https://r4ds.hadley.nz/data-tidy.html</loc>
@@ -30,7 +30,7 @@
   </url>
   <url>
     <loc>https://r4ds.hadley.nz/workflow-scripts.html</loc>
-    <lastmod>2023-06-21T21:15:24.025Z</lastmod>
+    <lastmod>2023-07-05T16:23:13.031Z</lastmod>
   </url>
   <url>
     <loc>https://r4ds.hadley.nz/data-import.html</loc>
@@ -38,6 +38,10 @@
   </url>
   <url>
     <loc>https://r4ds.hadley.nz/workflow-help.html</loc>
-    <lastmod>2023-06-21T21:15:24.047Z</lastmod>
+    <lastmod>2023-07-05T16:23:13.038Z</lastmod>
+  </url>
+  <url>
+    <loc>https://r4ds.hadley.nz/communication.html</loc>
+    <lastmod>2023-07-05T16:33:21.709Z</lastmod>
   </url>
 </urlset>
