@@ -1,0 +1,266 @@
+---
+title: "chapter-14"
+author: "jabir"
+editor: visual
+---
+
+## Prerequisites
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+library(reprex)
+```
+
+## Exercises 14.3.1
+
+1.this code counts the number of NA's.
+
+```{r}
+# Count the number of rows with missing values for "dep_time" variable
+flights |>
+  filter(is.na(dep_time)) |>
+  count()
+```
+
+2\.
+
+```{r}
+flights |>
+  group_by(dest) |>
+  summarise(n = n()) |>
+  arrange(desc(n)) 
+```
+
+```{r}
+flights |>
+  group_by(tailnum) |>
+  summarize(total_distance = sum(distance, na.rm = TRUE)) |>
+  arrange(desc(total_distance))
+
+```
+
+## Exercises 14.4.8
+
+1.  First you divided sched_dep_time by 100 to make a new variable called hours then you group_by that new variable, then you summarized making a new variable called prop_cancelled which is the average number of NA's in dep_time you also made a count variable aswell,then you filtered hours greater than 1, then you make a plot with hour on the x axis and prop_cancelled on the y, then created a line plot and a scatterplot with size as the count variable n.
+
+2.So there's,sinpi(),tanpi(),sin() etc, these all use radians and not degrees.
+
+3\.
+
+```{r}
+flights |> 
+  filter(month == 1, day == 1) |> 
+  ggplot(aes(x = sched_dep_time, y = dep_delay)) +
+  geom_point()
+
+
+hours2mins <- function(x) {
+  x %/% 100 * 60 + x %% 100}
+
+mutate(flights,
+  dep_time = hours2mins(dep_time),
+  sched_dep_time = hours2mins(sched_dep_time)) |>
+  filter(month == 1, day == 1) |> 
+  ggplot(aes(x = sched_dep_time, y = dep_delay)) +
+  geom_point()
+```
+
+4\.
+
+```{r}
+mutate(flights,
+ dep_time = 60 * floor(dep_time/100) + (dep_time - floor(dep_time/100) * 100),
+ arr_time = 60 * floor(arr_time/100) + (arr_time - floor(arr_time/100) * 100)) |>
+ ggplot(aes(x = arr_time, y = dep_time)) +
+ geom_point()
+```
+
+## Exercises 14.5.4
+
+1\.
+
+```{r}
+ flights |>
+  top_n(10, dep_delay, wt = -ranks)
+```
+
+2.  It looks like florida has the worst on time record, having 18 total flights but only 1 was on time.
+
+```{r}
+on_time_record <- flights |>
+  group_by(tailnum) |>
+  summarize(total_flights = n(), on_time_flights = sum(arr_delay <= 0, na.rm = TRUE),      carrier = carrier)
+
+on_time_record <- on_time_record |>
+  mutate(on_time_percentage = on_time_flights / total_flights * 100)
+
+worst_plane <- on_time_record |>
+  filter(on_time_percentage == min(on_time_percentage, na.rm = TRUE)) |>
+  arrange(desc(on_time_flights))
+```
+
+3.  5:00 am seems to be the best time.
+
+```{r}
+delay_by_hour <- flights |>
+  group_by(hour) |>
+  summarize(avg_delay = mean(dep_delay, na.rm = TRUE))
+
+sorted_delay_by_hour <- delay_by_hour |>
+  arrange(avg_delay)
+
+best_hours <- sorted_delay_by_hour$hour[1]
+```
+
+4.It groups the flights dataset by the destination then It filters the grouped data to include only the first three rows (row numbers 1, 2, and 3) within each group.
+This effectively selects the top three flights for each destination based on their original order in the dataset.
+The next code returns the top three flights for each destination, considering the order determined by the **`dep_delay`** variable.
+It selects the flights with the lowest **`dep_delay`** values within each destination group
+
+5\.
+
+```{r}
+total_delay_by_dest <- flights |>
+  group_by(dest) |>
+  summarize(total_delay = sum(dep_delay, na.rm = TRUE))
+
+flights_with_total_delay <- flights |>
+  left_join(total_delay_by_dest, by = "dest")
+
+flights_with_total_delay <- flights_with_total_delay |>
+  mutate(proportion_delay = dep_delay / total_delay)
+
+```
+
+6\.
+
+```{r}
+flights |>
+  mutate(hour = dep_time %/% 100) |>
+  group_by(year, month, day, hour) |>
+  summarize(
+    dep_delay = mean(dep_delay, na.rm = TRUE),
+    prev_hour_delay = lag(dep_delay),
+    n = n(),
+    .groups = "drop"
+  ) |>
+  filter(n > 5)
+
+```
+
+7.HA has the most delayed flights.
+
+```{r}
+flights_filtered <- flights |> 
+  filter(!is.na(arr_time), !is.na(dep_time), !is.na(arr_delay), !is.na(dep_delay))
+
+flights_filtered <- flights_filtered |>
+  mutate(air_time = arr_time - dep_time)
+
+shortest_flight_times <- flights_filtered |>
+  group_by(dest) |>
+  summarize(shortest_flight_time = min(air_time, na.rm = TRUE))
+
+flights_with_shortest_time <- flights_filtered |>
+  left_join(shortest_flight_times, by = "dest")
+
+flights_with_relative_time <- flights_with_shortest_time |>
+  mutate(relative_air_time = air_time / shortest_flight_time)
+
+suspicious_flights <- flights_with_relative_time |>
+  filter(relative_air_time < 0.8)
+
+most_delayed_flights <- flights_filtered |>
+  arrange(desc(abs(arr_delay)))
+```
+
+8.The resulting **`carrier_ranking`** dataframe will contain the relative ranking of carriers based on their performance for the destinations flown by at least two carriers.
+The lower the rank, the better the carrier's performance in terms of average delay.
+
+```{r}
+flights_filtered <- flights |>
+  select(carrier, dest, dep_delay, arr_delay)
+
+carrier_performance <- flights_filtered |>
+  group_by(dest, carrier) |>
+  summarize(avg_dep_delay = mean(dep_delay, na.rm = TRUE),
+            avg_arr_delay = mean(arr_delay, na.rm = TRUE)) |>
+  ungroup()
+
+carrier_counts <- carrier_performance |>
+  count(dest) |>
+  filter(n >= 2)
+
+carrier_performance_filtered <- carrier_performance |>
+  semi_join(carrier_counts, by = "dest")
+
+carrier_ranking <- carrier_performance_filtered |>
+  group_by(carrier) |>
+  summarize(avg_dep_delay = mean(avg_dep_delay, na.rm = TRUE),
+            avg_arr_delay = mean(avg_arr_delay, na.rm = TRUE)) |>
+  mutate(rank = row_number(desc(avg_dep_delay)))
+
+```
+
+## Exercises 14.6.7
+
+1.  Heres 5 different ways to assess the typical delay characteristics of a group of flights
+
+2.  Mean Delay: Calculate the average delay of a group of flights.
+    It provides an understanding of the average delay experienced but can be sensitive to extreme values and may not represent the typical delay if there are significant variations in the data.
+
+3.  Median Delay: Find the middle value of the delays when sorted in ascending order.
+    The median is useful when there are extreme values or a skewed distribution in the delay data, providing a measure of central tendency less affected by outliers.
+
+4.  Percentiles: Calculate specific percentiles (e.g., 25th, 50th, 75th) of the delay data to understand the spread of delays within the group.
+    Percentiles show the range of delays experienced by different proportions of flights, providing insights into the distribution.
+
+5.  Standard Deviation: Compute the average amount of variation or dispersion from the mean delay.
+    Standard deviation quantifies the spread of delay values around the average.
+    It assumes a normal distribution and can be influenced by outliers.
+
+6.  Boxplots: Visualize the minimum, quartiles, median, and maximum values of the delay data.
+    Boxplots summarize the delay distribution, identifying outliers, skewness, and quartiles.
+    They are useful for comparing delay characteristics across groups or categories.
+
+    The choice between mean() and median() depends on the data distribution and presence of outliers.
+    Mean() works well with symmetric data and no extreme values, while median() is suitable for skewed data or when extreme values significantly affect the average.
+
+    The choice between arrival delay and departure delay depends on the analysis goals.
+    Arrival delay measures delays experienced at the destination, relevant for overall efficiency and passenger experiences.
+    Departure delay reflects delays at the origin airport, relevant for assessing airport operations or airline scheduling.
+
+    Using data from planes in R is useful for performance analysis, operational efficiency, safety assessment, route optimization, and understanding passenger experiences.
+    It enables evaluation and improvement in various aspects of airline operations, safety, and customer satisfaction.
+
+    2.The resulting **`sorted_destinations`** dataframe will contain the destinations with the greatest variation in air speed, with the destination having the highest standard deviation of air time appearing at the top of the list.
+
+    ```{r}
+    flights_filtered <- flights |>
+      select(dest, air_time)
+
+    destination_variation <- flights_filtered |>
+      group_by(dest) |>
+      summarize(air_speed_variation = sd(air_time, na.rm = TRUE)) |>
+      ungroup()
+
+    sorted_destinations <- destination_variation |>
+      arrange(desc(air_speed_variation))
+
+    print(sorted_destinations)
+    ```
+
+    3\.
+
+    ```{r}
+    ege_flights <- flights |>
+      filter(origin == "EGE" | dest == "EGE")
+
+    ggplot(ege_flights, aes(x = year, y = month, color = origin == "EGE")) +
+      geom_point() +
+      labs(title = "Flights Involving EGE",
+           x = "Year",
+           y = "Month",
+           color = "Origin is EGE")
+    ```
