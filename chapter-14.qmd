@@ -4,8 +4,6 @@ author: "jabir"
 editor: visual
 ---
 
-## Solutions
-
 ## Prerequisites
 
 ```{r}
@@ -16,10 +14,13 @@ library(reprex)
 
 ## Exercises 14.3.1
 
-1\.
+1.this code counts the number of NA's.
 
 ```{r}
-sum(is.na(flights))
+# Count the number of rows with missing values for "dep_time" variable
+flights |>
+  filter(is.na(dep_time)) |>
+  count()
 ```
 
 2\.
@@ -43,7 +44,7 @@ flights |>
 
 1.  First you divided sched_dep_time by 100 to make a new variable called hours then you group_by that new variable, then you summarized making a new variable called prop_cancelled which is the average number of NA's in dep_time you also made a count variable aswell,then you filtered hours greater than 1, then you make a plot with hour on the x axis and prop_cancelled on the y, then created a line plot and a scatterplot with size as the count variable n.
 
-2.So theres,sinpi(),tanpi(),sin() etc, these all use radians and not degrees.
+2.So there's,sinpi(),tanpi(),sin() etc, these all use radians and not degrees.
 
 3\.
 
@@ -69,10 +70,10 @@ mutate(flights,
 
 ```{r}
 mutate(flights,
-      dep_time = 60 * floor(dep_time/100) + (dep_time - floor(dep_time/100) * 100),
-      arr_time = 60 * floor(arr_time/100) + (arr_time - floor(arr_time/100) * 100)) |>
-      ggplot(aes(x = arr_time, y = dep_time)) +
-      geom_point()
+ dep_time = 60 * floor(dep_time/100) + (dep_time - floor(dep_time/100) * 100),
+ arr_time = 60 * floor(arr_time/100) + (arr_time - floor(arr_time/100) * 100)) |>
+ ggplot(aes(x = arr_time, y = dep_time)) +
+ geom_point()
 ```
 
 ## Exercises 14.5.4
@@ -81,7 +82,7 @@ mutate(flights,
 
 ```{r}
  flights |>
-top_n(10, dep_delay, wt = -ranks)
+  top_n(10, dep_delay, wt = -ranks)
 ```
 
 2.  It looks like florida has the worst on time record, having 18 total flights but only 1 was on time.
@@ -89,7 +90,7 @@ top_n(10, dep_delay, wt = -ranks)
 ```{r}
 on_time_record <- flights |>
   group_by(tailnum) |>
-  summarize(total_flights = n(), on_time_flights = sum(arr_delay <= 0, na.rm = TRUE), carrier = carrier)
+  summarize(total_flights = n(), on_time_flights = sum(arr_delay <= 0, na.rm = TRUE),      carrier = carrier)
 
 on_time_record <- on_time_record |>
   mutate(on_time_percentage = on_time_flights / total_flights * 100)
@@ -112,7 +113,10 @@ sorted_delay_by_hour <- delay_by_hour |>
 best_hours <- sorted_delay_by_hour$hour[1]
 ```
 
-4.It groups the flights dataset by the destination then It filters the grouped data to include only the first three rows (row numbers 1, 2, and 3) within each group. This effectively selects the top three flights for each destination based on their original order in the dataset. The next code returns the top three flights for each destination, considering the order determined by the **`dep_delay`** variable. It selects the flights with the lowest **`dep_delay`** values within each destination group
+4.It groups the flights dataset by the destination then It filters the grouped data to include only the first three rows (row numbers 1, 2, and 3) within each group.
+This effectively selects the top three flights for each destination based on their original order in the dataset.
+The next code returns the top three flights for each destination, considering the order determined by the **`dep_delay`** variable.
+It selects the flights with the lowest **`dep_delay`** values within each destination group
 
 5\.
 
@@ -171,7 +175,8 @@ most_delayed_flights <- flights_filtered |>
   arrange(desc(abs(arr_delay)))
 ```
 
-8.The resulting **`carrier_ranking`** dataframe will contain the relative ranking of carriers based on their performance for the destinations flown by at least two carriers. The lower the rank, the better the carrier's performance in terms of average delay.
+8.The resulting **`carrier_ranking`** dataframe will contain the relative ranking of carriers based on their performance for the destinations flown by at least two carriers.
+The lower the rank, the better the carrier's performance in terms of average delay.
 
 ```{r}
 flights_filtered <- flights |>
@@ -202,21 +207,32 @@ carrier_ranking <- carrier_performance_filtered |>
 
 1.  Heres 5 different ways to assess the typical delay characteristics of a group of flights
 
-2.  Mean Delay: Calculate the average delay of a group of flights. It provides an understanding of the average delay experienced but can be sensitive to extreme values and may not represent the typical delay if there are significant variations in the data.
+2.  Mean Delay: Calculate the average delay of a group of flights.
+    It provides an understanding of the average delay experienced but can be sensitive to extreme values and may not represent the typical delay if there are significant variations in the data.
 
-3.  Median Delay: Find the middle value of the delays when sorted in ascending order. The median is useful when there are extreme values or a skewed distribution in the delay data, providing a measure of central tendency less affected by outliers.
+3.  Median Delay: Find the middle value of the delays when sorted in ascending order.
+    The median is useful when there are extreme values or a skewed distribution in the delay data, providing a measure of central tendency less affected by outliers.
 
-4.  Percentiles: Calculate specific percentiles (e.g., 25th, 50th, 75th) of the delay data to understand the spread of delays within the group. Percentiles show the range of delays experienced by different proportions of flights, providing insights into the distribution.
+4.  Percentiles: Calculate specific percentiles (e.g., 25th, 50th, 75th) of the delay data to understand the spread of delays within the group.
+    Percentiles show the range of delays experienced by different proportions of flights, providing insights into the distribution.
 
-5.  Standard Deviation: Compute the average amount of variation or dispersion from the mean delay. Standard deviation quantifies the spread of delay values around the average. It assumes a normal distribution and can be influenced by outliers.
+5.  Standard Deviation: Compute the average amount of variation or dispersion from the mean delay.
+    Standard deviation quantifies the spread of delay values around the average.
+    It assumes a normal distribution and can be influenced by outliers.
 
-6.  Boxplots: Visualize the minimum, quartiles, median, and maximum values of the delay data. Boxplots summarize the delay distribution, identifying outliers, skewness, and quartiles. They are useful for comparing delay characteristics across groups or categories.
+6.  Boxplots: Visualize the minimum, quartiles, median, and maximum values of the delay data.
+    Boxplots summarize the delay distribution, identifying outliers, skewness, and quartiles.
+    They are useful for comparing delay characteristics across groups or categories.
 
-    The choice between mean() and median() depends on the data distribution and presence of outliers. Mean() works well with symmetric data and no extreme values, while median() is suitable for skewed data or when extreme values significantly affect the average.
+    The choice between mean() and median() depends on the data distribution and presence of outliers.
+    Mean() works well with symmetric data and no extreme values, while median() is suitable for skewed data or when extreme values significantly affect the average.
 
-    The choice between arrival delay and departure delay depends on the analysis goals. Arrival delay measures delays experienced at the destination, relevant for overall efficiency and passenger experiences. Departure delay reflects delays at the origin airport, relevant for assessing airport operations or airline scheduling.
+    The choice between arrival delay and departure delay depends on the analysis goals.
+    Arrival delay measures delays experienced at the destination, relevant for overall efficiency and passenger experiences.
+    Departure delay reflects delays at the origin airport, relevant for assessing airport operations or airline scheduling.
 
-    Using data from planes in R is useful for performance analysis, operational efficiency, safety assessment, route optimization, and understanding passenger experiences. It enables evaluation and improvement in various aspects of airline operations, safety, and customer satisfaction.
+    Using data from planes in R is useful for performance analysis, operational efficiency, safety assessment, route optimization, and understanding passenger experiences.
+    It enables evaluation and improvement in various aspects of airline operations, safety, and customer satisfaction.
 
     2.The resulting **`sorted_destinations`** dataframe will contain the destinations with the greatest variation in air speed, with the destination having the highest standard deviation of air time appearing at the top of the list.
 
