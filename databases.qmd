@@ -1,0 +1,59 @@
+---
+title: "databases"
+---
+
+### **22.1.1 Prerequisites**
+
+```{r}
+#| label: setup
+#| message: false
+library(DBI)
+library(dbplyr)
+library(tidyverse)
+library(nycflights13)
+library(duckdb)
+```
+
+### **22.5.10 Exercises**
+
+1.  What is [`distinct()`](https://dplyr.tidyverse.org/reference/distinct.html) translated to? How about [`head()`](https://rdrr.io/r/utils/head.html)?
+`distinct` adds the `DISTINCT` clause to the `SELECT` query.
+> `head` is usually translated to the LIMIT clause of the SQL query. Because LIMIT is not an official part of the SQL specification, some database use other clauses like TOP or FETCH ROWS.
+
+```{r}
+con <- DBI::dbConnect(duckdb::duckdb())
+dbplyr::copy_nycflights13(con)
+planes <- tbl(con, "planes")
+
+planes |>
+ distinct(manufacturer) |>
+  head() |>
+  show_query()
+```
+
+2.  Explain what each of the following SQL queries do and try recreate them using dbplyr.
+
+    ```         
+    SELECT *  
+    FROM flights 
+    WHERE dep_delay < arr_delay 
+    
+    SELECT *, distance / (air_time / 60) AS speed 
+    FROM flights   
+    ```
+  The first query selects all the columns in the `flights` table and `filter` for rows with `dep_delay < arr_delay` 
+  The second query selects all the columns in the `flights` table, compute/`mutate` a new variable and call it "speed".
+
+```{r}
+flights <- tbl(con, "flights")
+
+flights |>
+  filter(dep_delay < arr_delay) |>
+  show_query()
+```
+```{r}
+flights |>
+  mutate(speed = (distance / air_time / 60)) |>
+  show_query()
+```
+
