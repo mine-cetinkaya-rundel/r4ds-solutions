@@ -1,0 +1,207 @@
+---
+title: "Hierarchial data"
+---
+
+### **Prerequisites**
+
+```{r}
+#| label: setup
+#| message: false
+library(tidyverse)
+library(repurrrsive)
+library(jsonlite)
+```
+
+### **24.3.5 Exercises**
+
+1.  What happens when you use [`unnest_wider()`](https://tidyr.tidyverse.org/reference/unnest_wider.html) with unnamed list-columns like `df2`?
+    What argument is now necessary?
+    What happens to missing values?
+
+    When using `unnest_wider` with unnamed list-columns, we need to provide it with `names_sep` to generate automatic column names.
+
+    ```{r}
+    df2 <- tribble(
+      ~x, ~y,
+      1, list(11, 12, 13),
+      2, list(21),
+      3, list(31, 32),
+    )
+
+    df2 |> 
+      unnest_wider(y, names_sep = "_")
+    ```
+
+2.  What happens when you use [`unnest_longer()`](https://tidyr.tidyverse.org/reference/unnest_longer.html) with named list-columns like `df1`?
+    What additional information do you get in the output?
+    How can you suppress that extra detail?
+
+Each element get its own row and we get an additional "index" column specifying the inner names of these elements.
+
+```{r}
+  df1 <- tribble(
+    ~x, ~y,
+    1, list(a = 11, b = 12),
+    2, list(a = 21, b = 22),
+    3, list(a = 31, b = 32),
+  )
+  
+  df1 |> 
+    unnest_longer(y)
+```
+
+To suppress this extra detail, we can set the argument `indices_include` to `FALSE`
+
+```{r}
+  df1 |> 
+    unnest_longer(y, indices_include = F)
+```
+
+2.  From time-to-time you encounter data frames with multiple list-columns with aligned values.
+    For example, in the following data frame, the values of `y` and `z` are aligned (i.e. `y` and `z` will always have the same length within a row, and the first value of `y` corresponds to the first value of `z`).
+    What happens if you apply two [`unnest_longer()`](https://tidyr.tidyverse.org/reference/unnest_longer.html) calls to this data frame?
+    How can you preserve the relationship between `x` and `y`?
+    (Hint: carefully read the docs).
+
+    If we apply two `unnest_longer` to a dataframe, we get all the possible pairs of y and z per each x.
+
+    ```{r}
+    df4 <- tribble(
+      ~x, ~y, ~z,
+      "a", list("y-a-1", "y-a-2"), list("z-a-1", "z-a-2"),
+      "b", list("y-b-1", "y-b-2", "y-b-3"), list("z-b-1", "z-b-2", "z-b-3")
+    )
+
+    df4 |>
+      unnest_longer(y) |>
+      unnest_longer(z)
+    ```
+
+    To preserve the relationship between x and y, we need to unnest simultaneously.
+
+```{r}
+df4 |>
+  unnest_longer(c(y, z))
+```
+
+### **24.4.4 Exercises**
+
+1.  Roughly estimate when `gh_repos` was created. Why can you only roughly estimate the date?
+
+```{r}
+repos <- tibble(gh_repos)
+
+repos |>
+  unnest_longer(gh_repos)|>
+  unnest_wider(gh_repos) |>
+  summarise(earliest_date = min(created_at), latest_date = max(created_at))
+```
+
+It probably wasn't created before June, 2012.
+It's hard to tell when it was exactly created since we only have the creation date of individual repos and not the collection itself.
+
+2.  The `owner` column of `gh_repo` contains a lot of duplicated information because each owner can have many repos.
+    Can you construct an `owners` data frame that contains one row for each owner?
+    (Hint: does [`distinct()`](https://dplyr.tidyverse.org/reference/distinct.html) work with `list-cols`?)
+
+    ```{r}
+    owners <- repos |>
+      unnest_longer(gh_repos)|>
+      unnest_wider(gh_repos)|>
+      select(owner)|>
+      unnest_wider(owner, names_sep = "_") |>
+      distinct()
+
+    owners
+    ```
+
+3.  Follow the steps used for `titles` to create similar tables for the aliases, allegiances, books, and TV series for the Game of Thrones characters.
+
+    ```{r}
+    chars <- tibble(json = got_chars)
+    extract_got_table <- function(table_name){
+      chars |> 
+      unnest_wider(json) |> 
+      select(id, name, table_name) |> 
+      unnest_longer(table_name) |> 
+      filter(c_across(table_name) != "")
+      }
+
+    aliases <- extract_got_table("aliases")
+    allegiances <- extract_got_table("allegiances")
+    books <- extract_got_table("books")
+    tvSeries <- extract_got_table("tvSeries")
+
+    books
+    ```
+
+    Explain the following code line-by-line.
+    Why is it interesting?
+    Why does it work for `got_chars` but might not work in general?
+
+```{r}
+tibble(json = got_chars) |> 
+  unnest_wider(json) |> 
+  select(id, where(is.list)) |> 
+  pivot_longer(
+    where(is.list), 
+    names_to = "name", 
+    values_to = "value"
+  ) |>  
+  unnest_longer(value)
+```
+
+At first we turned the list into list-columns to suit our tools.
+After that, we unnested the named list-column wider to separate columns.
+Then, we picked only the list-columns and the id column.
+We used `pivot_longer` to lengthen the data, decreasing the number of columns.
+Lastly, we unnested the last list-column.
+
+This sequence of steps is unique to this particular data because it follows its structure.
+A different list would have a different structure and would require a different sequence to "rectangle" it.
+
+5.  In `gmaps_cities`, what does `address_components` contain? Why does the length vary between rows? Unnest it appropriately to figure it out. (Hint: `types` always appears to contain two elements. Does [`unnest_wider()`](https://tidyr.tidyverse.org/reference/unnest_wider.html) make it easier to work with than [`unnest_longer()`](https://tidyr.tidyverse.org/reference/unnest_longer.html)?) .
+
+    ```{r}
+    locations <- gmaps_cities |> 
+      unnest_wider(json) |> 
+      select(-status) |> 
+      unnest_longer(results) |> 
+      unnest_wider(results) 
+    locations |>
+      select(city, address_components) |>
+      unnest_longer(address_components) |>
+      unnest_wider(address_components) |>
+      unnest_longer(types)
+
+    ```
+
+### **24.5.4 Exercises**
+
+1.  Rectangle the `df_col` and `df_row` below. They represent the two ways of encoding a data frame in JSON.
+
+```{r}
+json_col <- parse_json('
+  {
+    "x": ["a", "x", "z"],
+    "y": [10, null, 3]
+  }
+')
+json_row <- parse_json('
+  [
+    {"x": "a", "y": 10},
+    {"x": "x", "y": null},
+    {"x": "z", "y": 3}
+  ]
+')
+
+df_col <- tibble(json = list(json_col))
+df_row <- tibble(json = json_row)
+
+df_col |>
+  unnest_wider(json)|>
+  unnest_longer(c(x,y))
+
+df_row |>
+  unnest_wider(json)
+```
