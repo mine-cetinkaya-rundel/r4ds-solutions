@@ -34,9 +34,20 @@ book:
 
     - part: "Visualize"
       chapters:
-        #- layers.qmd
+        - layers.qmd
         - EDA.qmd
         #- communication.qmd
+
+    - part: "Transform"
+      #chapters:
+        #- logicals.qmd
+        #- numbers.qmd
+        #- strings.qmd
+        #- regexps.qmd
+        #- factors.qmd
+        #- datetimes.qmd
+        #- missing-values.qmd
+        #- joins.qmd
 
 format:
   html:
