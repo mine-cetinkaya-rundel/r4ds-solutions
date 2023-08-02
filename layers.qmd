@@ -1,5 +1,8 @@
 ---
 title: "Layers"
+editor: 
+  markdown: 
+    wrap: sentence
 ---
 
 ```{r}
@@ -171,8 +174,6 @@ ggplot(mpg, aes(x = hwy, y = displ, color = displ < 5)) +
       facet_grid(. ~ drv)
     ```
 
-<!-- -->
-
 7.  Facet grid chose to use rows instead of columns in the first code.
 
     ```{r}
@@ -205,8 +206,28 @@ ggplot(mpg, aes(x = hwy, y = displ, color = displ < 5)) +
 2.  `geom_col()` plots the heights of the bars to represent values in the data, while `geom_bar()` first calculates the heights from data and then plots them.
     `geom_col()` can be used to make a bar plot from a data frame that represents a frequency table, while `geom_bar()` can be used to make a bar plot from a data frame where each row is an observation.
 
-3.  A lot of the geoms use stat = identity and some use bin and count.
-    **TO DO:** Expand.
+3.  Geoms and stats that are almost always used in concert are listed below:
+
+    | **geom**                | **stat**                |
+    |-------------------------|-------------------------|
+    | `geom_bar()`            | `stat_count()`          |
+    | `geom_bin2d()`          | `stat_bin_2d()`         |
+    | `geom_boxplot()`        | `stat_boxplot()`        |
+    | `geom_contour_filled()` | `stat_contour_filled()` |
+    | `geom_contour()`        | `stat_contour()`        |
+    | `geom_count()`          | `stat_sum()`            |
+    | `geom_density_2d()`     | `stat_density_2d()`     |
+    | `geom_density()`        | `stat_density()`        |
+    | `geom_dotplot()`        | `stat_bindot()`         |
+    | `geom_function()`       | `stat_function()`       |
+    | `geom_sf()`             | `stat_sf()`             |
+    | `geom_sf()`             | `stat_sf()`             |
+    | `geom_smooth()`         | `stat_smooth()`         |
+    | `geom_violin()`         | `stat_ydensity()`       |
+    | `geom_hex()`            | `stat_bin_hex()`        |
+    | `geom_qq_line()`        | `stat_qq_line()`        |
+    | `geom_qq()`             | `stat_qq()`             |
+    | `geom_quantile()`       | `stat_quantile()`       |
 
 4.  `stat_smooth()` computes the following variables:
 
@@ -216,7 +237,7 @@ ggplot(mpg, aes(x = hwy, y = displ, color = displ < 5)) +
     -   `se`: Standard error
 
 5.  In the first pair of plots, we see that setting `group = 1` results in the marginal proportions of `cut`s being plotted.
-    In the second pair of plots, **TO DO:** Convert second plot to use `after_stat(prop)`.
+    In the second pair of plots, setting `group = color` results in the proportions of `color`s within each `cut` being plotted.
 
     ```{r}
     #| layout-ncol: 2
@@ -248,8 +269,6 @@ ggplot(mpg, aes(x = hwy, y = displ, color = displ < 5)) +
     ggplot(mpg, aes(x = cty, y = hwy)) + 
       geom_jitter()
     ```
-
-<!-- -->
 
 2.  The two plots are identical.
 
@@ -317,8 +336,6 @@ ggplot(mpg, aes(x = hwy, y = displ, color = displ < 5)) +
       geom_bar() + 
       coord_polar(theta = "y")
     ```
-
-<!-- -->
 
 2.  `coord_map()` projects the portion of the earth you're plotting onto a flat 2D plane using a given projection.
     `coord_quickmap()` is an approximation of this projection.
