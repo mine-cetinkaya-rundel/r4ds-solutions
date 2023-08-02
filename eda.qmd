@@ -15,6 +15,7 @@ source("_common.R")
 library(tidyverse)
 library(ggbeeswarm)
 library(lvplot)
+library(nycflights13)
 ```
 
 ## 11.3.3 Exercises {.unnumbered}
@@ -25,14 +26,15 @@ library(lvplot)
     #| layout-ncol: 3
 
     ggplot(diamonds, aes(x = x)) +
-      geom_histogram(binwidth = 0.01)
+      geom_histogram(binwidth = 0.1)
     ggplot(diamonds, aes(x = y)) +
-      geom_histogram(binwidth = 0.01)
+      geom_histogram(binwidth = 0.1)
     ggplot(diamonds, aes(x = z)) +
-      geom_histogram(binwidth = 0.01)
+      geom_histogram(binwidth = 0.1)
     ```
 
-    Typical values for `x` and `y` are larger than `z`, which might suggest `z` is the depth, which matches up with the documentation. Typical values for `x` and `y` are ver similar, but the maximum for `y` is much higher, therefore I would guess that `y` is width, since we generally expect width to be larger than length.
+    Typical values for `x` and `y` are larger than `z`, which might suggest `z` is the depth, which matches up with the documentation.
+    Typical values for `x` and `y` are very similar, but the maximum for `y` is much higher, therefore I would guess that `y` is width, since we generally expect width to be larger than length.
 
     ```{r}
     diamonds |>
@@ -49,9 +51,6 @@ library(lvplot)
       )
     ```
 
-```{=html}
-<!-- -->
-```
 2.  The distribution of price is right skewed with a median of \$2,401.
     There is a gap in the distribution with very few diamonds around \$1,500, which is curious -- I can't think of a specific reason why that would be the case.
 
@@ -75,9 +74,6 @@ library(lvplot)
       )
     ```
 
-```{=html}
-<!-- -->
-```
 3.  Only 23 diamonds are 0.99 carats and 1,558 diamonds are 1 carat.
     This is likely because the market for 0.99 carat diamonds is small.
     If you can get a 1 carat diamond for just a little but of increase in price.
@@ -122,190 +118,230 @@ library(lvplot)
       coord_cartesian(ylim = c(0, 1000))
     ```
 
-```{=html}
-<!-- -->
-```
-4.  It looks like when you use the `xlim` it zooms out but when you use the `ylim` it zooms in.
+5.  The plots below show a default view, a view limited with `coord_cartesian()`, and a view limited with `xlim()` and `ylim()`.
+    While `coord_cartesian()` zooms in to the original plot, `xlim()` and `ylim()` first filter the data for cases that fill into those bounds, and then plots them.
 
-```{r}
-ggplot(diamonds, aes(x = carat)) + geom_histogram(binwidth = .1) +
-  coord_cartesian(xlim = c(0,50))
+    ```{r}
+    #| layout-ncol: 3
 
-ggplot(diamonds, aes(x = carat)) + geom_histogram(binwidth = .1) + 
-  coord_cartesian(ylim = c(0,50))
-```
+    ggplot(diamonds, aes(x = carat)) + 
+      geom_histogram(binwidth = 0.1) +
+      labs(title = "No limits")
+    ggplot(diamonds, aes(x = carat)) + 
+      geom_histogram(binwidth = 0.1) +
+      coord_cartesian(xlim = c(0, 1), ylim = c(0, 5000)) +
+      labs(title = "coord_cartesian(xlim = c(0, 1), ylim = c(0, 5000))")
+    ggplot(diamonds, aes(x = carat)) + 
+      geom_histogram(binwidth = 0.1) +
+      xlim(0, 1) +
+      ylim (0, 5000) +
+      labs(title = "xlim(0, 1) + ylim (0, 5000)")
+    ```
 
 ## 11.4.1 Exercises {.unnumbered}
 
-1.  The missing values are removed with a warning.
+1.  In a histogram, missing values are not plotted and a warning is emitted.
+    In a bar plot, missing values are plotted.
+    While it's not possible to plot a missing numeric value, it is feasible to represent a missing categorical one with "NA" or "missing" as the level.
 
-2.  For mean it determines whether na's should be removed or not and for sum should na values be removed and certain other values.
+    ```{r}
+    #| layout-ncol: 2
+
+    data_frame_with_missings <- tibble(
+      x = c(runif(9), NA),
+      y = c(rep(c("a", "b", "c"), 3), NA)
+    )
+
+    ggplot(data_frame_with_missings, aes(x = x)) +
+      geom_histogram()
+    ggplot(data_frame_with_missings, aes(x = y)) +
+      geom_bar()
+    ```
+
+2.  The `na.rm` argument removes `NA`s in the data before calculating these summary statistics.
+
+    ```{r}
+    data_frame_with_missings |>
+      summarize(
+        x_mean = mean(x),
+        x_mean_narm = mean(x, na.rm = TRUE),
+        x_sum = sum(x),
+        x_sum_narm = sum(x, na.rm = TRUE)
+      )
+    ```
+
+3.  **TO DO: Answer this question.**
 
 ## 11.5.1.1 Exercises {.unnumbered}
 
-1.  
+1.  TO DO: Add text.
 
-```{r}
-canceled_flights <- nycflights13::flights |> 
-  mutate(
-    cancelled = is.na(dep_time),
-    sched_hour = sched_dep_time %/% 100,
-    sched_min = sched_dep_time %% 100,
-    sched_dep_time = sched_hour + (sched_min / 60)
-  ) 
+    ```{r}
+    canceled_flights <- flights |> 
+      mutate(
+        cancelled = is.na(dep_time),
+        sched_hour = sched_dep_time %/% 100,
+        sched_min = sched_dep_time %% 100,
+        sched_dep_time = sched_hour + (sched_min / 60)
+      ) 
+    ```
 
-ggplot(canceled_flights,aes(x = cancelled)) +
-  geom_bar()
-```
-
-2.I would say maybe clarity or just straight up price,because the lower quality diamonds correspond to people buying them who don't really know about diamonds or don't care about the quality,theres alot more lower quality diamonds than higher quality.
-
-?diamonds
+2.  I would say maybe clarity or just straight up price,because the lower quality diamonds correspond to people buying them who don't really know about diamonds or don't care about the quality,theres alot more lower quality diamonds than higher quality.
 
 3.  It switching the x and y its alot faster.
 
-```{r}
-ggplot(mpg, aes(x = hwy, y = fct_reorder(class, hwy, median))) +
-  geom_boxplot() + coord_flip()
+    ```{r}
+    ggplot(mpg, aes(x = hwy, y = fct_reorder(class, hwy, median))) +
+      geom_boxplot() + coord_flip()
+    ```
+
+4.  One problem with boxplots is that they were developed in an era of much smaller datasets and tend to display a prohibitively large number of "outlying values".
+    One approach to remedy this problem is the letter value plot.
+    Install the lvplot package, and try using `geom_lv()` to display the distribution of price vs. cut.
+    What do you learn?
+    How do you interpret the plots?
+
+    ```{r}
+    ggplot(diamonds,aes(x = cut,y = price)) +
+      geom_lv()
+    ```
+
+```{=html}
+<!-- -->
 ```
-
-4.One problem with boxplots is that they were developed in an era of much smaller datasets and tend to display a prohibitively large number of "outlying values".
-One approach to remedy this problem is the letter value plot.
-Install the lvplot package, and try using `geom_lv()` to display the distribution of price vs. cut.
-What do you learn?
-How do you interpret the plots?
-
-```{r}
-ggplot(diamonds,aes(x = cut,y = price)) +
-  geom_lv()
-```
-
 5.  geom_violin shows a basic understanding of the amount of diamonds while geom_histogram shows the further outliers better and where they are and geom_freqpoly shows the count better
 
-```{r}
-ggplot(diamonds,aes(x = price, y = clarity)) +
-  geom_violin()
-```
+    ```{r}
+    ggplot(diamonds,aes(x = price, y = clarity)) +
+      geom_violin()
 
-```{r}
-ggplot(diamonds,aes(x = price)) +
-  geom_histogram() +
-  facet_wrap(~clarity, ncol = 1, scales = "free_y")
-#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`
-```
+    ggplot(diamonds,aes(x = price)) +
+      geom_histogram() +
+      facet_wrap(~clarity, ncol = 1, scales = "free_y")
 
-```{r}
-ggplot(diamonds,aes(x = price, color = clarity)) +
-  geom_freqpoly()
-#> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-```
+    ggplot(diamonds,aes(x = price, color = clarity)) +
+      geom_freqpoly()
+    ```
 
+```{=html}
+<!-- -->
+```
 6.  `geom_beeswarm()` makes it so you have more control over overplotting datasets, while geom_jitter to me seems like just a default that you can use on the go but if you do want more customization ggbeeswarm is better for handling overplotting.
 
 ## 11.5.2.1 Exercises {.unnumbered}
 
-1.  
+1.  **TO DO: Add text.**
 
-```{r}
-ggplot(diamonds, aes(x = cut, y = color)) +
-  geom_count()
+    ```{r}
+    ggplot(diamonds, aes(x = cut, y = color)) +
+      geom_count()
+    ```
+
+```{=html}
+<!-- -->
 ```
+2.  **TO DO: Add text.**
 
-2.  
+    ```{r}
+    count(diamonds,color,cut)
+     
+    ggplot(diamonds,aes( x = color, fill = cut)) +
+      geom_bar(position = "fill")
+    ```
 
-```{r}
-count(diamonds,color,cut)
- 
- ggplot(diamonds,aes( x = color, fill = cut)) +
-  geom_bar(position = "fill")
+```{=html}
+<!-- -->
 ```
+3.  **TO DO:** Add text.
 
-3.  
-
-```{r}
-nycflights13::flights |> 
-  summarise(dest,month,year) |> 
-  group_by(dest,month)
-```
+    ```{r}
+    flights |> 
+      summarise(dest,month,year) |> 
+      group_by(dest,month)
+    ```
 
 ## 11.5.3.1 Exercises {.unnumbered}
 
-```{r}
-smaller <- diamonds |> 
-  filter(carat < 3)
-```
-
 1.  If you want to use cut_width know you r datas values,if you use cut_number know your sample size.
 
-```{r}
-# visualize price binning by carat, cut_width()
-ggplot(smaller, aes(x = price, y = ..density..,)) +
-  geom_freqpoly(aes(color = cut_width(carat, 0.5)))
+    ```{r}
+    smaller <- diamonds |> 
+      filter(carat < 3)
 
-# visualize price binning by carat, cut_number(), 10 bins
-ggplot(smaller, aes(x = price, y = ..density..,)) +
-  geom_freqpoly(aes(color = cut_number(carat, 10)))
+    # visualize price binning by carat, cut_width()
+    ggplot(smaller, aes(x = price, y = ..density..,)) +
+      geom_freqpoly(aes(color = cut_width(carat, 0.5)))
+
+    # visualize price binning by carat, cut_number(), 10 bins
+    ggplot(smaller, aes(x = price, y = ..density..,)) +
+      geom_freqpoly(aes(color = cut_number(carat, 10)))
+    ```
+
+2.  Visualize the distribution of `carat`, partitioned by `price`.
+
+    ```{r}
+    ggplot(diamonds, aes(x = price, y = carat)) + 
+      geom_boxplot()
+    ```
+
+```{=html}
+<!-- -->
 ```
-
-2.Visualize the distribution of `carat`, partitioned by `price`.
-
-```{r}
-ggplot(diamonds, aes(x = price, y = carat)) + 
-  geom_boxplot()
-```
-
 3.  Its not what i expect even the large diamonds are the same price as smaller diamonds.
 
-```{r}
-ggplot(diamonds,aes(x = carat, y = price)) +
-  geom_point()
+    ```{r}
+    ggplot(diamonds,aes(x = carat, y = price)) +
+      geom_point()
+    ```
+
+```{=html}
+<!-- -->
 ```
+4.  **TO DO: Add text.**
 
-4.  
+    ```{r}
+    ggplot(diamonds,aes(x = price, color = cut, fill = cut)) +
+      geom_freqpoly()
 
-```{r}
-ggplot(diamonds,aes(x = price, color = cut, fill = cut)) +
-  geom_freqpoly()
+    ggplot(diamonds,aes(x = carat, color = cut, fill = cut)) +
+      geom_freqpoly()
+    ```
+
+```{=html}
+<!-- -->
 ```
-
-```{r}
-ggplot(diamonds,aes(x = carat, color = cut, fill = cut)) +
-  geom_freqpoly()
-```
-
 5.  This scatterplot shows outliers and binned plots don't.
 
-```{r}
-diamonds |> 
-  filter(x >= 4) |> 
-  ggplot(aes(x = x, y = y)) +
-  geom_point() +
-  coord_cartesian(xlim = c(4, 11), ylim = c(4, 11))
-```
+    ```{r}
+    diamonds |> 
+      filter(x >= 4) |> 
+      ggplot(aes(x = x, y = y)) +
+      geom_point() +
+      coord_cartesian(xlim = c(4, 11), ylim = c(4, 11))
 
-```{r}
-diamonds |> 
-  filter(x >= 4) |> 
-ggplot(aes(x = x)) +
-  geom_histogram()
-```
+    diamonds |> 
+      filter(x >= 4) |> 
+      ggplot(aes(x = x)) +
+      geom_histogram()
+    ```
 
+```{=html}
+<!-- -->
+```
 6.  If you want to control the width you use cut_width, if you want to choose the number of bins use cut_number.
 
-```{r}
-ggplot(smaller, aes(x = carat, y = price)) + 
-  geom_boxplot(aes(group = cut_number(carat, 20)))
+    ```{r}
+    ggplot(smaller, aes(x = carat, y = price)) + 
+      geom_boxplot(aes(group = cut_number(carat, 20)))
 
-smaller |> 
-  mutate(carat_group = cut_number(carat,20)) |>
-  count(carat_group)
-```
+    smaller |> 
+      mutate(carat_group = cut_number(carat,20)) |>
+      count(carat_group)
 
-```{r}
-ggplot(smaller, aes(x = carat, y = price)) + 
-  geom_boxplot(aes(group = cut_width(carat, .1)))
+    ggplot(smaller, aes(x = carat, y = price)) + 
+      geom_boxplot(aes(group = cut_width(carat, .1)))
 
-smaller |>
-  mutate(carat_group = cut_width(carat,.1)) |> 
-  count(carat_group)
-```
+    smaller |>
+      mutate(carat_group = cut_width(carat,.1)) |> 
+      count(carat_group)
+    ```
