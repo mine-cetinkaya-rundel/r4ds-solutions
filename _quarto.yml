@@ -35,19 +35,38 @@ book:
     - part: "Visualize"
       chapters:
         - layers.qmd
-        #- EDA.qmd
-        #- communication.qmd
+        - EDA.qmd
+        - communication.qmd
 
     - part: "Transform"
-      #chapters:
-        #- logicals.qmd
-        #- numbers.qmd
-        #- strings.qmd
-        #- regexps.qmd
-        #- factors.qmd
-        #- datetimes.qmd
-        #- missing-values.qmd
-        #- joins.qmd
+      chapters:
+        - logicals.qmd
+        - numbers.qmd
+        - strings.qmd
+        - regexps.qmd
+        - factors.qmd
+        - datetimes.qmd
+        - missing-values.qmd
+        - joins.qmd
+
+    - part: import.qmd
+      chapters:
+        - spreadsheets.qmd
+        - databases.qmd
+        - arrow.qmd
+        - rectangling.qmd
+        - webscraping.qmd
+
+    - part: program.qmd
+      chapters:
+        - functions.qmd
+        - iteration.qmd
+        - base-R.qmd
+
+    - part: communicate.qmd
+      chapters:
+        - quarto.qmd
+        - quarto-formats.qmd
 
 format:
   html:

@@ -1,0 +1,7 @@
+---
+title: "Logical vectors"
+---
+
+::: callout-warning
+Solutions for this chapter are under construction.
+:::

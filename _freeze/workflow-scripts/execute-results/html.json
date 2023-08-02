@@ -1,0 +1,14 @@
+{
+  "hash": "8ce7ba31587d4c3ddd5e70fd327b75fe",
+  "result": {
+    "markdown": "---\ntitle: \"Workflow: scripts and projects\"\n---\n\n\n\n\n## 7.3 Exercises {.unnumbered}\n\n1.  If you go to Tools \\> Global Options \\> Appearance you can change the theme of your RStudio.\n\n2.  RStudio will warn with a caution icon (orange triangle with an exclamation point in it) if variable used in your code is not defined in your scope (i.e., your environment).\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

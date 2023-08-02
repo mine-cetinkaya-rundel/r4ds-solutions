@@ -1,3 +1,5 @@
 # Introduction {#sec-intro}
 
+::: callout-note
 There are no exercises in this chapter.
+:::

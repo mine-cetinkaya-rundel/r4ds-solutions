@@ -22,31 +22,31 @@ library(tidyverse)
 
 2.  The corrected code is provided below.
 
-```{r}
-library(tidyverse)
-
-ggplot(mpg, aes(x = displ, y = hwy)) + 
-  geom_point() +
-  geom_smooth(method = "lm")
-```
+    ```{r}
+    library(tidyverse)
+    
+    ggplot(mpg, aes(x = displ, y = hwy)) + 
+      geom_point() +
+      geom_smooth(method = "lm")
+    ```
 
 3.  Option + Shift + K / Alt + Shift + K pulls up keyboard shortcuts.
     Alternatively, you can get to the same place with Help \> Keyboard Shortcuts Help.
 
 4.  The `my_bar_plot` object is saved because that's what was specified in the `plot` argument of the `ggsave()` call.
 
-```{r}
-my_bar_plot <- ggplot(mpg, aes(x = class)) +
-  geom_bar()
+    ```{r}
+    my_bar_plot <- ggplot(mpg, aes(x = class)) +
+      geom_bar()
+    
+    my_scatter_plot <- ggplot(mpg, aes(x = cty, y = hwy)) +
+      geom_point()
+    
+    ggsave(filename = "mpg-plot.png", plot = my_bar_plot)
+    ```
 
-my_scatter_plot <- ggplot(mpg, aes(x = cty, y = hwy)) +
-  geom_point()
-
-ggsave(filename = "mpg-plot.png", plot = my_bar_plot)
-```
-
-```{r}
-#| include: false
-
-fs::file_delete("mpg-plot.png")
-```
+    ```{r}
+    #| include: false
+    
+    fs::file_delete("mpg-plot.png")
+    ```

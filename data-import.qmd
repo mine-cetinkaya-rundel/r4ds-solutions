@@ -25,9 +25,9 @@ library(tidyverse)
 
 4.  We need to specify the `quote` argument.
 
-```{r}
-read_csv("x,y\n1,'a,b'", quote = "\'")
-```
+    ```{r}
+    read_csv("x,y\n1,'a,b'", quote = "\'")
+    ```
 
 5.  Problems with each `read_csv()` statement is shown below:\\
 
@@ -63,46 +63,42 @@ read_csv("x,y\n1,'a,b'", quote = "\'")
 
 6.  The non-syntactic names can be read in as follows.
 
-```{r}
-annoying <- tibble(
-  `1` = 1:10,
-  `2` = `1` * 2 + rnorm(length(`1`))
-)
-```
+    ```{r}
+    annoying <- tibble(
+      `1` = 1:10,
+      `2` = `1` * 2 + rnorm(length(`1`))
+    )
+    ```
 
-a\.
-Extracting the variable called `1`:
+    a.  Extracting the variable called `1`:
 
-```{r}
-annoying |>
-  select(`1`)
-```
+    ```{r}
+    annoying |>
+      select(`1`)
+    ```
 
-b\.
-Plotting a scatterplot of `1` vs. `2`:
+    b.  Plotting a scatterplot of `1` vs. `2`:
 
-```{r}
-ggplot(annoying, aes(x = `2`, y = `1`)) +
-  geom_point()
-```
+    ```{r}
+    ggplot(annoying, aes(x = `2`, y = `1`)) +
+      geom_point()
+    ```
 
-c\.
-Creating a new column called `3`, which is `2` divided by `1`:
+    c.  Creating a new column called `3`, which is `2` divided by `1`:
 
-```{r}
-annoying |>
-  mutate(`3` = `2` / `1`)
-```
+    ```{r}
+    annoying |>
+      mutate(`3` = `2` / `1`)
+    ```
 
-d\.
-Renaming the columns to `one`, `two`, and `three`:
+    d.  Renaming the columns to `one`, `two`, and `three`:
 
-```{r}
-annoying |>
-  mutate(`3` = `2` / `1`) |>
-  rename(
-    "one" = `1`,
-    "two" = `2`,
-    "three" = `3`
-  )
-```
+    ```{r}
+    annoying |>
+      mutate(`3` = `2` / `1`) |>
+      rename(
+        "one" = `1`,
+        "two" = `2`,
+        "three" = `3`
+      )
+    ```

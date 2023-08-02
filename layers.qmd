@@ -1,8 +1,5 @@
 ---
 title: "Layers"
-editor: 
-  markdown: 
-    wrap: sentence
 ---
 
 ```{r}
@@ -22,27 +19,27 @@ library(tidyverse)
 
 1.  Below is a scatterplot of `hwy` vs. `displ` where the points are pink filled in triangles.
 
-```{r}
-ggplot(mpg, aes(x = hwy, y = displ)) +
-  geom_point(color = "pink", shape = "triangle")
-```
+    ```{r}
+    ggplot(mpg, aes(x = hwy, y = displ)) +
+      geom_point(color = "pink", shape = "triangle")
+    ```
 
 2.  Color should be set outside of the aesthetic mapping.
 
-```{r}
-ggplot(mpg, aes(x = displ, y = hwy)) +
-  geom_point(color = "blue")
-```
+    ```{r}
+    ggplot(mpg, aes(x = displ, y = hwy)) +
+      geom_point(color = "blue")
+    ```
 
 3.  Stroke controls the size of the edge/border of the points for shapes 21-24 (filled circle, square, triangle, and diamond).
 
 4.  It creates a logical variable with values `TRUE` and `FALSE` for cars with displacement values below and above 5.
     In general, mapping an aesthetic to something other than a variable first evaluates that expression then maps the aesthetic to the outcome.
 
-```{r}
-ggplot(mpg, aes(x = hwy, y = displ, color = displ < 5)) + 
-  geom_point()
-```
+    ```{r}
+    ggplot(mpg, aes(x = hwy, y = displ, color = displ < 5)) + 
+      geom_point()
+    ```
 
 ## 10.3.1 Exercises {.unnumbered}
 
