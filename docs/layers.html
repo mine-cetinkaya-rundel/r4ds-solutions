@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.353">
+<meta name="generator" content="quarto-1.4.274">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jabir Ghaffar, Davon Person, and Mine Çetinkaya-Rundel">
 <title>R for Data Science (2e) - Solutions to Exercises - 10&nbsp; Layers</title>
@@ -61,6 +61,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./EDA.html" rel="next">
 <link href="./workflow-help.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -77,6 +78,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "panel-placement": "start",
   "type": "textbox",
   "limit": 20,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -86,7 +92,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 </head>
@@ -97,10 +104,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./layers.html">Visualize</a></li><li class="breadcrumb-item"><a href="./layers.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Layers</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./layers.html">Visualize</a></li><li class="breadcrumb-item"><a href="./layers.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Layers</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -110,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div class="sidebar-title mb-0 py-0">
       <a href="./">R for Data Science (2e) - Solutions to Exercises</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/mine-cetinkaya-rundel/r4ds-solutions/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/mine-cetinkaya-rundel/r4ds-solutions/" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -212,6 +219,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Layers</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./EDA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Exploratory data analysis</span></span></a>
+  </div>
+</li>
       </ul>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -233,10 +246,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#exercises-3" id="toc-exercises-3" class="nav-link" data-scroll-target="#exercises-3">10.5.1 Exercises</a></li>
   <li><a href="#exercises-4" id="toc-exercises-4" class="nav-link" data-scroll-target="#exercises-4">10.6.1 Exercises</a></li>
   <li><a href="#exercises-5" id="toc-exercises-5" class="nav-link" data-scroll-target="#exercises-5">10.7.1 Exercises</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mine-cetinkaya-rundel/r4ds-solutions/edit/main/layers.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/mine-cetinkaya-rundel/r4ds-solutions/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/mine-cetinkaya-rundel/r4ds-solutions/edit/main/layers.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/mine-cetinkaya-rundel/r4ds-solutions/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./layers.html">Visualize</a></li><li class="breadcrumb-item"><a href="./layers.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Layers</span></a></li></ol></nav><div class="quarto-title">
 <h1 class="title">
 <span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Layers</span>
 </h1>
@@ -251,6 +264,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     
   </div>
   
+
 
 </header><section id="prerequisites" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <div class="cell">
@@ -469,8 +483,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </li>
-</ol>
-<!-- --><ol start="7" type="1">
 <li>
 <p>Facet grid chose to use rows instead of columns in the first code.</p>
 <div class="cell">
@@ -509,7 +521,89 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </li>
 <li><p><code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col()</a></code> plots the heights of the bars to represent values in the data, while <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code> first calculates the heights from data and then plots them. <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col()</a></code> can be used to make a bar plot from a data frame that represents a frequency table, while <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code> can be used to make a bar plot from a data frame where each row is an observation.</p></li>
-<li><p>A lot of the geoms use stat = identity and some use bin and count. <strong>TO DO:</strong> Expand.</p></li>
+<li>
+<p>Geoms and stats that are almost always used in concert are listed below:</p>
+<table class="table">
+<thead><tr class="header">
+<th><strong>geom</strong></th>
+<th><strong>stat</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">stat_count()</a></code></td>
+</tr>
+<tr class="even">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_bin_2d.html">geom_bin2d()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_bin_2d.html">stat_bin_2d()</a></code></td>
+</tr>
+<tr class="odd">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">stat_boxplot()</a></code></td>
+</tr>
+<tr class="even">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_contour.html">geom_contour_filled()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_contour.html">stat_contour_filled()</a></code></td>
+</tr>
+<tr class="odd">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_contour.html">geom_contour()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_contour.html">stat_contour()</a></code></td>
+</tr>
+<tr class="even">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_count.html">geom_count()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_count.html">stat_sum()</a></code></td>
+</tr>
+<tr class="odd">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_density_2d.html">geom_density_2d()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_density_2d.html">stat_density_2d()</a></code></td>
+</tr>
+<tr class="even">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">stat_density()</a></code></td>
+</tr>
+<tr class="odd">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_dotplot.html">geom_dotplot()</a></code></td>
+<td><code>stat_bindot()</code></td>
+</tr>
+<tr class="even">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_function.html">geom_function()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_function.html">stat_function()</a></code></td>
+</tr>
+<tr class="odd">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">stat_sf()</a></code></td>
+</tr>
+<tr class="even">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">stat_sf()</a></code></td>
+</tr>
+<tr class="odd">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">stat_smooth()</a></code></td>
+</tr>
+<tr class="even">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">stat_ydensity()</a></code></td>
+</tr>
+<tr class="odd">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_hex.html">geom_hex()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_hex.html">stat_bin_hex()</a></code></td>
+</tr>
+<tr class="even">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html">geom_qq_line()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html">stat_qq_line()</a></code></td>
+</tr>
+<tr class="odd">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html">geom_qq()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html">stat_qq()</a></code></td>
+</tr>
+<tr class="even">
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_quantile.html">geom_quantile()</a></code></td>
+<td><code><a href="https://ggplot2.tidyverse.org/reference/geom_quantile.html">stat_quantile()</a></code></td>
+</tr>
+</tbody>
+</table>
+</li>
 <li>
 <p><code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">stat_smooth()</a></code> computes the following variables:</p>
 <ul>
@@ -524,7 +618,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </li>
 <li>
-<p>In the first pair of plots, we see that setting <code>group = 1</code> results in the marginal proportions of <code>cut</code>s being plotted. In the second pair of plots, <strong>TO DO:</strong> Convert second plot to use <code>after_stat(prop)</code>.</p>
+<p>In the first pair of plots, we see that setting <code>group = 1</code> results in the marginal proportions of <code>cut</code>s being plotted. In the second pair of plots, setting <code>group = color</code> results in the proportions of <code>color</code>s within each <code>cut</code> being plotted.</p>
 <div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># one variable</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">diamonds</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">cut</span>, y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html">after_stat</a></span><span class="op">(</span><span class="va">prop</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -578,8 +672,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </li>
-</ol>
-<!-- --><ol start="2" type="1">
 <li>
 <p>The two plots are identical.</p>
 <div>
@@ -691,8 +783,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </li>
-</ol>
-<!-- --><ol start="2" type="1">
 <li><p><code><a href="https://ggplot2.tidyverse.org/reference/coord_map.html">coord_map()</a></code> projects the portion of the earth you’re plotting onto a flat 2D plane using a given projection. <code><a href="https://ggplot2.tidyverse.org/reference/coord_map.html">coord_quickmap()</a></code> is an approximation of this projection.</p></li>
 <li>
 <p><code><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline()</a></code> adds a straight line at <code>y = x</code>, in other words, where highway mileage is equal to city mileage and <code><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_fixed()</a></code> uses a fixed scale coordinate system where the number of units on the x and y-axes are equivalent. Since all the points are above the line, the highway mileage is always greater than city mileage for these cars.</p>
@@ -788,10 +878,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -801,8 +890,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -815,6 +913,81 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -858,6 +1031,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -947,15 +1121,22 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./EDA.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Exploratory data analysis</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer">
-    <div class="nav-footer-left">The Solutions to Exercises for R for Data Science (2e) was written by Jabir Ghaffar, Davon Person, and Mine Çetinkaya-Rundel.</div>   
+    <div class="nav-footer-left">
+<p>The Solutions to Exercises for R for Data Science (2e) was written by Jabir Ghaffar, Davon Person, and Mine Çetinkaya-Rundel.</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
-    <div class="nav-footer-right">This book was built with <a href="https://quarto.org/">Quarto</a>.</div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
   </div>
 </footer>
 

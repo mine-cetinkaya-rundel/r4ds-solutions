@@ -35,7 +35,7 @@ book:
     - part: "Visualize"
       chapters:
         - layers.qmd
-        #- EDA.qmd
+        - EDA.qmd
         #- communication.qmd
 
     - part: "Transform"
