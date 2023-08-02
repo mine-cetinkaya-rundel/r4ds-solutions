@@ -1,8 +1,5 @@
 ---
 title: "Layers"
-editor: 
-  markdown: 
-    wrap: sentence
 ---
 
 ```{r}
