@@ -228,6 +228,15 @@ library(palmerpenguins)
     )
     ```
 
+7.  The first plot allows us to answer how the relative frequency of a species varies across islands. For example, we can see that Biscoe has the lowest proportion of Adelies. The second plot allows us to answer the inverse: How does the relative frequency of islands differ across species? For example, Adelies are roughly evenly spread among the islands, whereas Chinstrap and Gentoo each inhabit only one island.
+
+    ```{r}
+    ggplot(penguins, aes(x = island, fill = species)) +
+    geom_bar(position = "fill")
+    ggplot(penguins, aes(x = species, fill = island)) +
+    geom_bar(position = "fill")
+    ```
+
 ## 2.6.1 Exercises {.unnumbered}
 
 1.  The second plot is saved, because `ggsave()` saves the last plot you made.
