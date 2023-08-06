@@ -1,0 +1,5 @@
+---
+title: "Web scraping"
+---
+
+There are no exercises in this chapter.
