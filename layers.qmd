@@ -257,6 +257,7 @@ library(tidyverse)
 1.  The `mpg` dataset has `r nrow(mpg)` observations, however the plot shows fewer observations than that.
     This is due to overplotting; many cars have the same city and highway mileage.
     This can be addressed by jittering the points.
+    We can further improve the plot by adjusting the alpha value to be below 1, which allows us to see overlapping points.
 
     ```{r}
     #| layout-ncol: 2
@@ -265,9 +266,12 @@ library(tidyverse)
       geom_point()
     ggplot(mpg, aes(x = cty, y = hwy)) + 
       geom_jitter()
+    ggplot(mpg, aes(x = cty, y = hwy)) + 
+      geom_jitter(alpha = 0.5)
     ```
 
 2.  The two plots are identical.
+    This is because the default value for the `position` argument of `geom_point()` is `"identity"`.
 
     ```{r}
     #| layout-ncol: 2
