@@ -1,0 +1,162 @@
+---
+title: "chapter-15"
+author: "jabir"
+editor: visual
+---
+
+## Prerequisites
+
+```{r}
+library(tidyverse)
+library(babynames)
+library(stringr)
+```
+
+## Solutions
+
+## Exercises 15.2.4
+
+1\.
+
+```{r}
+'He said "That\'s amazing!"'
+
+"\\a\\b\\c\\d"
+
+"\\\\\\\\"
+```
+
+2.  These special characters do nothing
+
+    ```{r}
+    x <- "This\u00a0is\u00a0tricky"
+
+    str_view(x)
+    ```
+
+## Exercises 15.3.4
+
+1\.
+
+1.  **`str_c("hi ", NA)`**
+
+    -   **`str_c("hi ", NA)`** with **`str_c()`**:
+
+        -   Result: **`"hi NA"`**
+
+        -   Explanation: **`str_c()`** converts the **`NA`** value to a character string representation of "NA" and concatenates it with the string "hi".
+
+    -   **`paste0("hi ", NA)`** with **`paste0()`**:
+
+        -   Result: **`"hi NA"`**
+
+        -   Explanation: **`paste0()`** also converts the **`NA`** value to a character string representation of "NA" and concatenates it with the string "hi".
+            The behavior is similar to **`str_c()`** in this case.
+
+    The results of **`str_c()`** and **`paste0()`** are the same for this input, as both functions convert **`NA`** to the character string "NA" and concatenate it with the preceding string.
+
+2.  **`str_c(letters[1:2], letters[1:3])`**
+
+    -   **`str_c(letters[1:2], letters[1:3])`** with **`str_c()`**:
+
+        -   Result: **`"aabbccc"`**
+
+        -   Explanation: **`str_c()`** concatenates the elements of the first vector (**`letters[1:2]`**) with the corresponding elements of the second vector (**`letters[1:3]`**).
+            The resulting strings are then concatenated together.
+
+    -   **`paste0(letters[1:2], letters[1:3])`** with **`paste0()`**:
+
+        -   Result: **`"aabbccc"`**
+
+        -   Explanation: **`paste0()`** behaves similarly to **`str_c()`** in this case, as it concatenates the elements of the first vector with the corresponding elements of the second vector, resulting in the same output.
+
+    The results of **`str_c()`** and **`paste0()`** are the same for this input as well, as both functions concatenate the corresponding elements of the vectors and create a single concatenated string.
+
+In summary, **`str_c()`** and **`paste0()`** generally produce similar results for concatenating strings.
+However, **`str_c()`** has additional options and features that allow for more flexibility and customization, such as specifying separators between the elements being concatenated.
+On the other hand, **`paste0()`** is a simplified version of **`paste()`** that concatenates without any separator.
+
+2.The **`paste()`** and **`paste0()`** functions in R are used for concatenating strings.
+The main difference between the two is that **`paste()`** allows you to specify a separator between the concatenated elements, whereas **`paste0()`** concatenates the elements without any separator.
+
+To recreate the equivalent of **`paste()`** using **`str_c()`** from the **`stringr`** package, you can use the **`collapse`** argument in **`str_c()`**:
+
+```{r}
+library(stringr)
+
+vec <- c("a", "b", "c")
+
+result_str_c <- str_c(vec, collapse = "-")
+
+```
+
+In the above code, **`str_c(vec, collapse = "-")`** is equivalent to **`paste(vec, collapse = "-")`**.
+It concatenates the elements of **`vec`** with a hyphen (**`-`**) separator specified by the **`collapse`** argument, resulting in the same output as **`paste()`**.
+
+3\.
+
+```{r}
+str_glue("The price of {food} is {price}")
+
+str_c("I'm ", age, " years old and live in ", country)
+
+str_glue("\\section{{{title}}}")
+
+```
+
+## Exercises 15.5.3
+
+1.In the data set we use wt to tell how many people were named any given name.
+
+2\.
+
+```{r}
+# Extract middle letter(s) from each baby name
+middle_letters <- sapply(babynames$name, function(name) {
+  name_length <- str_length(name)
+  middle_index <- ceiling(name_length / 2)
+  
+  if (name_length %% 2 == 0) {
+    str_sub(name, middle_index, middle_index + 1)
+  } else {
+    str_sub(name, middle_index, middle_index)
+  }
+})
+
+# Display the middle letter(s)
+head(middle_letters)
+```
+
+3\.
+
+```{r}
+# lengths of names over time
+
+babynames |>
+  group_by(year) |> 
+  mutate(length = str_length(name)) |>
+  summarize(average_length = weighted.mean(length, n)) |>
+  ggplot(aes(x = year, y = average_length)) +
+  geom_line() +
+  scale_x_continuous(breaks = seq(1880, 2020, 10))
+
+# first letter
+
+babynames |>
+  mutate(first_letter = str_sub(name, start = 1, end = 1)) |>
+  group_by(year, first_letter) |>
+  summarize(total_prop = sum(prop), .groups = "drop") |>
+  ggplot(aes(x = year, y = total_prop)) +
+  geom_line() +
+  facet_wrap(~first_letter)
+
+# last letter
+
+babynames |>
+  mutate(last_letter = str_sub(name, start = -1, end = -1)) |>
+  group_by(year, last_letter) |>
+  summarize(total_prop = sum(prop), .groups = "drop") |>
+  ggplot(aes(x = year, y = total_prop)) +
+  geom_line() +
+  facet_wrap(~last_letter)
+```
