@@ -1,0 +1,402 @@
+---
+title: "chapter-16"
+author: "jabir"
+editor: visual
+---
+
+## 
+
+## Prerequisites
+
+```{r}
+library(tidyverse)
+library(babynames)
+```
+
+## Solutions
+
+## Exercises 16.3.5
+
+1.  Mariadelrosario has the most vowels,
+
+```{r}
+babynames |> 
+  count(name) |> 
+  mutate(
+    vowels = str_count(name, "[aeiou]")
+  ) |>
+  arrange(desc(vowels))
+```
+
+```{r}
+babynames |> 
+  count(name) |> 
+  mutate(
+    vowels = mean(str_count(name, "[aeiou]"))
+  ) 
+```
+
+2.It shows the letters in order,these two codes do the same thing.
+
+```{r}
+str_replace_all("a/b/c/d/e","/","\\")
+```
+
+```{r}
+str_replace_all("a/b/c/d/e","/","\\")
+```
+
+3\.
+
+```{r}
+fruits <- c("one apple", "two pears", "three bananas")
+str_replace_all(fruits,"a","-")
+```
+
+4.Creating a regular expression using telephone number.
+
+```{r}
+# Example phone number
+phone_number <- "(123) 456-7890"
+
+# Regular expression pattern
+pattern <- "\\(\\d{3}\\) \\d{3}-\\d{4}"
+
+# Check if the phone number matches the pattern
+if (grepl(pattern, phone_number)) {
+  print("Phone number is valid")
+} else {
+  print("Phone number is invalid")
+}
+```
+
+## Exercises 16.4.7
+
+1\.
+
+```{r}
+# Input string
+input <- "'\\? How about \"\$^$'"
+
+# Pattern to match
+pattern <- "'\\? How about \"\\$\\^\\$'"
+
+# Matching
+if (grepl(pattern, input)) {
+  print("Match found!")
+} else {
+  print("No match found.")
+}
+```
+
+2\.
+"" The pattern "" is not a valid pattern in R because the backslash is not properly escaped.
+R interprets the backslash as an escape character, and since there is no character following it, it results in a syntax error.
+To match a backslash as a literal character, you need to escape it by using two backslashes: "\\".
+
+"\\" The pattern "\\\\" is a valid pattern in R and it represents a single backslash.
+The first backslash acts as an escape character, and the second backslash is treated as a literal backslash.
+So this pattern matches a single backslash.
+
+"\\" The pattern "\\"" is not a valid pattern in R because the third backslash is not properly escaped. R interprets the first two backslashes as an escape character followed by a double quote character (").
+However, the third backslash is not followed by any character, resulting in a syntax error.
+To match a literal backslash followed by a double quote, you need to use four backslashes:"\\\\\\".
+
+3\.
+
+```{r}
+#a
+str_subset(words,"^y")
+#b
+str_subset(words,"\\b(?!y)[a-zA-Z]+\\b")
+#c
+str_subset(words,"x$")
+```
+
+```{r}
+#d
+str_subset(words,"\\b[a-zA-Z]{3}\\b")
+#e
+str_subset(words,"\\b[a-zA-Z]{7,}\\b")
+#f
+str_subset(words,"\\b[a-zA-Z]*[aeiou][bcdfghj-np-tv-z][a-zA-Z]*\\b")
+#g
+str_subset(words,"\\b[a-zA-Z]*(?:[aeiou][bcdfghj-np-tv-z]){2}[a-zA-Z]*\\b")
+#h
+str_subset(words,"\\b(?:[aeiou][bcdfghj-np-tv-z])+\\b")
+```
+
+4\.
+
+```{r}
+x <- c("airplane", "aeroplane", "plane", "potato", "apple", "appleplane")
+# TRUE TRUE FALSE FALSE FALSE FALSE
+str_detect(x, "^a(ir)|(ero)plane$")
+```
+
+```{r}
+x <- c("aluminum", "aluminium", "aluminxum", "am")
+# TRUE TRUE FALSE FALSE
+str_detect(x, "^alumini?um$")
+```
+
+```{r}
+x <- c("analog","analogue","analoggy","anaplex")
+
+str_detect(x, "^analog(ue)?$")
+```
+
+```{r}
+x <- c("ass","arse","arsenal")
+
+str_detect(x,"^a(ss|rse)$")
+```
+
+```{r}
+x <- c("centre","center","central")
+
+str_detect(x,"cent(?:re|er)")
+```
+
+```{r}
+x <- c("defense","defence","defend","defy")
+
+str_detect(x, "defen[sc]e")
+```
+
+```{r}
+x <- c("donut","doughnut","dough")
+
+str_detect(x, "dough?nut|donut")
+```
+
+```{r}
+x <- c("gray","grey","grayhound")
+
+str_detect(x,"gr[ae]y$")
+```
+
+```{r}
+x <- c("modeling","modelling","modern")
+
+str_detect(x,"modell?ing")
+```
+
+```{r}
+x <- c("skeptic","sceptic","scissors")
+
+str_detect(x,"s[kc]?eptic")
+```
+
+```{r}
+x <- c("summarize","summarise","summary")
+
+str_detect(x,"summari[zs]e")
+```
+
+5\.
+
+```{r}
+# The words dataset in stringr::words
+words_corpus <- stringr::words
+
+# Function to switch the first and last letters in a word
+switch_letters <- function(word) {
+  if (nchar(word) < 2) {
+    return(word)  # Skip words with less than two letters (no change)
+  } else {
+    first_letter <- substr(word, 1, 1)
+    last_letter <- substr(word, nchar(word), nchar(word))
+    middle_part <- substr(word, 2, nchar(word) - 1)
+    return(paste0(last_letter, middle_part, first_letter))
+  }
+}
+
+# Apply the switch_letters function to each word in the words_corpus
+modified_words <- sapply(words_corpus, switch_letters)
+
+# Check which of the modified strings are still words
+are_still_words <- str_detect(words_corpus, paste0("\\b", modified_words, "\\b"))
+
+# Filter out the words that are still words
+words_still_words <- words_corpus[are_still_words]
+
+# Print the modified words that are still words
+print(words_still_words)
+
+```
+
+6\.
+
+1.  \^.*\$ This regular expression matches any string that contains zero or more characters. The \^ symbol represents the start of the string, the .* matches any character (except for newline) zero or more times, and the \$ symbol represents the end of the string.
+    In other words, this regex matches the entire input string.
+
+2.  "\\{.+\\}" This regular expression matches a string that begins and ends with curly braces and contains at least one or more characters in between.
+    The backslashes () before the curly braces are used to escape them, as curly braces have special meaning in regular expressions.
+    So, this regex matches strings like "{abc}", "{123}", etc.
+
+3.  \\d{4}-\\d{2}-\\d{2} This regular expression matches a date format in the pattern "YYYY-MM-DD." The \\d represents any digit, and {4}, {2}, and {2} specify the exact number of digits in each part.
+    So, it matches strings like "2023-07-21," "1998-12-31," etc., where YYYY represents the year, MM represents the month, and DD represents the day.
+
+4.  "\\\\{4}" This regular expression matches a string that contains four consecutive backslashes.
+    To specify a single backslash in a regular expression, you need to escape it with another backslash.
+    So, this regex matches strings like "\\\\1234", "\\\\\\ab", etc.
+
+5.  \...\...
+    This regular expression matches any string that consists of six characters, with a period (.) as the second and fifth character.
+    The period (.) in a regular expression matches any single character.
+    So, it matches strings like "a.b.c.d.e", "1.2.3.4.5", etc.
+
+6.  (.)\\1\\1 This regular expression matches any string that has three consecutive identical characters.
+    The parentheses () create a capturing group that captures any single character.
+    The \\1 is a backreference to the first capturing group, which means it matches the same character as the one captured by the first group.
+    So, it matches strings like "aaa", "111", "\###", etc.
+
+7.  "(..)\\1" This regular expression matches a string that is enclosed in double quotes and has the same two characters repeated twice inside the quotes.
+    The (..) creates a capturing group that captures any two characters, and the \\1 is a backreference to that capturing group, ensuring that the same two characters are repeated.
+    So, it matches strings like ""aa"",""11"",""!!"
+    ", etc., but not"abab" or "123".
+
+<!-- -->
+
+7.  didn't do this one
+
+## Exercises 16.6.4
+
+1\.
+
+```{r}
+#a
+str_subset(words,"^x|x$")
+```
+
+```{r}
+#a
+# Multiple str_detect() calls
+pattern_start_x <- "\\b[xX][a-zA-Z]+\\b"
+pattern_end_x <- "\\b[a-zA-Z]+[xX]\\b"
+
+# Find all words that start or end with 'x' using str_detect()
+words_with_x_start <- stringr::words[str_detect(stringr::words, pattern_start_x)]
+words_with_x_end <- stringr::words[str_detect(stringr::words, pattern_end_x)]
+
+# Combine the results to get the unique set of words
+words_with_x_multiple <- unique(c(words_with_x_start, words_with_x_end))
+
+# Print the matched words
+print(words_with_x_multiple)
+```
+
+```{r}
+#b
+# Single regular expression
+pattern_single_vowel_consonant <- "\\b[aeiouAEIOU][a-zA-Z]*[bcdfghj-np-tv-zBCDFGHJ-NP-TV-Z]\\b"
+
+# Find all words that start with a vowel and end with a consonant using str_view_all()
+vowel_consonant_words_single <- str_view_all(stringr::words, pattern_single_vowel_consonant)[, 1]
+
+# Print the matched words
+print(vowel_consonant_words_single)
+```
+
+```{r}
+#b
+# Multiple str_detect() calls
+pattern_vowel <- "\\b[aeiouAEIOU][a-zA-Z]*\\b"
+pattern_consonant <- "\\b[a-zA-Z]*[bcdfghj-np-tv-zBCDFGHJ-NP-TV-Z]\\b"
+
+# Find all words that start with a vowel and end with a consonant using str_detect()
+words_start_vowel <- stringr::words[str_detect(stringr::words, pattern_vowel)]
+words_end_consonant <- stringr::words[str_detect(stringr::words, pattern_consonant)]
+
+# Find the intersection of words that start with a vowel and end with a consonant
+vowel_consonant_words_multiple <- intersect(words_start_vowel, words_end_consonant)
+
+# Print the matched words
+print(vowel_consonant_words_multiple)
+
+```
+
+```{r}
+#c
+# Single regular expression
+pattern_single_all_vowels <- "\\b(?=.*a)(?=.*e)(?=.*i)(?=.*o)(?=.*u)[a-zA-Z]+\\b"
+
+# Check if there are any words with all different vowels using str_detect()
+contains_all_vowels_single <- any(str_detect(stringr::words, pattern_single_all_vowels))
+
+# Print the result
+print(contains_all_vowels_single)
+```
+
+```{r}
+#c
+# Multiple str_detect() calls
+pattern_a <- "\\b[a-zA-Z]*a[a-zA-Z]*\\b"
+pattern_e <- "\\b[a-zA-Z]*e[a-zA-Z]*\\b"
+pattern_i <- "\\b[a-zA-Z]*i[a-zA-Z]*\\b"
+pattern_o <- "\\b[a-zA-Z]*o[a-zA-Z]*\\b"
+pattern_u <- "\\b[a-zA-Z]*u[a-zA-Z]*\\b"
+
+# Check if there are any words with each different vowel using str_detect()
+contains_a <- any(str_detect(stringr::words, pattern_a))
+contains_e <- any(str_detect(stringr::words, pattern_e))
+contains_i <- any(str_detect(stringr::words, pattern_i))
+contains_o <- any(str_detect(stringr::words, pattern_o))
+contains_u <- any(str_detect(stringr::words, pattern_u))
+
+# Check if there are any words that contain at least one of each different vowel
+contains_all_vowels_multiple <- contains_a && contains_e && contains_i && contains_o && contains_u
+
+# Print the result
+print(contains_all_vowels_multiple)
+```
+
+2\.
+
+```{r}
+# Regular expression to find words with 'cie' or 'ie' (following the rule)
+pattern_for_rule <- "\\b(cie|ie)\\b"
+
+# Find words with 'cie' or 'ie' using str_view_all()
+evidence_for_rule <- str_view_all(stringr::words, pattern_for_rule)[, 1]
+
+# Print the matched words
+print(evidence_for_rule)
+
+```
+
+```{r}
+# Regular expression to find words with 'ei' not preceded by 'c' (violating the rule)
+pattern_against_rule <- "\\b(?<!c)ei\\b"
+
+# Find words with 'ei' not preceded by 'c' using str_view_all()
+evidence_against_rule <- str_view_all(stringr::words, pattern_against_rule)[, 1]
+
+# Print the matched words
+print(evidence_against_rule)
+
+```
+
+3\.
+
+```{r}
+# Assuming you have loaded the grDevices package for colors()
+# And you have already run colors() to get the list of color names
+
+# Extract base color names using regular expressions
+base_colors <- gsub("^(dark|light|pale|deep|pale|mid|midnight|medium|bright)?(.*?)(gray|grey)?$", "\\2", colors(), ignore.case = TRUE)
+
+# Remove duplicate entries
+base_colors <- unique(base_colors)
+
+# Print the identified base color names
+print(base_colors)
+
+```
+
+4\.
+
+```{r}
+
+```
