@@ -2,6 +2,61 @@
 title: "Missing values"
 ---
 
-::: callout-warning
-Solutions for this chapter are under construction.
-:::
+```{r}
+#| label: setup
+
+library(tidyverse)
+library(janitor)
+library(gt)
+library(gtExtras)
+```
+
+# **19.3.4 Exercises**
+
+## Question 1
+
+**Can you find any relationship between the carrier and the rows that appear to be missing from `planes`?**
+
+Yes, as we can see in the @tbl-q1-ex3 , the airline carriers `MQ` and `AA` have most of their aircrafts' tail numbers missing from the `planes` data-set, apart from few other carriers that have a small percentage of their data missing.
+
+```{r}
+#| label: tbl-q1-ex3
+#| tbl-cap: "Percentage of tail numbers of each carrier that is missing from planes data set"
+#| tbl-cap-location: top
+
+library(nycflights13)
+data("flights")
+data("planes")
+
+# Create a vector of carriers that have tailsnums missing in planes
+car_vec = flights |>
+  distinct(tailnum, carrier) |>
+  anti_join(planes) |>
+  distinct(carrier) |>
+  as_vector() |>
+  unname()
+
+# Find total tailnums for these carriers
+total_tails = flights |>
+  filter(carrier %in% car_vec) |>
+  group_by(carrier) |>
+  summarize(
+    total_aircrafts = n_distinct(tailnum)
+    )
+
+flights |>
+  distinct(tailnum, carrier) |>
+  anti_join(planes) |>
+  count(carrier, name = "missing_tailnums") |>
+  full_join(total_tails) |>
+  mutate(percentage_missing = missing_tailnums/total_aircrafts) |>
+  arrange(desc(percentage_missing)) |>
+  gt() |>
+  gt_theme_538() |>
+  cols_label_with(fn = ~ janitor::make_clean_names(., case = "title")) |>
+  fmt_percent(columns = percentage_missing) |>
+   tab_style(
+    style = list(cell_text(weight = "bold") ),
+    locations = cells_body(columns = percentage_missing)) 
+```
+
