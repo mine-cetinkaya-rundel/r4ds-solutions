@@ -5,3 +5,175 @@ title: "A field guide to base R"
 ::: callout-warning
 Solutions for this chapter are under construction.
 :::
+
+# **28.2.4 Exercises**
+
+## Question 1
+
+**Create functions that take a vector as input and return:**
+
+a.  **The elements at even-numbered positions.**
+
+    ```{r}
+    # Creating a function called even positions
+    even_positions <- function(x){
+      x[seq.int(from = 0,
+                to = length(x),
+                by = 2)]
+    }
+
+    # Demonstration
+    # Create a vector with alternating "odd" and "even" based on the sequence
+    nums <- rep(1:10, each = 2)
+    chars <- c("odd", "even")
+    x <- paste0(chars, nums)
+    names(x) <- 1:length(x)
+    x
+
+    # Demonstrating an example with our created function
+    even_positions(x)
+
+    # Method 2: simpler method using TRUE and FALSE
+    even_positions <- function(input_vector) {
+      even_elements <- input_vector[c(FALSE, TRUE)]
+      return(even_elements)
+    }
+
+    even_positions(x)
+    ```
+
+b.  **Every element except the last value.**
+
+    ```{r}
+    drop_last <- function(x){
+      return(x[-length(x)])
+    }
+
+    # Demonstrating an example with our created function
+    x <- letters[1:5]
+    drop_last(x)
+    ```
+
+c.  **Only even values (and no missing values).**
+
+    ```{r}
+    display_even <- function(x){
+      return(x[(x %% 2 == 0) & (!is.na(x))])
+    }
+
+    # Demonstrating an example with our created function
+    x <- sample(c(1:10, NA), size = 10, replace = FALSE)
+    x
+
+    display_even(x)
+
+    # Better function with an error message facility
+    display_even <- function(input_vector) {
+      if (is.vector(input_vector) && is.numeric(input_vector)) {
+        even_values <- input_vector[!is.na(input_vector) & input_vector %% 2 == 0]
+        return(even_values)
+      } else {
+        stop("Input must be a numeric vector.")
+      }
+    }
+
+    # Example usage:
+    display_even(x)
+    ```
+
+## Question 2
+
+**Why is `x[-which(x > 0)]` not the same as `x[x <= 0]`? Read the documentation for [`which()`](https://rdrr.io/r/base/which.html) and do some experiments to figure it out.**
+
+In `R`, **`x[-which(x > 0)]`** and **`x[x <= 0]`** are not exactly the same because they handle missing values (`NA`s) and non-real numbers (`NaN`s) differently. The difference arises from how the `which()` function handles missing values.
+
+-   The `which()` function returns the indices of elements that are `TRUE`. When applied wiht `!`, it will return all those elements that did not fulfil that logical condition. Thus, it returns the indices of elements that do not satisfy that condition.
+
+-   The `[x <= 0]` operator also finds similar answer. However, note the important difference shown in the code below, it converts `NaN` comparison with zero into `NA`s.
+
+Here's an example to illustrate the difference:
+
+```{r}
+# Example vector of +ve, -ve, NA and NaN values
+x <- c(NA, NaN, -Inf, -5:5, Inf, NaN, NA)
+x
+
+# which() finds all the conditions that are true
+x[which(x > 0)]
+# Thus, -which() finds all the elements that are not present above
+x[-which(x > 0)]
+
+# On the other hand, logical condition also finds similar answer
+# however, note the important difference, it converts NaN comparison
+# with zero into NAs
+x[x <= 0]
+```
+
+# **28.3.4 Exercises**
+
+## Question 1
+
+**What happens when you use `[[` with a positive integer that's bigger than the length of the vector? What happens when you subset with a name that doesn't exist?**
+
+When we use double square brackets `[[` with a positive integer that's bigger than the length of the vector, or when we subset with a name that doesn't exist, we'll get different outcomes depending on the situation:
+
+1.  *Using `[[` with an index larger than the vector length:* If we use `[[` with an index that is greater than the length of the vector, `R` will return an error. This is because we are trying to access an element that is out of the vector's bounds, which is not allowed in `R`.
+
+    Example:
+
+    ```{r}
+    #| error: true
+
+    x <- c(1, 2, 3, 4, 5)
+    x
+    x[[6]]
+    ```
+
+2.  *Subsetting with a name that doesn't exist:* When we use `[[` with a name that doesn't exist in the list or data frame, `R` will return `NULL`. It ***doesn't throw an error***, but it tells us that the name we specified doesn't match any existing names in the list or data frame.
+
+    Example:
+
+    ```{r}
+    my_list <- list(a = 1, b = 2, c = 3)
+    my_list
+    my_list[["d"]]
+    ```
+
+In summary, attempting to access an index or name that is out of bounds or doesn't exist will either result in an error (for index out of bounds) or a `NULL` value (for nonexistent names), depending on the specific situation.
+
+## Question 2
+
+**What would `pepper[[1]][1]` be? What about `pepper[[1]][[1]]`?**
+
+In R, when we are working with lists and we want to subset elements, the use of single square brackets `[]` and double square brackets `[[]]` has different implications:
+
+1.  Single Square Brackets `[]`: When we use single square brackets to subset a list, we get a new list containing the selected elements. The result is always a list, regardless of how many elements you select.
+
+2.  Double Square Brackets `[[]]`: Double square brackets, on the other hand, are used to directly access the individual elements within the list. When we use `[[]]`, we extract the element itself rather than a list containing that element.
+
+```{r}
+# Example list
+list1 <- list(
+  a = 1:10,
+  b = letters[1:5],
+  c = list(
+    c1  = 11:15,
+    c2 = letters[6:10]
+  )
+)
+# Printing the list
+list1
+
+# [[ ]] pulls out a vector, i.e. it produces element of the class of first element of the list
+list1[[1]]
+list1[[1]] |> class()
+
+# [1] pulls out a list that only contains the first element
+list1[1]
+list1[1] |> class()
+
+```
+
+Thus, **`pepper[[1]][1]`** will access the first grain of pepper inside the satchet of pepper. The grain of pepper will still be inside the sachet of pepper.
+
+On the other hand, **`pepper[[1]][[1]]`** will be the first grain of pepper. This grain of pepper will be lying on the table, not inside the pepper sachet. Thus, the grain of pepper will be accessed directly.
