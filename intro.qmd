@@ -1,4 +1,4 @@
-# Introduction {#sec-intro}
+# Introduction {#sec-intro .unnumbered}
 
 ::: callout-note
 There are no exercises in this chapter.

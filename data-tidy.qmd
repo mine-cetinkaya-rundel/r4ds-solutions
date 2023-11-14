@@ -15,7 +15,7 @@ source("_common.R")
 library(tidyverse)
 ```
 
-## 6.2.1 Exercises {.unnumbered}
+## 5.2.1 Exercises {.unnumbered}
 
 1.  In each of `table1`, `table2`, and `table3`, each observation represents a country.
     In `table1`, `country` is the country name, `year` is the year of data collection, `cases` is the number of people with the disease in that year, and `population` is the number of people in each country in that year.

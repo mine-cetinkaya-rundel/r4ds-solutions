@@ -15,7 +15,7 @@ source("_common.R")
 library(tidyverse)
 ```
 
-## 10.2.1 Exercises {.unnumbered}
+## 9.2.1 Exercises {.unnumbered}
 
 1.  Below is a scatterplot of `hwy` vs. `displ` where the points are pink filled in triangles.
 
@@ -41,7 +41,7 @@ library(tidyverse)
       geom_point()
     ```
 
-## 10.3.1 Exercises {.unnumbered}
+## 9.3.1 Exercises {.unnumbered}
 
 1.  For a line chart you can use `geom_path()` or `geom_line()`.
     For a boxplot you can use `geom_boxplot()`.
@@ -85,7 +85,7 @@ library(tidyverse)
       geom_point(aes(color = drv))
     ```
 
-## 10.4.1 Exercises {.unnumbered}
+## 9.4.1 Exercises {.unnumbered}
 
 1.  Faceting by a continuous variable results in one facet per each unique value of the continuous variable.
     We can see this in the scatterplot below of `cyl` vs. `drv`, faceted by `hwy`.
@@ -183,7 +183,7 @@ library(tidyverse)
       facet_wrap(~drv, nrow = 3)
     ```
 
-## 10.5.1 Exercises {.unnumbered}
+## 9.5.1 Exercises {.unnumbered}
 
 1.  The default geom of stat summary is `geom_pointrange()`.
     The plot from the book can be recreated as follows.
@@ -252,7 +252,7 @@ library(tidyverse)
       geom_bar()
     ```
 
-## 10.6.1 Exercises {.unnumbered}
+## 9.6.1 Exercises {.unnumbered}
 
 1.  The `mpg` dataset has `r nrow(mpg)` observations, however the plot shows fewer observations than that.
     This is due to overplotting; many cars have the same city and highway mileage.
@@ -319,7 +319,7 @@ library(tidyverse)
       geom_boxplot(position = "dodge2")
     ```
 
-## 10.7.1 Exercises {.unnumbered}
+## 9.7.1 Exercises {.unnumbered}
 
 1.  We can turn a stacked bar chart into a pie chart by adding a `coord_polar()` layer.
 
