@@ -15,7 +15,7 @@ source("_common.R")
 library(tidyverse)
 ```
 
-## 8.2.4 Exercises {.unnumbered}
+## 7.2.4 Exercises {.unnumbered}
 
 1.  For reading a file delimited with `|`, use `read_delim()` with argument `delim = "|"`.
 

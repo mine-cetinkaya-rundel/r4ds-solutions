@@ -15,7 +15,7 @@ source("_common.R")
 library(tidyverse)
 ```
 
-## 3.5 Exercises {.unnumbered}
+## 2.5 Exercises {.unnumbered}
 
 1.  The variable is called `my_variable` while the next line calls it `my_varıable`, with an an `ı` (`i` without a dot) in the variable name.
     Therefore the error is due to the mismatch in variable names.
@@ -24,7 +24,7 @@ library(tidyverse)
 
     ```{r}
     library(tidyverse)
-    
+
     ggplot(mpg, aes(x = displ, y = hwy)) + 
       geom_point() +
       geom_smooth(method = "lm")
@@ -38,15 +38,15 @@ library(tidyverse)
     ```{r}
     my_bar_plot <- ggplot(mpg, aes(x = class)) +
       geom_bar()
-    
+
     my_scatter_plot <- ggplot(mpg, aes(x = cty, y = hwy)) +
       geom_point()
-    
+
     ggsave(filename = "mpg-plot.png", plot = my_bar_plot)
     ```
 
     ```{r}
     #| include: false
-    
+
     fs::file_delete("mpg-plot.png")
     ```

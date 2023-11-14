@@ -9,7 +9,7 @@ title: "Workflow: scripts and projects"
 source("_common.R")
 ```
 
-## 7.3 Exercises {.unnumbered}
+## 6.3 Exercises {.unnumbered}
 
 1.  If you go to Tools \> Global Options \> Appearance you can change the theme of your RStudio.
 

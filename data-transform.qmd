@@ -16,10 +16,13 @@ library(nycflights13)
 library(tidyverse)
 ```
 
-## 4.2.5 Exercises {.unnumbered}
+## 3.2.5 Exercises {.unnumbered}
 
 1.  Pipelines for each part are given below.
 
+```{=html}
+<!-- -->
+```
 a.  
 
 ```{r}
@@ -107,7 +110,7 @@ flights |>
 
 6.  The order doesn't matter because we filter based on a condition, not based on row number.
 
-## 4.3.5 Exercises {.unnumbered}
+## 3.3.5 Exercises {.unnumbered}
 
 1.  I would expect `dep_time` to be `sched_dep_time + dep_delay`.
 
@@ -121,10 +124,10 @@ flights |>
     ```{r}
     flights |> 
       select(dep_time, dep_delay, arr_time, arr_delay)
-    
+
     flights |> 
       select(starts_with("dep"), starts_with("arr"))
-    
+
     flights |>
       select(dep_time:arr_delay, -contains("sched"))
     ```
@@ -140,20 +143,21 @@ flights |>
 
     ```{r}
     variables <- c("year", "month", "day", "dep_delay", "arr_delay")
-    
+
     flights |> 
       select(any_of(variables))
     ```
 
-5.  Yes, it does surprise me since the variable names are lowercase but the string in `contains()` is uppercase. By default, `contains()` ignores case.
+5.  Yes, it does surprise me since the variable names are lowercase but the string in `contains()` is uppercase.
+    By default, `contains()` ignores case.
 
     ```{r}
     flights |> 
       select(contains("TIME"))
     ```
-    
+
     To change this default behavior, set `ignore.case = FALSE`.
-    
+
     ```{r}
     flights |> 
       select(contains("TIME", ignore.case = FALSE))
@@ -171,13 +175,13 @@ flights |>
 
     ```{r}
     #| error: true
-    
+
     flights |> 
       select(tailnum) |> 
       arrange(arr_delay)
     ```
 
-## 4.5.7 Exercises {.unnumbered}
+## 3.5.7 Exercises {.unnumbered}
 
 1.  F9 (Frontier Airlines) has the worst average delays.
 
@@ -214,15 +218,15 @@ flights |>
     flights |> 
       slice_min(dep_delay, n = -5) |>
       relocate(dep_delay)
-    
+
     flights |> 
       slice_min(dep_delay, n = 5) |>
       relocate(dep_delay)
-    
+
     flights |> 
       slice_max(dep_delay, n = -5) |>
       relocate(dep_delay)
-    
+
     flights |> 
       slice_max(dep_delay, n = 5) |>
       relocate(dep_delay)
@@ -240,6 +244,9 @@ flights |>
     )
     ```
 
+```{=html}
+<!-- -->
+```
 a.  The following groups `df` by `y`.
 
     ```{r}
@@ -262,7 +269,8 @@ c.  The following groups `df` by `y` and then calculates the average value of `x
       summarize(mean_x = mean(x))
     ```
 
-d.  The following groups `df` by `y` and `z`, and then calculates the average value of `x` for each group combination. The resulting data frame is grouped by `y`.
+d.  The following groups `df` by `y` and `z`, and then calculates the average value of `x` for each group combination.
+    The resulting data frame is grouped by `y`.
 
     ```{r}
     df |>
@@ -270,7 +278,8 @@ d.  The following groups `df` by `y` and `z`, and then calculates the average va
       summarize(mean_x = mean(x))
     ```
 
-e.  The following groups `df` by `y` and `z`, and then calculates the average value of `x` for each group combination. The resulting data frame is not grouped.
+e.  The following groups `df` by `y` and `z`, and then calculates the average value of `x` for each group combination.
+    The resulting data frame is not grouped.
 
     ```{r}
     df |>
@@ -278,13 +287,14 @@ e.  The following groups `df` by `y` and `z`, and then calculates the average va
       summarize(mean_x = mean(x), .groups = "drop")
     ```
 
-f.  Each of the following groups `df` by `y` and `z`, and then calculates the average value of `x` for each group combination. With `summarize()` the resulting data frame has one row per group combination while with `mutate()` the resulting data frame has the same number of rows as the original data frame.
+f.  Each of the following groups `df` by `y` and `z`, and then calculates the average value of `x` for each group combination.
+    With `summarize()` the resulting data frame has one row per group combination while with `mutate()` the resulting data frame has the same number of rows as the original data frame.
 
     ```{r}
     df |>
       group_by(y, z) |>
       summarize(mean_x = mean(x))
-    
+
     df |>
       group_by(y, z) |>
       mutate(mean_x = mean(x))

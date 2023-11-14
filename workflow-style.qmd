@@ -16,7 +16,7 @@ library(tidyverse)
 library(nycflights13)
 ```
 
-## Exercises 5.6
+## Exercises 4.6
 
 1.  Restyled pipelines are given below.
 
@@ -30,7 +30,7 @@ library(nycflights13)
       ) |>
       filter(n > 10)
     ```
-    
+
     ```{r}
     flights |>
       filter(
