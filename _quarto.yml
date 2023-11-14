@@ -49,7 +49,7 @@ book:
         - missing-values.qmd
         - joins.qmd
 
-    - part: import.qmd
+    - part: "Import"
       chapters:
         - spreadsheets.qmd
         - databases.qmd
@@ -57,13 +57,13 @@ book:
         - rectangling.qmd
         - webscraping.qmd
 
-    - part: program.qmd
+    - part: "Program"
       chapters:
         - functions.qmd
         - iteration.qmd
         - base-R.qmd
 
-    - part: communicate.qmd
+    - part: "Communicate"
       chapters:
         - quarto.qmd
         - quarto-formats.qmd
