@@ -2,6 +2,855 @@
 title: "Numbers"
 ---
 
-::: callout-warning
-Solutions for this chapter are under construction.
-:::
+## Prerequisites {.unnumbered}
+
+```{r}
+library(tidyverse)
+library(gt)
+library(janitor)
+library(nycflights13)
+data("flights")
+```
+
+## 14.3.1 Exercises {.unnumbered}
+
+1.  We can use `count()` with weights as `is.na(var_name)` to the number of rows with missing values, as shown below
+
+    ```{r}
+    #| layout-ncol: 2
+    
+    flights |>
+      group_by(month) |>
+      summarise(total = n(),
+                missing = sum(is.na(dep_time))) |>
+      gt()
+    
+    
+    flights |>
+      group_by(month) |>
+      count(wt = is.na(dep_time)) |>
+      ungroup() |>
+      gt()
+    ```
+
+2.  Answers are below: 
+    1.  **`flights |> count(dest, sort = TRUE)`**
+    
+        ```{r}
+        flights |>
+          group_by(dest) |>
+          summarise(n = n()) |>
+          arrange(desc(n))
+        ```
+    
+    2.  **`flights |> count(tailnum, wt = distance)`**
+    
+        ```{r}
+        flights |>
+          group_by(tailnum) |>
+          summarise(n = sum(distance))
+        ```
+
+## 14.4.8 Exercises {.unnumbered}
+
+1.  The explanation is given as annotation in the code below (i.e, lines starting with `#`): --
+    
+    ```{r}
+    # Load in the data-set flights from package nycflights13
+    flights |> 
+      # Create a variable hour, which is the quotient of the division of
+      # sched_dep_time by 100. Further, group the dataset by this newly 
+      # created variable "hour" to get data into 24 groups - one for each
+      # hour.
+      group_by(hour = sched_dep_time %/% 100) |> 
+      
+      # For each gropu, i.e. all flights scheduled to depart in that
+      # hour, compute the NAs, i.e. cancelled flights, then compute their
+      # mean, i.e. proportion of cancelled flights; and also create a 
+      # variable n, which is the total number of flights
+      summarize(prop_cancelled = mean(is.na(dep_time)), n = n()) |> 
+      
+      # Remove the flights departing between 12 midnight and 1 am, since
+      # these are very very few, and all are cancelled leading to a highly
+      # skewed and uninformative graph
+      filter(hour > 1) |> 
+      
+      # Start a ggplot call, plotting the hour on the x-axis, and 
+      # proportion of cancelled flights on the y-axis
+      ggplot(aes(x = hour, y = prop_cancelled)) +
+      
+      # Create a line graph,which joins the proportion of cancelled 
+      # flights for each hour. Also, put in in dark grey colour
+      geom_line(color = "grey50") + 
+      
+      # Add points for each hour, whose size varies with the total number
+      # of flights in that hour
+      geom_point(aes(size = n))
+    ```
+
+2.  `R` provides several trigonometric functions, most of which operate in radians. Here's a table listing some of the commonly used trigonometric functions in R, along with short descriptions and information about whether they use degrees or radians:
+    
+    | **Function**               | **Description**                                                                                                                | **Angle Measure** |
+    |----------------------------|--------------------------------------------------------------------------------------------------------------------------------|-------------------|
+    | `sin(x)`                   | Sine function: Computes the sine of the angle `x`.                                                                             | Radians           |
+    | `cos(x)`                   | Cosine function: Computes the cosine of the angle `x`.                                                                         | Radians           |
+    | `tan(x)`                   | Tangent function: Computes the tangent of the angle `x`.                                                                       | Radians           |
+    | `asin(x)` or `acos(x)`     | Inverse sine or inverse cosine: Computes the angle whose sine or cosine is `x`.                                                | Radians           |
+    | `atan(x)` or `atan2(y, x)` | Inverse tangent or arctangent: Computes the angle whose tangent is `x` or the angle between the point `(x, y)` and the origin. | Radians           |
+    | `sinh(x)`                  | Hyperbolic sine function: Computes the hyperbolic sine of `x`.                                                                 | Radians           |
+    | `cosh(x)`                  | Hyperbolic cosine function: Computes the hyperbolic cosine of `x`.                                                             | Radians           |
+    | `tanh(x)`                  | Hyperbolic tangent function: Computes the hyperbolic tangent of `x`.                                                           | Radians           |
+    
+    In R, trigonometric functions like `sin`, `cos`, and `tan` expect angles to be in radians by default. However, we can convert between degrees and radians using the `deg2rad` and `rad2deg` functions. For example, to compute the sine of an angle in degrees, you can use `sin(deg2rad(angle))`.
+    
+    ```{r}
+    #| label: fig-q2-ex4
+    #| fig-cap: Graphs from some common trigonometric functions
+    #| fig-width: 10
+    #| code-fold: true
+    
+    
+    df = tibble(x = seq(from = -5, to = +5, by = 0.1))
+    g = ggplot(df, aes(x = x)) + 
+      theme_minimal() +
+      theme(plot.title = element_text(hjust = 0.5)) +
+      labs(x = NULL, y = NULL) +
+      scale_x_continuous(breaks = -5:5)
+    gridExtra::grid.arrange(
+      g + geom_line(aes(y = sin(x))) + labs(title = "sin(x)"),
+      g + geom_line(aes(y = cos(x))) + labs(title = "cos(x)"),
+      g + geom_line(aes(y = tan(x))) + labs(title = "tan(x)"),
+      g + geom_line(aes(y = asin(x))) + labs(title = "asin(x)"),
+      g + geom_line(aes(y = acos(x))) + labs(title = "acos(x)"),
+      g + geom_line(aes(y = atan(x))) + labs(title = "atan(x)"),
+      g + geom_line(aes(y = sinh(x))) + labs(title = "sinh(x)"),
+      g + geom_line(aes(y = cosh(x))) + labs(title = "cosh(x)"),
+      
+      nrow = 2
+    )
+    ```
+
+3.  Answer code below
+    ```         
+    flights |>    
+      filter(month == 1, day == 1) |>    
+      ggplot(aes(x = sched_dep_time, y = dep_delay)) +   
+      geom_point()
+    ```
+    
+    **Convert them to a more truthful representation of time (either fractional hours or minutes since midnight).**
+    
+    We can correct the `sched_dep_time()` using the two arithmetical functions `%/%` and `%%` to generate the decimal representation of time in hours as shown in the code for the graph on the right hand side in
+    
+    ```{r}
+    #| label: fig-q3-ex4
+    #| fig-cap: "Improved represenation of scheduled departure time to remove breaks in the data owing to represention of time as hhmm"
+    #| code-fold: true
+    
+    gridExtra::grid.arrange(
+      flights |>    
+        filter(month == 1, day == 1) |>    
+        ggplot(aes(x = sched_dep_time, y = dep_delay)) +   
+        geom_point(size = 0.5) +
+        labs(subtitle = "Incorrect scheduled departure time"),
+    
+      flights |>
+        mutate(
+          hour_dep = sched_dep_time %/% 100,
+          min_dep  = sched_dep_time %%  100,
+          time_dep = hour_dep + (min_dep/60)
+        ) |>
+        filter(month == 1, day == 1) |>    
+        ggplot(aes(x = time_dep, y = dep_delay)) +   
+        geom_point(size = 0.5) +
+        labs(subtitle = "Improved and accurate scheduled departure time",
+             x = "Scheduled Departure Time (in hrs)") +
+        scale_x_continuous(breaks = seq(0,24,4)),
+      
+      ncol = 2)
+    ```
+
+4.  
+    
+    ```{r}
+    attach(flights)
+    flights |>
+      slice_head(n = 50) |>
+      mutate(
+        dep_time_5 = round(dep_time/5) * 5,
+        arr_time_5 = round(arr_time/5) * 5,
+        .keep = "used"
+      ) |>
+      gt() |>
+      opt_interactive()
+    ```
+    
+    ## Various Ranking functions in `R`
+    
+    | **Function**     | **Description**                                                                                                                                                                 | **Handling Ties**                                                                      |
+    |------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+    | `min_rank()`     | Assigns the minimum rank to each element. The way ranks are usually computed in sports.                                                                                         | Tied values get the same rank; next rank is skipped.                                   |
+    | `row_number()`   | Assigns every input a unique rank. Ties are given ranks based on the order of appearance, i.e. row number.                                                                      | Tied values get different ranks, depending on the order of appearance in the data set. |
+    | `dense_rank()`   | Assigns the minimum rank to each element. And, assigns the same rank to tied values without gaps.                                                                               | Tied values get the same rank; no gaps in ranks.                                       |
+    | `percent_rank()` | Computes the rank as a percentage of the total number of elements. It counts the total number of values less than x~i~, and divides it by the number of observations minus 1.   | Tied values get the same rank; no gaps in ranks.                                       |
+    | `cume_dist()`    | Computes the cumulative distribution function (CDF) of the data. It counts the total number of values less than or equal to x~i~, and divides it by the number of observations. | Tied values get the same rank; no gaps in ranks.                                       |
+    
+    ```{r}
+    #| code-fold: true 
+    #| fig-cap: "Various Ranking Functions" 
+    #| label: fig-ex0-1  
+    
+    df <- data.frame(Name = c("Alice", "Bob", "Carol", "David", "Eve"),                  Score = c(85, 92, 85, 78, 92))   
+    
+    # Apply ranking functions and store the results in new columns   
+    df |>      
+      mutate(Min_Rank = min_rank(Score),                    
+             Row_Number = row_number(Score),                    
+             Dense_Rank = dense_rank(Score),                    
+             Percent_Rank = percent_rank(Score),                    
+             Cumulative_Dist = cume_dist(Score)) |>      
+      gt()
+    ```
+
+## 14.5.4 Exercises {.unnumbered}
+
+1.  We can find the 10 most delayed flights by using `min_rank()` since it gives ties equal rank, while creating gaps, thus keeping the total number of the flights to 10.
+
+    ```{r}
+    flights |>
+      select(sched_dep_time, dep_time, dep_delay, tailnum, dest, carrier) |>
+      mutate(rank_delay = min_rank(desc(dep_delay))) |>
+      arrange(rank_delay) |>
+      slice_head(n = 10) |>
+      gt()
+    ```
+
+2.  Using the code below, we can find the that the flight with tail number `N844MH` has the highest average departure delay of 32 minutes. However, this flight flew only once, so we might want to re-look for this delay statistic by removing the flights that flew less than 5 times.
+
+    Thus, amongst the flights that flew 5 times or more, the highest mean departure delay of the flight with tail number `N665MQ`.
+    
+    ```{r}
+    # The flight tailnum with the highest average delay
+    flights |>
+      group_by(tailnum) |>
+      summarize(mean_delay = mean(dep_delay, na.rm = TRUE),
+                n = n()) |>
+      arrange(desc(mean_delay)) |>
+      slice_head(n = 5)
+    
+    # The flight tailnum with the highest average delay amongst 
+    # the flights that flew atleast 5 times or more
+    flights |>
+      group_by(tailnum) |>
+      summarize(mean_delay = mean(dep_delay, na.rm = TRUE),
+                nos_of_flights = n()) |>
+      filter(nos_of_flights >= 5) |>
+      arrange(desc(mean_delay)) |>
+      slice_head(n = 5)
+    ```
+
+3.  As shown in the @fig-q3-ex5 , we should fly with the early morning flights, particularly 5 am to 7 am, to avoid delays as much as possible.
+    
+    ```{r}
+    #| label: fig-q3-ex5
+    #| fig-cap: "Graph of average departure delay vs. scheduled departure time"
+    
+    
+    flights |>
+      mutate(sched_dep_hour = sched_dep_time %/% 100) |>
+      group_by(sched_dep_hour) |>
+      summarize(
+        mean_dep_delay = mean(dep_delay, na.rm = TRUE),
+        nos_of_flights = n()
+      ) |>
+      drop_na() |>
+      ggplot(aes(x = sched_dep_hour,
+                 y = mean_dep_delay)) +
+      geom_line() +
+      geom_point(aes(size = nos_of_flights), 
+                 alpha = 0.5) +
+      theme_light() +
+      labs(x = "Depature Hour", y = "Average departure delay (min)",
+           title = "Early morning flights have the least delay",
+           size = "Number of flights") +
+      scale_x_continuous(breaks = seq(5, 24, 2)) +
+      theme(legend.position = "bottom")
+    ```
+
+4.  The code `flights |> group_by(dest) |> filter(row_number() < 4)` displays only three flights for each destination, selected on the basis of the order in which they appear in the `flights` data-set.
+
+    ```{r}
+    flights |> 
+      # reducing the number of columns for easy display
+      select(carrier, dest, sched_dep_time, month, day) |>
+      group_by(dest) |> 
+      # arrange(dest, sched_dep_time) |>
+      filter(row_number() < 4)
+    ```
+    
+    On the other hand, the code `flights |> group_by(dest) |> filter(row_number(dep_delay) < 4)` will display the three flights with the least departure delays for each destination. Further, in case of ties, it will select the flight which appears earlier in the data-set, i.e. on a earlier date.
+    
+    ```{r}
+    flights |> 
+      # reducing the number of columns for easy display
+      select(carrier, dest, sched_dep_time, month, day, dep_delay) |>
+      group_by(dest) |> 
+      filter(row_number(dep_delay) < 4)
+    ```
+
+5.  The following code does the calculation desired: --
+
+    ```{r}
+    flights |>
+      group_by(dest) |>
+      mutate(
+        total_delay = sum(dep_delay, na.rm = TRUE),
+        prop_delay = dep_delay / total_delay,
+        .keep = "used"
+      )
+    ```
+
+6.  Here's the code for the analysis with annotation at appropriate places: --
+    
+    ```{r}
+    #| label: fig-q6-ex5
+    #| fig-cap: "Plots of average departure delays in each hour vs. average departure delay in the previous hour"
+    #| fig-height: 8
+    
+    flights |>    
+      # Generate hour of departure
+      mutate(hour = dep_time %/% 100) |>    
+      
+      # Creating groups by each hour of depature for different days
+      group_by(year, month, day, hour) |>  
+      
+      # Remove 213 flights with NA as hour (i.e., cancelled flights)
+      # to improve the subsequent plotting
+      filter(!is.na(hour)) |>
+      
+      # Average delay and the number of flights in each hour
+      summarize(     
+        dep_delay = mean(dep_delay, na.rm = TRUE),     
+        n = n(),     
+        .groups = "drop"   
+      ) |>    
+      
+      # Removing hours in which there were less than 5 flights departing
+      filter(n > 5) |>
+      
+      # Grouping to prevent using 11 pm hour delays as previous delays of the
+      # next day's 5 am flights
+      group_by(year, month, day) |>
+      
+      # A new variabe to show previous hour's average average departure delay
+      mutate(
+        prev_hour_delay = lag(dep_delay),
+        morning_flights = hour == 5
+      ) |>
+      
+      # Plotting to see correlation
+      ggplot(aes(x = dep_delay,
+                 y = prev_hour_delay,
+                 col = morning_flights)) +
+      geom_point(alpha = 0.5) +
+      geom_smooth(se = FALSE) +
+      geom_abline(slope = 1, intercept = 0, col = "grey") +
+      theme_light() +
+      coord_fixed() +
+      scale_x_continuous(breaks = seq(0,300,60)) +
+      scale_y_continuous(breaks = seq(0,300,60)) +
+      scale_color_discrete(labels = c("Other flights",
+                                      "Early Morning flights (5 am to 6 am)")) +
+      labs(x = "Average Departure Delay in an hour (min)",
+           y = "Average Departure Delay in the previous hour (min)",
+           col = NULL,
+           title = "Departure Delay correlates with delay in previous hour",
+           subtitle = "The average departure delay in any hour is worse than previous hours's average delay. \nFurther, the early morning flights' delay doesn't depend on previous nights' delay.") +
+      theme(legend.position = "bottom")
+    ```
+
+7.  The @tbl-q7-ex5 computes the average air time to each destination, and then computes the ratio of each flight's airtime to the average air time. There are four flights with this ratio less than 0.6. Out of these, the flight `N666DN` to `ATL` destination with air time of just 65 minutes *(compared to average 113 minutes)* appears to be suspiciously fast, and a potential data entry error.
+
+    ```{r}
+    #| label: tbl-q7-ex5
+    #| tbl-cap: "Suspiciously fast flights compared to the average air time for that destination"
+    
+    flights |>
+      select(month, day, dest, tailnum, dep_time, arr_time, air_time) |>
+      group_by(dest) |>
+      mutate(
+        mean_air_time = mean(air_time, na.rm = TRUE),
+        fast_ratio = air_time/mean_air_time
+      ) |>
+      relocate(air_time, mean_air_time, fast_ratio) |>
+      ungroup() |>
+      arrange(fast_ratio) |>
+      filter(fast_ratio < 0.6) |>
+      gt() |>
+      fmt_number(columns = c(mean_air_time, fast_ratio),
+        decimals = 2)
+    ```
+    
+    The following code also computes the air time (`air_time`)of every flight relative to the shortest flight (`min_air_time`) for each destination in form a ratio (`rel_ratio`), and @fig-q7a-ex5 displays top 100 flights that were most delayed in the air. We observe that, of the 100 most delayed flights in-air: --
+    
+    -   83 of these are flights to Boston (`BOS`); with shortest air time of 21 minutes (a potential data entry) causing this over-representation of Boston flights in the current computation.
+    
+    -   Once Boston is removed, most of top 100 delayed in-air flights belong to destinations `PHL` , `DCA` and `ATL`. These again either represent a erroneous data entry (flight `N666DN` to `ATL` destination with air time of just 65 minutes) or very short glifht destinations (`PHL` and `DCA`).
+    
+    ```{r}
+    #| label: fig-q7a-ex5
+    #| fig-cap: "Flights that were most delayed in the air-time"
+    
+    flights |>
+      select(month, day, dest, tailnum, dep_time, arr_time, air_time) |>
+      group_by(dest) |>
+      mutate(
+        min_air_time = min(air_time, na.rm = TRUE),
+        rel_ratio = air_time/min_air_time
+      ) |>
+      relocate(air_time, min_air_time, rel_ratio) |>
+      ungroup() |>
+      arrange(desc(rel_ratio)) |>
+      slice_head(n = 100) |>
+      gt() |>
+      fmt_number(columns = c(min_air_time, rel_ratio),
+        decimals = 2) |>
+      opt_interactive()
+    
+    ```
+
+8.  First, as shown in @fig-q8a-ex5 , we find out the destinations which have at-least two or more carriers. There are 76 such destinations.
+
+    ```{r}
+    #| label: fig-q8a-ex5
+    #| fig-cap: "Destinations with two or more carriers"
+    #| code-fold: true
+    
+    # Computing the destinations with atleast two carriers
+    df1 = flights |>
+      group_by(dest) |>
+      summarize(no_of_carriers = n_distinct(carrier)) |>
+      filter(no_of_carriers > 1)
+    
+    # Extracting the names of these carriers as a vector to use in filtering
+    # the data in subsequent steps, as a vector called "dest2"
+    dest2 = df1 |>
+      select(dest) |>
+      as_vector() |>
+      unname()
+    
+    # Displaying the table
+    df1 |>
+      arrange(desc(no_of_carriers)) |>
+      gt() |>
+      opt_interactive(page_size_default = 5)
+    ```
+    
+    Then, in @fig-q8b-ex5 , we compute the three important parameters that we use to compare the performance of carriers: --
+    
+    1.  Average departure delay.
+    
+    2.  Proportion of flights cancelled.
+    
+    3.  Average delay in Air Time.
+    
+    ```{r}
+    #| label: fig-q8b-ex5
+    #| fig-cap: "Table displaying the comparison parameters for each carrier at each destination"
+    #| code-fold: true
+    
+    # Ranking parameters can be based on: ---
+    # 1. Average Departure Delay
+    # 2. Proportion of flights cancelled
+    # 3. Average Delay in Air Time
+    # Note: I have not included arrival delay, as that will automatically
+    #       include the delay in the departure, and penalize the airline 
+    #       twice for a departure delay.
+    
+    df2 = flights |>
+      filter(dest %in% dest2) |>
+      group_by(dest, carrier) |>
+      summarise(
+        mean_dep_delay = mean(dep_delay, na.rm = TRUE),
+        prop_cancelled = mean(is.na(dep_time)),
+        mean_air_time  = mean(air_time, na.rm = TRUE),
+        nos_of_flights = n()
+      ) |>
+      drop_na()
+      
+    df2 |>
+      ungroup() |>
+      gt() |>
+      fmt_number(decimals = 2,
+                 columns = -nos_of_flights) |>
+      opt_interactive()
+    ```
+    
+    Thereafter, in @tbl-q8c-ex5 , we compute scores based on these three parameters for each carrier and rank them accordingly.
+    
+    ```{r}
+    #| label: tbl-q8c-ex5
+    #| tbl-cap: "Computed rankings with the method of scoring displayed for two destinations"
+    #| code-fold: true
+    
+    # Ranking can be generated on basis of the least score calculated after
+    # giving equal weightage to the following in formula for each carrier as
+    # calculated by: (x - min(x)) / (max(x) - min(x))
+    # 1. Average Departure Delay
+    # 2. Proportion of flights cancelled
+    # 3. Average Delay in Air Time
+    df3 = df2 |>
+      mutate(
+        score_delay = (mean_dep_delay - min(mean_dep_delay))/(max(mean_dep_delay) - min(mean_dep_delay)),
+        score_cancel = (prop_cancelled - min(prop_cancelled)) / (max(prop_cancelled) - min(prop_cancelled)),
+        score_at = (mean_air_time - min(mean_air_time)) / (max(mean_air_time) - min(mean_air_time)),
+        total_score = score_delay + score_cancel + score_at,
+        rank_carrier = min_rank(total_score)
+      ) |>
+      drop_na()
+    
+    # Displaying an example ranking for ATL and AUS
+    df3 |>
+      filter(dest %in% c("ATL", "AUS")) |>
+      gt() |>
+      fmt_number(columns = -c(rank_carrier, nos_of_flights)) |>
+      tab_spanner(label = "Scoring and Rank",
+                  columns = score_delay:rank_carrier) |>
+      tab_spanner(label = "Statistics",
+                  columns = mean_dep_delay:nos_of_flights) |>
+      opt_stylize(style = 1)
+    ```
+    
+    The final ranking of the carriers for each destination is displayed below in @tbl-fnl-q8-ex5 with names of destinations as column names, and within each column, the best carrier at the top, worst carrier at the bottom.
+    
+    ```{r}
+    #| label: tbl-fnl-q8-ex5
+    #| tbl-cap-location: top
+    #| tbl-cap: "Ranks of carriers for each destination: Best carrier at top, worst carrier at bottom"
+    #| code-fold: true
+    
+    df3 |>
+      arrange(dest, rank_carrier) |>
+      select(dest, carrier, rank_carrier) |>
+      ungroup() |>
+      pivot_wider(names_from = rank_carrier,
+                  values_from = carrier) |>
+      t() |>
+      as_tibble() |>
+      janitor::row_to_names(row_number = 1) |>
+      gt() |>
+      sub_missing(missing_text = "") |>
+      gtExtras::gt_theme_538()
+      
+    ```
+
+## 14.6.7 Exercises {.unnumbered}
+
+1.  The different ways to assess the delay characteristics of a group of flights in form of a tabular comparison of various measures of central tendency are shown below: --
+
+    +-----------------------------+---------------------------------------------------------------------------------------------------------+----------------------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    |                             | **Definition**                                                                                          | **Appropriate Data Types** | **Robustness to Outliers**      | **Suitability**                                                                                                                                                                          |
+    +=============================+=========================================================================================================+============================+=================================+==========================================================================================================================================================================================+
+    | **Mean**                    | The sum of all values divided by the number of values.                                                  | Interval, Ratio            | Sensitive to outliers           | Commonly used for normally distributed data.                                                                                                                                             |
+    |                             |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    | `mean()`                    |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    +-----------------------------+---------------------------------------------------------------------------------------------------------+----------------------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | **Median**                  | The middle value in a dataset when values are ordered, i.e., 50^th^ percentile.                         | Ordinal, Interval, Ratio   | Robust to outliers              | Suitable for skewed data and data with outliers.                                                                                                                                         |
+    |                             |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    | `median()`                  |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    +-----------------------------+---------------------------------------------------------------------------------------------------------+----------------------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | **Trimmed Mean**            | Mean calculated after removing a certain percentage of extreme values.                                  | Interval, Ratio            | Reduces the impact of outliers  | Useful for data containing outliers, i.e. flights with abnormally high delay                                                                                                             |
+    |                             |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    | `mean(x, trim = 0.05)`      |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    +-----------------------------+---------------------------------------------------------------------------------------------------------+----------------------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | **Weighted Mean**           | The sum of the products of values and their associated weights divided by the sum of the weights.       | Interval, Ratio            | Depends on the weighting scheme | Appropriate when different data points have different levels of importance. Example, if we give more importance to delay in short-haul flights, i.e., ratio of `dep_delay` to `air_time` |
+    |                             |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    | `weighted.mean(x, weights)` |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    +-----------------------------+---------------------------------------------------------------------------------------------------------+----------------------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | **Inter-Quartile Range**    | The difference between 25^th^ and 75^th^ percentile values in a dataset.                                | Interval, Ratio            | Not sensitive to outliers       | Provides a simple measure of central dispersion in the data.                                                                                                                             |
+    |                             |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    | `IQR()`                     |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    +-----------------------------+---------------------------------------------------------------------------------------------------------+----------------------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | **Percentile**              | The value below which a given percentage of data falls, e.g. 95^th^ percentile                          | Interval, Ratio            | Not influenced by outliers      | Useful for identifying specific positions within a dataset. We could find 95th percentile instead to maximum `dep_delay` to avoid data entry errors affecting our computation.           |
+    |                             |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    | `quantile()`                |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    +-----------------------------+---------------------------------------------------------------------------------------------------------+----------------------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    | **Winsorized Mean**         | Mean calculated after replacing extreme values with less extreme ones, say 5^th^ and 95^th^ percentile. | Interval, Ratio            | Reduces the impact of outliers  | Useful when we want to retain some information from outliers.                                                                                                                            |
+    |                             |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    | `DescTools::Winsorize()`    |                                                                                                         |                            |                                 |                                                                                                                                                                                          |
+    +-----------------------------+---------------------------------------------------------------------------------------------------------+----------------------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+    
+    Our choice of a measure depends on the characteristics of flights delay data and our specific analytical objectives.
+    
+    1.  `mean()` is useful when: --
+    
+        -   When we want to find the typical or central value of a dataset, sensitive to all data points.
+    
+        -   When our data does not contain extreme outliers. That is, it is commonly used for normally distributed data or data that follows a symmetric bell-shaped curve.
+    
+    2.  `median()` is useful when: --
+    
+        -   When we want to find the middle value of a dataset. We want this when our data contains extreme values and outliers, perhaps due to data entry error.
+    
+        -   Median is robust to outliers and is a better choice when the data contains extreme values or is skewed.
+    
+        -   Caution: `median()` may not provide as much information about the distribution of data as the `mean()` does. It doesn't consider the magnitude of differences between values.
+    
+    3.  When to use something else:
+    
+        -   **Mode:** The mode is useful when we want to identify the most frequently occurring value(s) in a dataset. It's suitable for nominal data (categories or labels) and not for departure delay data.
+    
+        -   **Geometric Mean:** If we're dealing with positive data that follows a multiplicative relationship (e.g., growth rates, financial returns), the geometric mean may be more appropriate than the arithmetic mean.
+    
+        -   **Trimmed Mean:** When dealing with data that contains outliers, we can calculate a trimmed mean by removing a certain percentage of extreme values from both ends of the dataset. This can help reduce the impact of outliers on the mean.
+    
+        -   **Weighted Mean:** If different data points have different levels of importance or weight, we can calculate a weighted mean to give more weight to specific values.
+    
+    We should use **departure delay** instead of arrival delay, as most of the delay occurs only in departure. Once in air, the delay is minimal, and even if so, it is unavoidable due to safety reasons. The following table compares departure and arrival delays, and in my view, since our purpose of analysis is to compare airline carriers, we might use **departure delay**.
+    
+    +----------+---------------------------------------------------------------------------+--------------------------------------------------------------------------+
+    |          | **Departure Delay**                                                       | **Arrival Delay**                                                        |
+    +==========+===========================================================================+==========================================================================+
+    | **Pros** | Useful for assessing punctuality in departing flights.                    | Provides a comprehensive view of overall travel delays.                  |
+    |          |                                                                           |                                                                          |
+    |          | Important for passengers concerned about on-time departure.               | Reflects the entire flight experience, including in-flight issues.       |
+    +----------+---------------------------------------------------------------------------+--------------------------------------------------------------------------+
+    | **Cons** | Doesn't account for delays occurring during the flight.                   | Doesn't provide specific insight into departure punctuality.             |
+    |          |                                                                           |                                                                          |
+    |          | Less relevant for passengers with long layovers or no connecting flights. | May not be as crucial for passengers with direct flights.                |
+    |          |                                                                           |                                                                          |
+    |          | May not fully represent the passenger's overall experience.               | May not reflect the airline's performance in terms of prompt departures. |
+    +----------+---------------------------------------------------------------------------+--------------------------------------------------------------------------+
+    
+    We might use data from `planes` (to get flight aircraft make and year) and `flights` together as shown in the analysis below: --
+    
+    ```{r}
+    #| label: fig-q1-ex7
+    #| fig-cap: "Bar plot of the average of median departure delays for each aircraft type (make)"
+    #| code-fold: true
+    #| fig-width: 10
+    
+    # Compute mean, median and trimmed mean for departure delay and delay
+    # in the airtime (i.e., time lost in air calculated by arr_delay minus 
+    # dep_delay).
+    df1 = 
+    flights |>
+      group_by(tailnum) |>
+      summarize(
+        mean_dep_delay = mean(dep_delay, na.rm = TRUE),
+        median_dep_delay = median(dep_delay, na.rm = TRUE),
+        trim_mean_dep_delay = mean(dep_delay, na.rm = TRUE, trim = 0.025),
+        mean_air_time_loss = mean(arr_delay - dep_delay, na.rm = TRUE),
+        median_air_time_loss = median(arr_delay - dep_delay, na.rm = TRUE)
+      )
+    
+    df1 = inner_join(df1, planes, by = "tailnum")
+    
+    
+    df1 |>
+      group_by(engine) |>
+      summarize(
+        median_delay = mean(median_dep_delay, na.rm = TRUE),
+        nos = n()
+      ) |>
+      mutate(is_positive = if_else(median_delay > 0, +1, -1)) |>
+      ggplot(aes(x = median_delay, 
+                 y = engine,
+                 fill = factor(is_positive),
+                 label = paste0("Flights = ", nos))) +
+      geom_bar(stat = "identity") +
+      geom_text(hjust = 0.5) +
+      theme_minimal() +
+      scale_x_continuous(breaks = seq(-3, 5, 1)) +
+      scale_fill_manual(values = c("#119644", "#ed523e")) +
+      labs(x = "Average of the Median Depature Delays of each airplane (in minutes)",
+           y = NULL,
+           title = "Turbo-jet aircrafts have highest departure delays on average") +
+      theme(axis.ticks.y = element_blank(),
+            axis.title.y = element_blank(),
+            legend.position = "blank",
+            panel.grid = element_blank())
+    ```
+    
+    ```{r}
+    #| label: fig-q1a-ex7
+    #| fig-cap: "Bar plot of the average of median departure delays for each aircraft manufacturer"
+    #| code-fold: true
+    #| fig-width: 10
+    
+    top_m = df1 |>
+      group_by(manufacturer) |>
+      count() |>
+      filter(n > 100) |>
+      select(manufacturer) |>
+      as_vector() |>
+      unname()
+    
+    df1 |>
+      filter(manufacturer %in% top_m) |>
+      group_by(manufacturer) |>
+      summarize(
+        nos = n(),
+        median_delay = mean(median_dep_delay, na.rm = TRUE)
+      ) |>
+      mutate(is_positive = if_else(median_delay > 0, +1, -1)) |>
+      ggplot(aes(x = median_delay, 
+                 y = reorder(manufacturer, -median_delay),
+                 fill = factor(is_positive),
+                 label = paste0("Flights = ", nos))) +
+      geom_bar(stat = "identity") +
+      geom_text(position = "fill", hjust = 1.2) +
+      theme_minimal() +
+      scale_x_continuous(breaks = seq(-4, 4, 1)) +
+      scale_fill_manual(values = c("#119644", "#ed523e")) +
+      labs(x = "Average of the Median Depature Delays of flights of the manufacturer's aircrafts (in minutes)",
+           y = NULL,
+           title = "Average Departure Delays vary by the aircrafts' manufacturers: Boeing's airplanes get delayed the most") +
+      theme(axis.ticks.y = element_blank(),
+            axis.title.y = element_blank(),
+            legend.position = "blank",
+            panel.grid = element_blank(),
+            plot.title.position = "plot")
+    ```
+
+2.  To find the destinations that show the greatest variation in air speed, we can group the `flights` data-set by `dest` and then find the destinations which have the highest coefficient of variability, i.e. $CV = \frac{sd}{\text{mean}} \cdot 100$, expressed as a percentage. The top 5 destinations with the greatest variation in air speed are in @tbl-q1aa-ex6 .
+    
+    The $CV$ is expressed as a percentage and is useful to compare the relative variability of different destinations' air speed because the mean airspeed for each destination is different.
+    
+    The usefulness of the coefficient of variation depends on the context and the nature of the data you are dealing with. Here are a few points to consider. A higher $CV$ indicates greater relative variability compared to the mean, while a lower CV suggests less relative variability.
+    
+    ```{r}
+    #| label: tbl-q1aa-ex6
+    #| tbl-cap: "The top 5 destinations with the greatest variation in air speed"
+    #| code-fold: true
+    
+    flights |>
+      mutate(speed = 60 * distance/air_time) |>
+      group_by(dest) |>
+      summarise(
+        nos = n(),
+        mean = mean(speed, na.rm = TRUE),
+        sd   = sd(speed, na.rm = TRUE),
+        CV   = sd/mean) |>
+      arrange(desc(CV)) |>
+      slice_head(n = 5) |>
+      gt() |>
+      fmt_number(columns = -nos, 
+                 decimals = 2) |>
+      fmt_percent(columns = "CV") |>
+      cols_label(
+        dest = "Destination",
+        nos = "Number of flights",
+        mean = "Mean Air Speed (mph)",
+        sd = "Std. Dev. Air Speed",
+        CV = "Coeff. of Variation"
+      ) |>
+      gtExtras::gt_theme_538()
+    ```
+    
+    Further, we can go one step ahead, and find whether there is a relation between destinations and air speeds along with their variability, graphically as shown in
+    
+    ```{r}
+    #| label: fig-q1ab-ex6
+    #| fig-cap: "A box-plot of the air speeds for the 10 most frequent destinations, with >10,000 flights in 2013"
+    #| fig-width: 10
+    #| code-fold: true
+    
+    dest_vec = flights |>
+      group_by(dest) |>
+      count() |>
+      filter(n > 10000) |>
+      select(dest) |>
+      as_vector() |>
+      unname()
+      
+    flights |>
+      filter(dest %in% dest_vec) |>
+      mutate(speed = 60 * distance/air_time) |>
+      group_by(dest) |>
+      mutate(m_s = mean(speed, na.rm = TRUE)) |>
+      ggplot(aes(y = reorder(dest, m_s), 
+                 x = speed)
+             ) +
+      geom_boxplot(outlier.alpha = 0.2,
+                   fill = "#cbc6cf") +
+      theme_minimal() +
+      labs(x = "Air speed (miles per hour)",
+           y = NULL, 
+           title = "Farther destinations have higher average air speed of aircrafts, and lesser variability",
+           subtitle = "Los Angeles bound aircrafts' average speed is much higher than Boston-bound aircrafts, but spread of data is lesser") +
+      theme(panel.grid.major.y = element_blank(),
+            panel.grid.minor = element_blank(),
+            plot.title.position = "plot") +
+      scale_x_continuous(breaks = seq(100, 600, 100)) +
+      coord_cartesian(xlim = c(100, 600))
+    ```
+
+3.  Once we start exploring the data, firstly, we observe in @fig-q3-ex6 and @tbl-q3a-ex6 that the flight distances of the 213 flights to EGE in 2013 cluster into two groups: one around 1725 miles and the other around 1746 miles. Thus, this is one piece of evidence that the `EGE` airport changed locations.
+
+    ```{r}
+    #| label: tbl-q3a-ex6
+    #| tbl-cap: "Flight distances for flights to EGE"
+    #| code-fold: true
+    
+    flights |>
+      filter(dest == "EGE") |>
+      group_by(distance) |>
+      count() |>
+      ungroup() |>
+      gt() |>
+      cols_label(
+        distance = "Distance (in miles)",
+        n = "Number of flights in 2013"
+      ) |>
+      gtExtras::gt_theme_538()
+    ```
+    
+    ```{r}
+    #| fig-asp: 0.3
+    #| label: fig-q3-ex6
+    #| fig-cap: "Scatter Plot of flight distances for the 213 flights to EGE in 2013"
+    #| code-fold: true
+    
+    flights |>
+      filter(dest == "EGE") |>
+      ggplot(aes(x = distance, y = 1)) +
+      geom_jitter(width = 0, 
+                  height = 0.1,
+                  alpha = 0.3) +
+      theme_minimal() +
+      coord_cartesian(xlim = c(1500, 1800),
+                      ylim = c(0.8, 1.2)) +
+      scale_x_continuous(breaks = c(1500, 1600, 1700, 1725, 1745, 1800)) +
+      labs(title = "Flight distances to EGE cluster into two groups around 1725 and 1746 miles", 
+           x = "Flight Distance (miles)", y = NULL) +
+      theme(panel.grid.minor = element_blank(),
+            panel.grid.major.y = element_blank(),
+            axis.text.y = element_blank(),
+            axis.ticks.y = element_blank())
+      
+    ```
+    
+    Now, upon exploring further, we find another variable, i.e., `origin` of the flights might explain the difference since `EWR` and `JFK` are slightly away from each other, even within New York City metropolitan area. The @tbl-q3b-ex6 explains this, and we conclude that after all, `EGE` airport may not have shifted after all.
+    
+    ```{r}
+    #| label: tbl-q3b-ex6
+    #| tbl-cap: "Comparison of EGE-bound flights' distance based on airport of origin"
+    #| code-fold: true
+    
+    flights |>
+      filter(dest == "EGE") |>
+      group_by(origin) |>
+      summarise(
+        mean_of_distance = mean(distance, na.rm = TRUE),
+        std_dev_of_distance = sd(distance, na.rm = TRUE),
+        proportion_of_cancelled_flights = mean(is.na(dep_time)),
+        number_of_flights = n()
+      ) |>
+      gt() |>
+      fmt_percent(columns = proportion_of_cancelled_flights) |>
+      fmt_number(decimals = 2,
+                 columns = c(mean_of_distance, std_dev_of_distance)) |>
+      cols_label_with(fn = ~ janitor::make_clean_names(., case = "title")) |>
+      gtExtras::gt_theme_pff()
+    ```
