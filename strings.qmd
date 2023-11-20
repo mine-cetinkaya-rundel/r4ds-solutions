@@ -1,7 +1,334 @@
 ---
 title: "Strings"
+execute: 
+  echo: true
+  warning: false
+  error: false
+  cache: true
 ---
 
-::: callout-warning
-Solutions for this chapter are under construction.
-:::
+## Prerequisites {.unnumbered}
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(babynames)
+library(gt)
+library(gtExtras)
+data("babynames")
+```
+
+**Important uses of quoting in `R`: --**
+
+|          |                                                    |
+|----------|----------------------------------------------------|
+| **Code** | **Purpose**                                        |
+| `⁠\n`⁠     | newline (aka 'line feed')                          |
+| `\t`⁠     | tab                                                |
+| `\b`⁠     | backspace                                          |
+| ⁠`\v⁠`     | vertical tab                                       |
+| `\\`⁠     | backslash '⁠`\`⁠'                                    |
+| `\'`⁠     | ASCII apostrophe '`⁠'⁠`'                             |
+| `⁠\"`⁠     | ASCII quotation mark '⁠`"⁠`'                         |
+| ⁠`\nnn⁠`   | character with given octal code (1, 2 or 3 digits) |
+| ⁠`\xnn⁠`   | character with given hex code (1 or 2 hex digits)  |
+
+## **15.2.4 Exercises** {.unnumbered}
+
+1.  
+      1.  `He said "That's amazing!"`
+      
+          ```{r}
+          x = "He said \"That's amazing!\""
+          str_view(x)
+          ```
+      
+      2.  `\a\b\c\d`
+      
+          ```{r}
+          x = "\\a\\b\\c\\d"
+          str_view(x)
+          ```
+      
+      3.  `\\\\\\`
+      
+          ```{r}
+          x = "\\\\\\\\\\\\"
+          str_view(x)
+          ```
+
+2.  The `"\u00a0"` represents a white space. By google, I find out that this represents ***No-Break Space (NBSP)***. But, `str_view()` displays it in form of a greenish-blue font `{\u00a0}.`
+    
+    ```{r}
+    "\u00a0" # This represents a white space
+    str_view("\u00a0")
+    
+    x <- "This\u00a0is\u00a0tricky"
+    print(x)
+    str_view(x)
+    ```
+    
+    The `"\u00a0"` represents a non-breaking space character in Unicode encoding. Unicode is a standardized character encoding system that assigns a unique numerical code to almost every character from every writing system in the world, including various symbols, letters, and special characters.
+    
+    In Unicode, "`\u`" is used to indicate that the following four characters represent a Unicode code point in hexadecimal notation. In this case, `"\u00a0"` represents the code point for the non-breaking space character.
+    
+    A non-breaking space is a type of space character that is used in typography and word processing to prevent a line break or word wrap from occurring at that particular space.
+    
+    It is similar to a regular space character (ASCII code 32), but it has the special property of **keeping adjacent words or characters together on the same line when text is justified or formatted**.
+
+## **15.3.4 Exercises** {.unnumbered}
+
+1.  As we can see below, `paste0` converts `NA` into a string `"NA"` and simply joins it with another string. However, `str_c()` behaves more sensibly - it generates `NA` if any of the strings being joined is `NA`.
+    
+    ```{r}
+    str_c("hi ", NA)
+    paste0("hi ", NA)
+    ```
+    
+    Further, we see below that we are joining two string vectors of unequal length, i.e., `letters[1:2]` is `"a" "b"` and `letters[1:3]` is `"a" "b" "c"` , both `str_c()` and `paste0()` behave differently.
+    
+    -   `str_c()` throws an error and informs us that the string vectors being joined are of unequal length.
+    
+    -   `paste0` simple recycles the shorter string vector silently.
+    
+    ```{r}
+    # str_c(letters[1:2], letters[1:3])
+    paste0(letters[1:2], letters[1:3])
+    ```
+
+2.  In R, both **`paste()`** and **`paste0()`** functions are used to concatenate strings together. However, they differ in how they handle separating the concatenated elements.
+
+    **`paste()`** concatenates its arguments with a space character as the default separator. We can specify a different separator using the **`sep`** argument.
+    
+    **`paste0()`** is similar to **`paste()`**, but it does not add any separator between the concatenated elements. It simply combines them as-is.
+    
+    Here is an example: --
+    
+    ```{r}
+    vec1 <- c("Hello", "Hi")
+    vec2 <- c("Amy", "Tom", "Neal")
+    paste(vec1, vec2)
+    paste(vec1, vec2, sep = ", ")
+    paste0(vec1, vec2)
+    ```
+    
+    We can recreate the equivalent of `paste()` using the `str_c()` function from the `stringr` package in `R`. To do this, we can specify the separator using the `sep` argument in `str_c()` as follows: --
+    
+    ```{r}
+    vec1 <- c(vec1, "Hallo")
+    paste(vec1, vec2)
+    str_c(vec1, vec2, sep = " ")
+    ```
+    
+    *Note: We had to add a string to `vec1` so that both `vec1` and `vec2` are of length 3. Else, `str_c` will throw up an error.*
+
+3.    
+    a.  `str_c("The price of ", food, " is ", price)`
+    
+        ``` r
+        str_glue("The price of {food} is {price}")
+        ```
+    
+    b.  `str_glue("I'm {age} years old and live in {country}")`
+    
+        ``` r
+        str_c("I'm ", age, " years old and live in ", country)
+        ```
+    
+    c.  `str_c("\\section{", title, "}")`
+    
+        ``` r
+        str_glue("\\\\section{{{title}}}")
+        ```
+
+3.  
+    ```{r}
+    data("babynames")
+    babynames |>
+      mutate(name_lgth = str_length(name)) |>
+      count(name_lgth, wt = n)
+    
+    babynames |>
+      filter(str_length(name) == 15) |>
+      count(name, wt = n, sort = TRUE) |>
+      slice_head(n = 5) |>
+      select(name) |>
+      as_vector() |>
+      unname() |>
+      str_sub(start = -3, end = -1)
+    ```
+
+## **15.5.3 Exercises** {.unnumbered}
+
+1.  The `babynames` data-set (@tbl-q1a-ex5) displays the column `n` to reflect the frequency, i.e., number of observations of that name in that year. Thus, when we are computing the distribution of the length of baby names (@tbl-q1b-ex5), we need to weigh the observations by `n` otherwise each row will be treated as 1 (@tbl-q1b-ex5 column 3), instead of the actual number reflected in `n` leading to erroneous results.
+
+    ```{r}
+    #| tbl-cap: "The babynames data-set"
+    #| label: tbl-q1a-ex5
+    #| code-fold: true
+    
+    babynames |>
+      slice_head(n = 5) |>
+      gt() |>
+      fmt_number(prop, decimals = 4)
+    ```
+    
+    ```{r}
+    #| tbl-cap: "The distribution of the length of babynames"
+    #| label: tbl-q1b-ex5
+    #| code-fold: true
+    
+    df1 = babynames |>
+      mutate(name_length = str_length(name)) |>
+      count(name_length, wt = n) |>
+      rename(correct_frequency = n)
+    
+    df2 = babynames |>
+      mutate(name_length = str_length(name)) |>
+      count(name_length) |>
+      rename(wrong_frequency_without_weights = n)
+    
+    inner_join(df1, df2, by = "name_length") |>
+      gt() |>
+      fmt_number(-name_length , decimals = 0) |>
+      cols_label_with(
+        fn = ~ janitor::make_clean_names(., case = "title")
+      ) |>
+      gt_theme_538()
+    ```
+
+2.  The code displayed below extracts the middle letter from each baby name, and the results for first 10 names are displayed in @tbl-q2-ex5 . If the string has an even number of characters, we can pick the middle two characters.
+
+    ```{r}
+    #| label: tbl-q2-ex5
+    #| tbl-cap: "Middle letters of names"
+    
+    df3 = babynames |>
+      mutate(
+        name_length = str_length(name),
+        middle_letter_start = if_else(name_length %% 2 == 0,
+                                 name_length/2,
+                                 (name_length/2) + 0.5),
+        middle_letter_end = if_else(name_length %% 2 == 0,
+                                    (name_length/2) + 1,
+                                    (name_length/2) + 0.5),
+        middle_letter = str_sub(name, 
+                                start = middle_letter_start, 
+                                end = middle_letter_end)
+      ) |>
+      select(-c(year, sex, n, prop)) |>
+      slice_head(n = 10)
+    
+    df3 |>
+      gt() |>
+      cols_label_with(fn = ~ janitor::make_clean_names(., case = "title")) |>
+      cols_align(align = "center",
+                 columns = -name) |>
+      gt_theme_538()
+    ```
+
+3.  The @fig-q3a-ex5, @fig-q3b-ex5 and @fig-q3c-ex5 show the trends over time.
+
+    ```{r}
+    #| label: fig-q3a-ex5
+    #| fig-cap: "Length of babynames over time"
+    #| code-fold: true
+    
+    df4 = babynames |>
+      mutate(
+        name_length = str_length(name),
+        name_start = str_sub(name, 1, 1),
+        name_end = str_sub(name, -1, -1)
+      )
+    y_coord = c(5.4, 6.3)
+    df4 |>
+      group_by(year) |>
+      count(name_length, wt = n) |>
+      summarise(mean_length = weighted.mean(name_length, w = n)) |>
+      ggplot(aes(x = year, y = mean_length)) +
+      theme_classic() +
+      labs(y = "Average name length (for each year)",
+           x = "Year", 
+           title = "Baby names have become longer over the past 12 decades",
+           subtitle = "Between 1890-1920, and 1960-1990 baby names became longer\nBut, since 1990 the names are becoming shorter again") +
+      scale_x_continuous(breaks = seq(1880, 2000, 20)) +
+      geom_rect(mapping = aes(xmin = 1890, xmax = 1920,
+                              ymin = y_coord[1], ymax = y_coord[2]),
+                alpha = 0.01, fill = "grey") +
+      geom_rect(mapping = aes(xmin = 1960, xmax = 1990,
+                              ymin = y_coord[1], ymax = y_coord[2]),
+                alpha = 0.01, fill = "grey") +
+      geom_line(lwd = 1) +
+      coord_cartesian(ylim = y_coord) +
+      theme(plot.title.position = "plot")
+    ```
+    
+    ```{r}
+    #| label: fig-q3b-ex5
+    #| fig-cap: "Trends on the starting letter of babynames over time"
+    #| code-fold: true
+    
+    
+    ns_vec = df4 |>
+      count(name_start, wt = n, sort = TRUE) |>
+      slice_head(n = 5) |>
+      select(name_start) |>
+      as_vector() |>
+      unname()
+    
+    df4 |>
+      filter(name_start %in% ns_vec) |>
+      group_by(year) |>
+      count(name_start, wt = n) |>
+      mutate(prop = 100*n/sum(n)) |>
+      mutate(lbl = if_else(year == 2017, 
+                           name_start, 
+                           NA)) |>
+      ggplot(aes(x = year, y = prop, 
+                 col = name_start, label = lbl)) +
+      geom_line(lwd = 1) +
+      ggrepel::geom_label_repel(nudge_x = 1) +
+      labs(x = "Year",
+           y = "Percentage of names starting with character",
+           title = "People's preferences for baby names' starting letter change over time",
+           subtitle = "Names starting with A are most popular now\nNames starting with J were popular in the 1940s\nIn 1950s, names starting with D became popular, while those starting with A lost popularity") +
+      theme_classic() +
+      theme(legend.position = "none",
+            plot.title.position = "plot") +
+      scale_x_continuous(breaks = seq(1880, 2020, 20))
+    
+    ```
+    
+    ```{r}
+    #| label: fig-q3c-ex5
+    #| fig-cap: "Trends on the ending letter of babynames over time"
+    #| code-fold: true
+    
+    ns_vec = df4 |>
+      count(name_end, wt = n, sort = TRUE) |>
+      slice_head(n = 5) |>
+      select(name_end) |>
+      as_vector() |>
+      unname()
+    
+    df4 |>
+      filter(name_end %in% ns_vec) |>
+      group_by(year) |>
+      count(name_end, wt = n) |>
+      mutate(prop = 100*n/sum(n)) |>
+      mutate(lbl = if_else(year == 2017, 
+                           name_end, 
+                           NA)) |>
+      ggplot(aes(x = year, y = prop, 
+                 col = name_end, label = lbl)) +
+      geom_line(lwd = 1) +
+      ggrepel::geom_label_repel(nudge_x = 1) +
+      labs(x = "Year",
+           y = "Percentage of names ending with character",
+           title = "People's preferences for baby names' ending letter change over time",
+           subtitle = "Names ending in N have risen in popularity over the decades.\nNames ending with E have become less popular over time") +
+      theme_classic() +
+      theme(legend.position = "none",
+            plot.title.position = "plot") +
+      scale_x_continuous(breaks = seq(1880, 2020, 20))
+    ```
