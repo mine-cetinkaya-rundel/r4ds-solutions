@@ -1,7 +1,511 @@
 ---
 title: "Regular expressions"
+execute: 
+  echo: true
+  warning: false
+  error: false
+  cache: true
 ---
 
-::: callout-warning
-Solutions for this chapter are under construction.
-:::
+## Prerequisites {.unnumbered}
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+library(babynames)
+library(gt)
+library(gtExtras)
+library(janitor)
+```
+
+## 16.3.5 Exercises {.unnumbered}
+1.  The code below shows the analysis. The answers are: ---
+    
+    -   The baby names with most vowels, i.e., 8 of them are ***Mariadelrosario*** and ***Mariaguadalupe***.
+    
+    -   The baby names with highest proportion of vowels, i.e. 1 (they are entirely composed of vowels) are ***Ai, Aia, Aoi, Ea, Eua, Ia,*** ***Ii*** and ***Io***.
+    
+    ```{r}
+    b1 = babynames |>
+      mutate(
+        nos_vowels = str_count(name, pattern = "[AEIOUaeiou]"),
+        name_length = str_length(name),
+        prop_vowels = nos_vowels / name_length
+      )
+      
+    b1 |> 
+      group_by(name) |>
+      summarise(nos_vowels = mean(nos_vowels)) |>
+      arrange(desc(nos_vowels)) |>
+      slice_head(n = 5)
+    
+    b1 |> 
+      group_by(name) |>
+      summarise(prop_vowels = mean(prop_vowels)) |>
+      filter(prop_vowels == 1) |>
+      select(name) |>
+      as_vector() |>
+      str_flatten(collapse = ", ", last = " and ")
+    ```
+
+2.  The following code replaces the "forward slashes" with "backward slashes": ---
+    
+    ```{r}
+    test_string = "a/b/c/d/e"
+    str_replace_all(test_string,
+                    pattern = "/",
+                    replacement = "\\\\") |>
+      str_view()
+    ```
+    
+    Further, when we try to do the same in reverse, there is an error because "`\`" is an escape character. Thus, we need to add four `\` to include one in the final output: ---
+    
+    ```{r}
+    # test_string2 = "a\b\c\d\e" throws an error because \ is an escape character
+    # Thus, we need to add four \ to include one in the final output.
+    
+    test_string2 = str_replace_all(test_string,
+                    pattern = "/",
+                    replacement = "\\\\")
+    test_string2 |>
+      str_replace_all(pattern = "\\\\",
+                      replace = "/") |>
+      str_view()
+    ```
+3.  The following code implements `str_to_lower()` using `str_replace_all()` function: ---
+
+    ```{r}
+    test_string3 = "Take The Match And Strike It Against Your Shoe."
+    
+    str_replace_all(test_string3,
+                    pattern = "[A-Z|a-z]",
+                    replacement = tolower)
+    ```
+
+4.  The regular expressions used in the code below can match USA format(s) telephone numbers and generate clean data into columns in @tbl-q4-ex3: ---
+    
+    ```{r}
+    #| label: tbl-q4-ex3
+    #| tbl-cap: "Use of regex to match USA telephone numbers"
+    
+    telephone_numbers = c(
+      "555-123-4567",
+      "(555) 555-7890",
+      "888-555-4321",
+      "(123) 456-7890",
+      "555-987-6543",
+      "(555) 123-7890"
+    )
+    
+    telephone_numbers |>
+      str_replace(" ", "-") |>
+      str_replace("\\(", "") |>
+      str_replace("\\)", "") |>
+      as_tibble() |>
+      separate_wider_regex(
+        cols = value,
+        patterns = c(
+          area_code = "[0-9]+",
+          "-| ",
+          exchange_code = "[0-9]+",
+          "-| ",
+          line_number = "[0-9]+"
+        )
+      ) |>
+      gt() |>
+      gtExtras::gt_theme_538() |>
+      cols_label_with(fn = ~ janitor::make_clean_names(., case = "title"))
+    ```
+    
+    Further, telephone numbers in the USA are commonly written in several formats, including:
+    
+    1.  \(123\) 456-7890
+    
+    2.  123-456-7890
+    
+    3.  123.456.7890
+    
+    4.  1234567890
+    
+    You can use the following regular expression to match these commonly written telephone number formats:
+    
+    **`^(\(\d{3}\)\s*|\d{3}[-.]?)\d{3}[-.]?\d{4}$`**
+    
+    Explanation of the regular expression:
+    
+    -   **`^`** and **`$`** match the start and end of the string, ensuring that the entire string is matched.
+    
+    -   **`(\(\d{3}\)\s*|\d{3}[-.]?)`** matches the area code, which can be enclosed in parentheses or separated by a hyphen or a period. It uses the **`|`** (OR) operator to allow either format.
+    
+        -   **`\(\d{3}\)`** matches a three-digit area code enclosed in parentheses.
+    
+        -   **`\s*`** matches zero or more whitespace characters (in case there's space between the closing parenthesis and the next part of the number).
+    
+        -   **`|`** is the OR operator.
+    
+        -   **`\d{3}[-.]?`** matches a three-digit area code followed by an optional hyphen or period.
+    
+    -   **`\d{3}[-.]?\d{4}`** matches the main part of the phone number, which is three digits followed by an optional hyphen or period, and then four more digits.
+
+## 16.4.7 Exercises  {.unnumbered}
+
+1.  To match the literal string `"'\` in `R` using the `stringr` package, we need to escape the special characters in our regular expression pattern. Thus, the matching pattern becomes `\"\'\\\\` . Here's an example:
+    
+    ```{r}
+    # The string you want to match
+    input_string <- "\"'\\"
+    str_view(input_string)
+    
+    # Pattern to match the literal string
+    match_pattern <- "\"\'\\\\"
+    str_view(match_pattern)
+    
+    # Use str_detect to check if the string contains the pattern
+    if (str_detect(input_string, match_pattern)) {
+      print("Pattern found in the input string.")
+    } else {
+      print("Pattern not found in the input string.")
+    }
+    
+    ```
+    
+    To match the literal string `"$^$"` in `R` using the `stringr` package, we need to escape the special characters in our regular expression pattern. Thus, the matching pattern becomes . Here's an example:
+    
+    ```{r}
+    # The string you want to match
+    input_string <- "\"$^$\""
+    str_view(input_string)
+    
+    # Pattern to match the literal string
+    match_pattern <- "\"\\$\\^\\$\""
+    str_view(match_pattern)
+    
+    # Use str_detect to check if the string contains the pattern
+    if (str_detect(input_string, match_pattern)) {
+      print("Pattern found in the input string.")
+    } else {
+      print("Pattern not found in the input string.")
+    }
+    
+    ```
+
+2.  Each of the patterns you provided does not match a single backslash `\` for the following reasons: ---
+
+    1.  `"\"` - This pattern does not match a single backslash because the backslash is an escape character in regular expressions. In most regular expression engines, a single backslash is used to escape special characters. So, when you use `"\"` alone, it is interpreted as an escape character, and it doesn't match a literal backslash in the input string.
+    
+    2.  `"\\"` - This pattern also does not match a single backslash. It may seem like it should work because you're escaping the backslash with another backslash, but in many regular expression engines, `"\\"` represents a literal backslash when you're defining the regular expression. However, when applied to the input string, it's still interpreted as a single backslash.
+    
+    3.  `"\\\"` - This pattern does not match a single backslash for the same reason as the previous ones. The combination `"\\\"` is treated as a literal backslash in the regular expression definition, but when applied to the input string, it's still interpreted as a single backslash, and the extra `"\"` followed by a quotation mark is not part of the pattern.
+    
+    To match a single backslash `"\"`, you would typically need to use four backslashes in the regular expression pattern, `"\\\\"` . This way, the first two backslashes represent a literal backslash, and the next two backslashes escape each other, resulting in a pattern that matches a single backslash in the input string.
+
+3.  
+
+      a.  **Start with "y".**
+      
+          ```{r}
+          words |>
+            str_view(pattern = "^y")
+          ```
+      
+      b.  **Don't start with "y".**
+      
+          ```{r}
+          # To view words not sarting with a y
+          words |>
+            str_view(pattern = "^(?!y)")
+          # Check the number of such words
+          words |>
+            str_view(pattern = "^(?!y)") |>
+            length()
+          # Check the number of words starting with y and total number of words
+          # to confirm the matter
+          words |> length()
+          ```
+      
+      c.  **End with "x".**
+      
+          a.  To display these, we can use the regular expression `"x$"`
+      
+          ```{r}
+          words |>
+            str_view(pattern = "x$")
+          ```
+      
+      d.  **Are exactly three letters long. (Don't cheat by using [`str_length()`](https://stringr.tidyverse.org/reference/str_length.html)!)**
+      
+          To display these, we can use the regular expression `"\\b\\w{3}\\b"`, where: --
+      
+          -   **`\\b`** is a word boundary anchor, ensuring that the matched word is exactly three letters long and not part of a longer word.
+      
+          -   **`\\w{3}`** matches exactly three word characters (letters).
+      
+          -   **`str_subset`** is used to find all words in the dataset that match the specified regular expression pattern.
+      
+          ```{r}
+          # Finding letters exactly three letters long using regex
+          words |>
+            str_subset(pattern = "\\b\\w{3}\\b")
+      
+          # Finding letters exactly three letters long using str_length()
+          three_let_words = str_length(words) == 3
+          words[three_let_words]
+      
+          # Checking results
+          words[three_let_words] |>
+            length()
+          words |>
+            str_view(pattern = "\\b\\w{3}\\b") |>
+            length()
+          ```
+      
+      e.  **Have seven letters or more.**
+      
+          To display these, we can use the regular expression `"\\b\\w{7,}\\b"` , where: --
+      
+          -   **`\\b`** is a word boundary anchor to ensure that the matched word has no additional characters before or after it.
+      
+          -   **`\\w{7,}`** matches words with 7 or more word characters (letters).
+      
+          -   **`str_subset`** is used to filter the words in the dataset based on the regular expression pattern, so it selects words with 7 letters or more.
+      
+          ```{r}
+          words |>
+            str_subset(pattern = "\\b\\w{7,}\\b")
+          ```
+      
+      f.  **Contain a vowel-consonant pair.**
+      
+          To display these, we can use the regular expression `"[aeiou][^aeiou]"` , where: --
+      
+          -   **`[aeiou]`** matches any vowel (a, e, i, o, or u).
+      
+          -   **`[^aeiou]`** matches any character that is not a vowel, which ensures that there's a consonant after the vowel.
+      
+          ```{r}
+          words |>
+            str_view(pattern = "[aeiou][^aeiou]")
+          ```
+      
+      g.  **Contain at least two vowel-consonant pairs in a row.**
+      
+          To display these, we can use the regular expression `"[aeiou][^aeiou][aeiou][^aeiou]"` , where: ---
+      
+          -   **`[aeiou]`** matches any vowel (a, e, i, o, or u).
+      
+          -   **`[^aeiou]*`** matches zero or more characters that are not vowels, allowing for consonants between the vowel-consonant pairs.
+      
+          -   **`[aeiou][^aeiou][aeiou][^aeiou]`** specifies the pattern for at least two consecutive vowel-consonant pairs.
+      
+          ```{r}
+          words |>
+            str_view(pattern = "[aeiou][^aeiou][aeiou][^aeiou]")
+          ```
+      
+      h.  **Only consist of repeated vowel-consonant pairs.**
+      
+          To display these, we can use the regular expression `"^(?:[aeiou][^aeiou]){2,}$"` , where: ---
+      
+          -   **`^`**: This anchor asserts the start of the string.
+      
+          -   **`(?: ... )`**: This is a non-capturing group used to group the pattern for a vowel-consonant pair.
+      
+          -   **`[aeiou]`**: This character class matches any vowel (a, e, i, o, or u). It's the first part of the vowel-consonant pair.
+      
+          -   **`[^aeiou]`**: This character class matches any character that is not a vowel. It's the second part of the vowel-consonant pair and matches a consonant.
+      
+          -   **`{2,}`**: This quantifier specifies that the preceding pattern (the vowel-consonant pair) must occur at least two or more times.
+      
+          -   **`$`**: This anchor asserts the end of the string.
+      
+          ```{r}
+          words |>
+            str_view(pattern = "^(?:[aeiou][^aeiou]){2,}$")
+          ```
+4.  
+      
+      ```{r}
+      # Sample passage with mixed spellings
+      sample_text <- "The airplane is made of aluminum. The analog signal is stronger. Don't be an ass. The center is closed for defense training. I prefer a donut, while she likes a doughnut. His hair is gray, but hers is grey. We're modeling a new project. The skeptic will not believe it. Please summarize the report."
+      
+      # Define the regular expressions
+      patterns_to_detect <- c(
+        "air(?:plane|oplane)",
+        "alumin(?:um|ium)",
+        "analog(?:ue)?",
+        "ass|arse",
+        "cent(?:er|re)",
+        "defen(?:se|ce)",
+        "dou(?:gh)?nut",
+        "gr(?:a|e)y",
+        "model(?:ing|ling)",
+        "skep(?:tic|tic)",
+        "summar(?:ize|ise)"
+      )
+      
+      # Find and highlight the spellings
+      for (pattern in patterns_to_detect) {
+        matches <- str_extract_all(sample_text, pattern)
+        if (length(matches[[1]]) > 0) {
+          sample_text <- str_replace_all(sample_text, 
+                                         pattern, 
+                                         paste0("**", matches[[1]], "**"))
+        }
+      }
+      
+      sample_text
+      ```
+
+5.   We can switch the first and last letters in `words` using the code given below, with `str_replace_all()`. To display the new strings which are still `words`, we can use the code below: ---
+    
+    ```{r}
+    # Code to switch the first and last letters in words
+    new_words = words |>
+      str_replace_all(pattern = "\\b(\\w)(\\w*)(\\w)\\b", 
+                      replacement = "\\3\\2\\1")
+    
+    # Finding which of the new strings are part of the original "words"
+    tibble(
+      original_words = words[new_words %in% words],
+      new_words = new_words[new_words %in% words]
+    ) |>
+      gt() |>
+      cols_label_with(columns = everything(),
+                      fn = ~ make_clean_names(., case = "title")) |>
+      opt_interactive()
+    
+    ```
+
+6.  A ***Regular Expression (Regex)*** is a formalized way to represent a pattern that can match various strings. It is language-independent and can be used in various programming languages, such as Python, R etc. On the other hand, ***a string that defines a Regular Expression*** is a regular character string that contains the textual representation of a regular expression. It is not the actual regular expression itself but rather a sequence of characters that programmers use to create and define regular expressions in their code. It is passed as an argument to a function or method provided by the programming language's regular expression library to create a regular expression object.
+    
+    Here's a description of what each of these regular expressions matches:
+    
+    a.  **`^.*$`**: This regular expression matches an entire string. It starts with **`^`** (caret), which anchors the match to the beginning of the string, followed by **`.*`** which matches any number of characters (including none), and ends with **`$`** (dollar sign), which anchors the match to the end of the string. So, it essentially matches any string, including an empty one.
+    
+    b.  **`"\\{.+\\}"`**: This is a string defining a regular expression matches strings that contain curly braces **`{}`** with content inside them. The double backslashes **`\\`** are used to escape the curly braces, and **`.+`** matches one or more of any characters within the braces. So, it would match strings like "{abc}" or "{123}".
+    
+    c.  **`\d{4}-\d{2}-\d{2}`**: This regular expression matches a date-like pattern in the format "YYYY-MM-DD." Here, **`\d`** matches a digit, and **`{4}`**, **`{2}`**, and **`{2}`** specify the exact number of digits for the year, month, and day, respectively. So, it matches strings like "2023-09-14."
+    
+    d.  **`"\\\\{4}"`**: This is a string that defines a regular expression which matches strings that contains exactly four backslashes. Each backslash is escaped with another backslash, so **`\\`** matches a single backslash, and **`{4}`** specifies that exactly four backslashes must appear consecutively in the string. It matches strings like "\\\\\\\\abcd" but not "\\\\efg" (which contains only two backslashes).
+    
+    e.  **`\..\..\..`**: This regular expression matches strings that have three dots separated by any character. The dot **`.`** is a special character in regular expressions, so it's escaped with a backslash **`\.`** to match a literal dot **`.`** . Thereafter, the `.` matches any character, and this pattern is repeated three times. So, it matches strings like ".a.b.c" or ".1.2.3"
+    
+        ```{r}
+        test_string = c("a.bc..de", "1.2.3", "x...y", ".1.2.3",
+                        "a.b.c.", ".a.b.c")
+    
+        test_regex = "\\..\\..\\.."
+        str_view(test_regex)
+    
+        tibble(
+          test_string = test_string,
+          match_result = str_detect(test_string, test_regex)
+        )
+    
+        ```
+    
+    f.  **`(.)\1\1`**: This regular expression matches strings that contain three consecutive identical characters. The parentheses **`(.)`** capture any single character, and **`\1`** refers to the first captured character. So, it matches strings like "aaa" or "111."
+    
+    g.  **`"(..)\\1"`**: This is a string that represents a regular expression which matches strings consisting of two identical characters repeated twice. The **`(..)`** captures any two characters, and **`\\1`** refers to the first captured two characters. So, it matches strings like `aa` or `11` within double quotes.
+
+## 16.6.4 Exercises {.unnumbered}
+
+1.  
+    a.  **Find all `words` that start or end with `x`.**
+    
+        The words are displayed below: ---
+    
+        ```{r}
+        # Using a singular regular expression
+        str_view(words, "(^xX)|(x$)")
+    
+        # Using a combination of multiple str_detect() calls
+        words[str_detect(words, "^xX") | str_detect(words, "x$")]
+    
+        ```
+    
+    b.  **Find all `words` that start with a vowel and end with a consonant.**
+    
+        The words are displayed below: ---
+    
+        ```{r}
+        # Using a singular regular expression
+        pattern_b = "^(?i)[aeiou].*[^aeiou]$"
+        str_subset(words, pattern_b)
+    
+        # Using a combination of multiple str_detect() calls
+        words[
+          str_detect(words, "^(?i)[aeiou]") &
+          str_detect(words, "[^aeiou]$")  
+        ]
+        ```
+    
+    c.  **Are there any `words` that contain at least one of each different vowel?**
+    
+        No, there are no such words in `words`.
+    
+        ```{r}
+        pattern_c = "^(?=.*a)(?=.*e)(?=.*i)(?=.*o)(?=.*u).+"
+        str_subset(words, pattern_c)
+        ```
+
+2.  The code given below provides annotated evidence for and against the rule "i before e except after c".
+    
+    ```{r}
+    # Creating the regexp's first to use in stringr functions
+    pattern_1a = "\\b\\w*ie\\w*\\b"
+    pattern_1b = "\\b\\w+ei\\w*\\b"
+    
+    pattern_2a = "\\b\\w*cei\\w*\\b"
+    pattern_2b = "\\b\\w*cie\\w*\\b"
+    
+    # Words which contain "i" before "e"
+    words[str_detect(words, pattern_1a)]
+    
+    # Words which contain "e" before an "i", thus giving evidence against
+    # the rule, unless there is a preceeding "c"
+    words[str_detect(words, pattern_1b)]
+    
+    # Words which contain "e" before an "i" after "c", thus following the rule.
+    # That is, evidence in favour of the rule
+    words[str_detect(words, pattern_2a)]
+    
+    # Words which contain an "i" before "e" after "c", thus violating the rule.
+    # That is, evidence against the rule
+    words[str_detect(words, pattern_2b)]
+    ```
+
+3.
+    -   The R code `col_vec = colours(distinct = TRUE)` creates a vector `col_vec` containing a set of distinct color names available in R's default color palette.
+    
+    -   The code `col_vec = col_vec[!str_detect(col_vec, "\\b\\w*\\d\\w*\\b")]` filters the vector `col_vec` to exclude color names that contain any digits within them.
+    
+    -   Finally, the code `col_vec[str_detect(col_vec, "\\b(?:light|dark)\\w*\\b")]` will return a subset of the `col_vec` vector containing color names that have modifiers like "light" or "dark" in them, effectively identifying color names with modifiers.
+    
+    ```{r}
+    col_vec = colours(distinct = TRUE)
+    col_vec = col_vec[!str_detect(col_vec, "\\b\\w*\\d\\w*\\b")]
+    
+    col_vec[str_detect(col_vec, "\\b(?:light|dark)\\w*\\b")]
+    ```
+
+4.  The following code does the job, and purpose of each line is explained in the annotations.
+    
+    ```{r}
+    # Extract all base R datasets into a character vector
+    base_r_packs = data(package = "datasets")$results[, "Item"]
+    
+    # Remove all the names of grouping data.frames in parenthesis 
+    base_r_packs = str_replace_all(base_r_packs, 
+                    pattern = "\\([^()]+\\)", 
+                    replacement = "")
+    # Remove the whitespace, i.e., " " let after removing the parenthesis words
+    base_r_packs = str_replace_all(base_r_packs, 
+                    pattern = "\\s+$", 
+                    replacement = "")
+    
+    # Create the regular expression
+    huge_regex = str_c("\\b(", str_flatten(base_r_packs, "|"), ")\\b")
+    
+    ```
