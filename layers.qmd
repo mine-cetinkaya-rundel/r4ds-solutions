@@ -234,7 +234,7 @@ library(tidyverse)
     -   `se`: Standard error
 
 5.  In the first pair of plots, we see that setting `group = 1` results in the marginal proportions of `cut`s being plotted.
-    In the second pair of plots, setting `group = color` results in the proportions of `color`s within each `cut` being plotted.
+    In the second pair of plots, setting `group = color` results in the proportions of `color`s within each `cut` being plotted. A more informative alternative is to use after_stat(count / sum(count)), which displays the proportion of each colour and cut combination relative to the entire dataset.
 
     ```{r}
     #| layout-ncol: 2
@@ -249,6 +249,8 @@ library(tidyverse)
     ggplot(diamonds, aes(x = cut, fill = color, y = after_stat(prop))) + 
       geom_bar()
     ggplot(diamonds, aes(x = cut, fill = color, y = after_stat(prop), group = color)) + 
+      geom_bar()
+    ggplot(diamonds, aes(x = cut, fill = color, y = after_stat(count / sum(count)))) + 
       geom_bar()
     ```
 
