@@ -20,14 +20,27 @@ library(palmerpenguins)
 
 2.  The `bill_depth_mm` denotes the bill depth in millimeters.
 
-3.  There is a positive, linear, and somewhat strong association between bill depth and bill length of penguins.
+3.  There is a slight negative relationship between bill depth and bill length of penguins in this plot.
 
     ```{r}
     ggplot(
       data = penguins, 
       aes(x = bill_depth_mm, y = bill_length_mm)
     ) + 
-      geom_point()
+      geom_point() +
+    
+    ```
+    However, when differentiating between species, as seen in Section 1.2.4, there is a positive, linear, and somewhat strong association between bill depth and bill length of penguins.
+
+
+    ```{r}
+    ggplot(
+      data = penguins,
+      aes(x = bill_depth_mm, y = bill_length_mm, color = species)
+    ) +
+      geom_point() +
+      geom_smooth(method = 'lm') +
+      scale_color_colorblind()
     
     ```
 
