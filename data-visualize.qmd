@@ -228,6 +228,19 @@ library(palmerpenguins)
     )
     ```
 
+7. The questions focus either on the island or the species, however you may view it. Specifically:
+The first plot: How many x species penguins live on this island? (Who lives here?)
+```{r}
+ggplot(penguins, aes(x = island, fill = species)) +
+  geom_bar(position = "fill")
+```
+
+The second plot: On which island does this species mostly live? (Where do they live?)
+```{r}
+ggplot(penguins, aes(x = species, fill = island)) +
+  geom_bar(position = "fill")
+```
+
 ## 2.6.1 Exercises {.unnumbered}
 
 1.  The second plot is saved, because `ggsave()` saves the last plot you made.
