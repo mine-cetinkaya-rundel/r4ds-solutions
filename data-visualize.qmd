@@ -82,7 +82,7 @@ library(palmerpenguins)
       geom_smooth()
     ```
 
-9.  I would expect the a scatterplot of body mass vs. flipper length with points and smooth lines for each species in a different color. The plot below indeed shows this.
+9.  I would expect the a scatterplot of body mass vs. flipper length with points and smooth lines for each island in a different color. The plot below indeed shows this.
 
     ```{r}
     ggplot(
